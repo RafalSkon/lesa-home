@@ -1,0 +1,260 @@
+/* ==========================================================================
+   LeSa - Home: Modern Underfloor & Heating Systems
+   Custom Styling & Animations
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --primary: #ea580c; /* Warm Orange / Ember */
+  --primary-hover: #c2410c;
+  --primary-light: #ffedd5;
+  --primary-glow: rgba(234, 88, 12, 0.25);
+  --secondary: #0f172a; /* Deep Slate / Navy */
+  --secondary-light: #1e293b;
+  --accent: #f97316; /* Bright Flame */
+  --surface: #ffffff;
+  --surface-alt: #f8fafc;
+  --border: #e2e8f0;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --shadow-subtle: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+  --shadow-card: 0 10px 30px -5px rgba(15, 23, 42, 0.08);
+  --shadow-glow: 0 0 40px -10px rgba(234, 88, 12, 0.35);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 85px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--text-main);
+  background-color: #ffffff;
+}
+
+h1, h2, h3, h4, .font-heading {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Glassmorphism Header */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all 0.3s ease;
+}
+
+.glass-nav.scrolled {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
+  border-bottom-color: rgba(226, 232, 240, 1);
+}
+
+/* Subtle Heat Pulse Effect */
+@keyframes heatPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(234, 88, 12, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 35px rgba(234, 88, 12, 0.4);
+    transform: scale(1.02);
+  }
+}
+
+.pulse-heat {
+  animation: heatPulse 4s infinite ease-in-out;
+}
+
+/* Background Thermal Grid Pattern */
+.bg-grid-pattern {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(226, 232, 240, 0.5) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(226, 232, 240, 0.5) 1px, transparent 1px);
+}
+
+.bg-radial-warm {
+  background: radial-gradient(circle at 50% 10%, rgba(254, 215, 170, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
+}
+
+.bg-dark-mesh {
+  background-color: #0f172a;
+  background-image: 
+    radial-gradient(at 10% 20%, rgba(234, 88, 12, 0.15) 0px, transparent 50%),
+    radial-gradient(at 90% 80%, rgba(30, 41, 59, 0.8) 0px, transparent 50%);
+}
+
+/* Card Hover Lift & Glow */
+.card-hover {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 35px -10px rgba(15, 23, 42, 0.12);
+  border-color: rgba(234, 88, 12, 0.3);
+}
+
+/* Gradient Text */
+.text-gradient-warm {
+  background: linear-gradient(135deg, #ea580c 0%, #f97316 50%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-dark {
+  background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Interactive Slider Customization */
+input[type=range].custom-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 6px;
+  background: #e2e8f0;
+  outline: none;
+  transition: background 0.2s;
+}
+
+input[type=range].custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #ea580c;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(234, 88, 12, 0.5);
+  border: 3px solid #ffffff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type=range].custom-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.7);
+}
+
+input[type=range].custom-slider::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #ea580c;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(234, 88, 12, 0.5);
+  border: 3px solid #ffffff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Custom Checkbox / Radio Badges */
+.radio-pill input:checked + label {
+  background-color: #ea580c;
+  color: #ffffff;
+  border-color: #ea580c;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);
+}
+
+.radio-card input:checked + div {
+  border-color: #ea580c !important;
+  background: linear-gradient(135deg, rgba(234, 88, 12, 0.22) 0%, rgba(30, 41, 59, 0.95) 100%) !important;
+  box-shadow: 0 0 25px -4px rgba(234, 88, 12, 0.4), inset 0 0 0 1px rgba(234, 88, 12, 0.6) !important;
+}
+
+.radio-card input:checked + div span {
+  color: #ffffff !important;
+}
+
+.radio-card input:checked + div .text-slate-400,
+.radio-card input:checked + div .text-\[11px\] {
+  color: #fed7aa !important; /* Warm readable cream-orange for subtitles */
+}
+
+.radio-card input:checked + div .text-orange-400 {
+  color: #fb923c !important;
+}
+
+.radio-card input:checked + div .check-indicator {
+  background-color: #ea580c !important;
+  border-color: #ea580c !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 10px rgba(234, 88, 12, 0.6);
+}
+
+/* Modal styles */
+.modal-backdrop {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease-out;
+}
+
+.modal-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-container {
+  transform: scale(0.95) translateY(15px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-backdrop.open .modal-container {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+/* Scroll reveal helper */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Floating contact widget */
+.floating-contact-btn {
+  box-shadow: 0 10px 25px -5px rgba(234, 88, 12, 0.45);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.floating-contact-btn:hover {
+  transform: scale(1.08);
+}
+
+/* Badge Glow */
+.badge-warm {
+  background: rgba(234, 88, 12, 0.1);
+  color: #c2410c;
+  border: 1px solid rgba(234, 88, 12, 0.2);
+}
+
+/* Heating Pipe Diagram Accent */
+.pipe-accent-line {
+  background: linear-gradient(90deg, #ea580c 0%, #f97316 50%, #fbbf24 100%);
+  height: 4px;
+  border-radius: 9999px;
+}

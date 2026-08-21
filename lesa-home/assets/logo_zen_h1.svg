@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 180" width="100%" height="100%">
+  <defs>
+    <linearGradient id="zen-warm-a" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ea580c" />
+      <stop offset="100%" stop-color="#f97316" />
+    </linearGradient>
+    <linearGradient id="zen-slate-a" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+  </defs>
+
+  <!-- Transparent / Clean Canvas -->
+  <rect width="100%" height="100%" fill="none" />
+
+  <!-- ================= LOGO SYGNET (LEFT) ================= -->
+  <g transform="translate(85, 90)">
+    <!-- Soft ambient aura -->
+    <circle cx="0" cy="0" r="62" fill="#fff7ed" opacity="0.6" />
+
+    <!-- Left Arc (Solid Foundation / Deep Slate) -->
+    <path d="M-36,36 L-36,-10 C-36,-38 -12,-52 14,-52 C34,-52 46,-40 46,-24 C46,-6 26,6 -4,14" 
+          fill="none" 
+          stroke="url(#zen-slate-a)" 
+          stroke-width="13" 
+          stroke-linecap="round" 
+          stroke-linejoin="round" />
+
+    <!-- Right Interlocking Arc (Warm Flow / Terracotta Amber) -->
+    <path d="M36,-36 L36,10 C36,38 12,52 -14,52 C-34,52 -46,40 -46,24 C-46,6 -26,-6 4,-14" 
+          fill="none" 
+          stroke="url(#zen-warm-a)" 
+          stroke-width="13" 
+          stroke-linecap="round" 
+          stroke-linejoin="round" />
+
+    <!-- Center Zen Balance Node -->
+    <circle cx="0" cy="0" r="5" fill="#ea580c" />
+  </g>
+
+  <!-- Vertical Subtle Divider -->
+  <line x1="175" y1="40" x2="175" y2="140" stroke="#e2e8f0" stroke-width="1.5" stroke-linecap="round" />
+
+  <!-- ================= TYPOGRAPHY (RIGHT) ================= -->
+  <g transform="translate(205, 0)">
+    <!-- Brand Name 'LeSa' -->
+    <text x="0" y="94" 
+          font-family="'Plus Jakarta Sans', 'Segoe UI', -apple-system, sans-serif" 
+          font-size="52" 
+          font-weight="800" 
+          fill="#0f172a" 
+          letter-spacing="-1px">
+      LeSa
+    </text>
+
+    <!-- Word 'HOME' -->
+    <text x="132" y="94" 
+          font-family="'Outfit', 'Segoe UI', sans-serif" 
+          font-size="34" 
+          font-weight="600" 
+          fill="#ea580c" 
+          letter-spacing="2px">
+      HOME
+    </text>
+
+    <!-- Subtitle / Tagline -->
+    <text x="2" y="126" 
+          font-family="'Plus Jakarta Sans', sans-serif" 
+          font-size="11.5" 
+          font-weight="600" 
+          fill="#64748b" 
+          letter-spacing="3.5px">
+      SYSTEMY GRZEWCZE &amp; WYKOŃCZENIA
+    </text>
+  </g>
+</svg>

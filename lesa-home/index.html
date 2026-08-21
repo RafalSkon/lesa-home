@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeSa - Home | Nowoczesne Ogrzewanie Podłogowe & Systemy Grzewcze</title>
+  <meta name="description" content="LeSa - Home to profesjonalny montaż nowoczesnego ogrzewania podłogowego, wylewek anhydrytowych i systemów grzewczych. Sprawdź nasz kalkulator i zamów bezpłatny audyt!">
+  <meta name="keywords" content="ogrzewanie podłogowe, podłogówka, wylewka anhydrytowa, pompa ciepła, montaż ogrzewania, LeSa Home, systemy grzewcze">
+  
+  <!-- Open Graph / Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="LeSa - Home | Mistrzowski Montaż Ogrzewania Podłogowego">
+  <meta property="og:description" content="Komfortowe ciepło pod Twoimi stopami. Precyzyjny montaż, 10 lat gwarancji i idealna współpraca z pompami ciepła.">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              200: '#fed7aa',
+              300: '#fdba74',
+              400: '#fb923c',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+              800: '#9a3412',
+              900: '#7c2d12',
+            },
+            slate: {
+              850: '#151f32',
+              950: '#090d16',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased selection:bg-orange-500 selection:text-white">
+
+  <!-- ================= TOP ANNOUNCEMENT BAR ================= -->
+  <div class="bg-slate-900 text-slate-200 text-xs py-2 px-4 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center justify-center w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>Rezerwacja terminów na sezon 2026 • <strong>Darmowy bilans cieplny i projekt ułożenia pętli</strong></span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="tel:+48790000000" class="hover:text-orange-400 transition-colors flex items-center gap-1 font-medium">
+          <svg class="w-3.5 h-3.5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          +48 790 000 000
+        </a>
+        <span class="text-slate-600 hidden sm:inline">|</span>
+        <span class="text-slate-400 hidden sm:inline">Pn - Sob: 7:00 - 19:00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= HEADER & NAVIGATION ================= -->
+  <header id="main-header" class="glass-nav sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#glowna" class="flex items-center gap-3.5 group">
+        <div class="w-11 h-11 rounded-xl bg-slate-900 flex items-center justify-center p-1.5 shadow-md shadow-slate-900/10 group-hover:scale-105 transition-transform">
+          <!-- Zen C Architectural Symbol -->
+          <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
+            <path d="M22,64 A36,36 0 1,1 76,77" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" />
+            <path d="M42,30 A20,20 0 0,1 70,58" fill="none" stroke="url(#nav-zen-warm)" stroke-width="7.5" stroke-linecap="round" />
+            <circle cx="50" cy="50" r="4" fill="#f97316" />
+            <defs>
+              <linearGradient id="nav-zen-warm" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ea580c" />
+                <stop offset="100%" stop-color="#f97316" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div>
+          <span class="text-2xl font-bold font-heading tracking-tight text-slate-900 flex items-center gap-1">
+            LeSa <span class="text-orange-600 font-extrabold">HOME</span>
+          </span>
+          <span class="text-[9.5px] tracking-widest uppercase font-semibold text-slate-500 block -mt-1">
+            Systemy Grzewcze &amp; Wykończenia
+          </span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-700">
+        <a href="#glowna" class="hover:text-orange-600 transition-colors">Główna</a>
+        <a href="#o-nas" class="hover:text-orange-600 transition-colors">O nas</a>
+        <a href="#dlaczego-my" class="hover:text-orange-600 transition-colors">Dlaczego my?</a>
+        <a href="#kalkulator" class="hover:text-orange-600 transition-colors flex items-center gap-1">
+          <span>Kalkulator</span>
+          <span class="bg-orange-100 text-orange-700 text-[10px] font-bold px-1.5 py-0.5 rounded-full">Szybka wycena</span>
+        </a>
+        <a href="#realizacje" class="hover:text-orange-600 transition-colors">Realizacje</a>
+        <a href="#blog" class="hover:text-orange-600 transition-colors">Baza wiedzy</a>
+        <a href="#kontakt" class="hover:text-orange-600 transition-colors">Kontakt</a>
+      </nav>
+
+      <!-- Header CTA Buttons -->
+      <div class="hidden lg:flex items-center gap-4">
+        <a href="tel:+48790000000" class="flex items-center gap-2 text-slate-800 hover:text-orange-600 font-semibold text-sm transition-colors">
+          <div class="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          </div>
+          <span>+48 790 000 000</span>
+        </a>
+        <a href="#kalkulator" class="px-5 py-2.5 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-semibold text-sm rounded-xl shadow-md shadow-orange-600/20 hover:shadow-orange-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]">
+          Darmowa Wycena
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-btn" class="md:hidden p-2.5 text-slate-700 hover:text-orange-600 rounded-xl hover:bg-slate-100 transition-colors" aria-label="Otwórz menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= MOBILE MENU DRAWER ================= -->
+  <div id="mobile-menu" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+    <div class="mobile-drawer fixed top-0 right-0 bottom-0 w-4/5 max-w-sm bg-white p-6 shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300">
+      <div>
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center p-1 shadow-sm">
+              <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
+                <path d="M22,64 A36,36 0 1,1 76,77" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" />
+                <path d="M42,30 A20,20 0 0,1 70,58" fill="none" stroke="#ea580c" stroke-width="7.5" stroke-linecap="round" />
+                <circle cx="50" cy="50" r="4" fill="#ea580c" />
+              </svg>
+            </div>
+            <span class="text-xl font-bold font-heading text-slate-900">LeSa <span class="text-orange-600 font-extrabold">HOME</span></span>
+          </div>
+          <button id="mobile-menu-close" class="p-2 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <nav class="flex flex-col gap-4 text-base font-semibold text-slate-800">
+          <a href="#glowna" class="mobile-nav-link hover:text-orange-600 py-1 transition-colors">Strona Główna</a>
+          <a href="#o-nas" class="mobile-nav-link hover:text-orange-600 py-1 transition-colors">O firmie</a>
+          <a href="#dlaczego-my" class="mobile-nav-link hover:text-orange-600 py-1 transition-colors">Dlaczego my?</a>
+          <a href="#kalkulator" class="mobile-nav-link text-orange-600 py-1 flex items-center justify-between">
+            <span>Kalkulator wyceny</span>
+            <span class="text-xs bg-orange-100 px-2 py-0.5 rounded-full font-bold">Oblicz</span>
+          </a>
+          <a href="#realizacje" class="mobile-nav-link hover:text-orange-600 py-1 transition-colors">Nasze realizacje</a>
+          <a href="#blog" class="mobile-nav-link hover:text-orange-600 py-1 transition-colors">Baza wiedzy & Poradniki</a>
+          <a href="#kontakt" class="mobile-nav-link hover:text-orange-600 py-1 transition-colors">Kontakt & Wycena</a>
+        </nav>
+      </div>
+
+      <div class="pt-6 border-t border-slate-100 space-y-3">
+        <a href="tel:+48790000000" class="w-full py-3 bg-slate-900 text-white rounded-xl font-semibold text-center flex items-center justify-center gap-2">
+          <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          Zadzwoń teraz
+        </a>
+        <a href="#kalkulator" class="mobile-nav-link w-full py-3 bg-orange-600 text-white rounded-xl font-semibold text-center block shadow-lg shadow-orange-600/30">
+          Darmowa Wycena Online
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= HERO SECTION ================= -->
+  <section id="glowna" class="relative overflow-hidden bg-radial-warm pt-12 pb-20 md:py-24 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left Hero Content -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-100/90 border border-orange-200 text-orange-800 text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-orange-600"></span>
+            Certyfikowany Wykonawca Ogrzewania Płaszczyznowego
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-heading text-slate-900 tracking-tight leading-[1.1]">
+            Perfekcyjne ciepło w Twoim domu. <br>
+            <span class="text-gradient-warm">Ogrzewanie podłogowe</span> od LeSa - Home.
+          </h1>
+
+          <p class="text-lg text-slate-600 leading-relaxed max-w-2xl font-normal">
+            Projektujemy i montujemy nowoczesne, energooszczędne systemy podłogowe dopasowane do pomp ciepła i kotłów nowej generacji. 
+            Precyzyjny rozstaw rur, próba ciśnieniowa i 10 lat pisemnej gwarancji.
+          </p>
+
+          <!-- Key Trust Badges -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 py-2">
+            <div class="bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+              <span class="text-xl font-extrabold text-orange-600 font-heading">10 Lat</span>
+              <span class="text-xs text-slate-600 font-medium">Gwarancji na montaż</span>
+            </div>
+            <div class="bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+              <span class="text-xl font-extrabold text-slate-900 font-heading">6 Bar</span>
+              <span class="text-xs text-slate-600 font-medium">Próba ciśnieniowa</span>
+            </div>
+            <div class="bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+              <span class="text-xl font-extrabold text-orange-600 font-heading">-30%</span>
+              <span class="text-xs text-slate-600 font-medium">Niższe rachunki</span>
+            </div>
+            <div class="bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+              <span class="text-xl font-extrabold text-slate-900 font-heading">100%</span>
+              <span class="text-xs text-slate-600 font-medium">Sprawdzona szczelność</span>
+            </div>
+          </div>
+
+          <!-- Hero CTAs -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+            <a href="#kalkulator" class="px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-600/30 hover:shadow-orange-600/40 text-center transition-all flex items-center justify-center gap-2 group text-base">
+              <span>Oblicz koszt w 60 sekund</span>
+              <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
+            <a href="#realizacje" class="px-7 py-4 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-semibold rounded-xl text-center shadow-sm transition-all text-base">
+              Zobacz nasze realizacje
+            </a>
+          </div>
+
+          <!-- Future Expansion / Contractor Trust Note -->
+          <div class="flex items-center gap-3 pt-2 text-xs text-slate-500">
+            <div class="flex -space-x-1.5">
+              <span class="inline-block w-6 h-6 rounded-full bg-orange-500 text-white text-[10px] flex items-center justify-center font-bold">✓</span>
+              <span class="inline-block w-6 h-6 rounded-full bg-slate-800 text-white text-[10px] flex items-center justify-center font-bold">⚡</span>
+            </div>
+            <span>Wkrótce: Kompleksowy wykonawca kotłowni i pomp ciepła w sieci partnerskiej LeSa - Home.</span>
+          </div>
+
+        </div>
+
+        <!-- Right Hero Visual Card -->
+        <div class="lg:col-span-5 relative">
+          
+          <!-- Decorative Background Glow -->
+          <div class="absolute -top-6 -right-6 w-72 h-72 bg-orange-500/20 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <!-- Main Interactive Visual Layer Showcase -->
+          <div class="bg-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-2xl border border-slate-800 relative z-10 overflow-hidden">
+            
+            <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+              <div>
+                <span class="text-xs text-orange-400 font-semibold tracking-wider uppercase block">Przekrój technologiczny</span>
+                <h3 class="text-lg font-bold text-white">System Płaszczyznowy LeSa - Home</h3>
+              </div>
+              <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                Norma PN-EN 1264
+              </span>
+            </div>
+
+            <!-- Visual Cross Section of Underfloor Layers -->
+            <div class="space-y-3">
+              
+              <!-- Layer 1: Flooring Finish -->
+              <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/60 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs font-bold">01</div>
+                  <div>
+                    <h4 class="text-sm font-bold text-slate-100">Posadzka wykończeniowa</h4>
+                    <p class="text-xs text-slate-400">Płytki gresowe, panele winylowe lub parkiet</p>
+                  </div>
+                </div>
+                <span class="text-xs font-semibold text-amber-400">23-24°C</span>
+              </div>
+
+              <!-- Layer 2: Screed -->
+              <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/60 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center text-xs font-bold">02</div>
+                  <div>
+                    <h4 class="text-sm font-bold text-slate-100">Wylewka anhydrytowa Knauf</h4>
+                    <p class="text-xs text-slate-400">Wysokie przewodnictwo λ=1.8 W/mK, bez pęcherzy</p>
+                  </div>
+                </div>
+                <span class="text-xs font-semibold text-orange-400">45 mm</span>
+              </div>
+
+              <!-- Layer 3: PEX Pipes with Heat Pulse Animation -->
+              <div class="p-4 bg-gradient-to-r from-orange-950/80 to-slate-800 rounded-xl border border-orange-500/40 relative overflow-hidden">
+                <div class="absolute inset-0 underfloor-circuit-bg"></div>
+                <div class="relative z-10 flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-orange-500 text-white flex items-center justify-center text-sm font-extrabold pulse-heat shadow-lg shadow-orange-500/50">
+                      ♨
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                        Rury wielowarstwowe PEX/AL/PEX
+                        <span class="text-[10px] bg-orange-600 px-1.5 py-0.5 rounded text-white font-bold">16x2.0</span>
+                      </h4>
+                      <p class="text-xs text-orange-200/80">Laserowy rozstaw 10–15 cm, ciągła pętla bez łączeń w podłodze</p>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-xs text-orange-300 font-bold block">Zasilanie</span>
+                    <span class="text-sm font-extrabold text-orange-400">28-32°C</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Layer 4: Insulation -->
+              <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/60 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs font-bold">04</div>
+                  <div>
+                    <h4 class="text-sm font-bold text-slate-100">Izolacja termiczna EPS 100 + Folia</h4>
+                    <p class="text-xs text-slate-400">Zero ucieczki ciepła w grunt lub strop</p>
+                  </div>
+                </div>
+                <span class="text-xs font-semibold text-blue-400">10-15 cm</span>
+              </div>
+
+            </div>
+
+            <!-- Footer of visual card -->
+            <div class="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                Optymalne pod pompy ciepła i kotły
+              </span>
+              <span class="text-orange-400 font-semibold">LeSa Engineering</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DLACZEGO MY / VALUE PROPOSITION ================= -->
+  <section id="dlaczego-my" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-orange-600 font-bold text-xs uppercase tracking-widest block mb-2">Dlaczego LeSa - Home?</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold font-heading text-slate-900 tracking-tight">
+          Inżynierska precyzja, która gwarantuje komfort i spokój na dekady
+        </h2>
+        <p class="text-slate-600 text-base mt-4 leading-relaxed">
+          Nie idziemy na kompromisy materiałowe. Każda pętla jest dokładnie przeliczona i sprawdzona pod ciśnieniem przed zalaniem posadzki.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <!-- Feature 1 -->
+        <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200 card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mb-6 shadow-sm">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <h3 class="text-xl font-bold font-heading text-slate-900 mb-3">Oszczędność do 30%</h3>
+            <p class="text-slate-600 text-sm leading-relaxed">
+              Dzięki niskiej temperaturze zasilania (28–32°C) Twoja pompa ciepła lub kocioł kondensacyjny pracują z najwyższą możliwą sprawnością.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-orange-700 font-semibold flex items-center gap-1">
+            <span>Maksymalny współczynnik COP</span>
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200 card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mb-6 shadow-sm">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <h3 class="text-xl font-bold font-heading text-slate-900 mb-3">100% Szczelności</h3>
+            <p class="text-slate-600 text-sm leading-relaxed">
+              Stosujemy wyłącznie rury w jednym odcinku (zero złączek pod podłogą) i wykonujemy 24-godzinną próbę ciśnieniową na 6 bar z protokołem odbioru.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-orange-700 font-semibold flex items-center gap-1">
+            <span>10 lat pisemnej gwarancji</span>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200 card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mb-6 shadow-sm">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+            </div>
+            <h3 class="text-xl font-bold font-heading text-slate-900 mb-3">Zdrowy Mikroklimat</h3>
+            <p class="text-slate-600 text-sm leading-relaxed">
+              Brak zjawiska przypalania kurzu i konwekcji powietrza. Idealny pionowy rozkład temperatur (cieplej w stopy, chłodniej przy głowie).
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-orange-700 font-semibold flex items-center gap-1">
+            <span>Rekomendowane dla alergików</span>
+          </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200 card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mb-6 shadow-sm">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            </div>
+            <h3 class="text-xl font-bold font-heading text-slate-900 mb-3">Kompleksowa Przyszłość</h3>
+            <p class="text-slate-600 text-sm leading-relaxed">
+              Rozwijamy sieć partnerską: podłogówka, wylewki anhydrytowe, pompy ciepła i automatyka od jednego zgranego zespołu wykonawców.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-orange-700 font-semibold flex items-center gap-1">
+            <span>Jeden partner, brak konfliktów</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= INTERACTIVE HEATING CALCULATOR ================= -->
+  <section id="kalkulator" class="py-20 bg-slate-900 text-white relative overflow-hidden bg-dark-mesh">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-orange-400 font-bold text-xs uppercase tracking-widest block mb-2">Interaktywny Kalkulator 2026</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold font-heading text-white tracking-tight">
+          Oszacuj koszt ogrzewania podłogowego w swoim domu
+        </h2>
+        <p class="text-slate-300 text-sm sm:text-base mt-3 leading-relaxed">
+          Wybierz powierzchnię i preferencje techniczne, aby natychmiast poznać szacunkowy koszt materiałów z montażem oraz orientacyjny czas realizacji.
+        </p>
+      </div>
+
+      <!-- Calculator Box -->
+      <div class="bg-slate-850 rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-2xl">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          
+          <!-- Controls (Left Side) -->
+          <div class="lg:col-span-7 space-y-8">
+            
+            <!-- Step 1: Area Slider -->
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <label for="calc-area-slider" class="text-base font-bold text-white flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-full bg-orange-600 text-white text-xs flex items-center justify-center font-extrabold">1</span>
+                  Powierzchnia do ogrzania:
+                </label>
+                <span id="calc-area-value" class="text-2xl font-extrabold font-heading text-orange-400">120 m²</span>
+              </div>
+              <input id="calc-area-slider" type="range" min="40" max="350" step="5" value="120" class="custom-slider">
+              <div class="flex justify-between text-xs text-slate-400 mt-2 font-medium">
+                <span>40 m² (mieszkanie/segment)</span>
+                <span>150 m² (standardowy dom)</span>
+                <span>350 m² (duża willa)</span>
+              </div>
+            </div>
+
+            <!-- Step 2: Building Type -->
+            <div>
+              <label class="text-base font-bold text-white flex items-center gap-2 mb-3">
+                <span class="w-6 h-6 rounded-full bg-orange-600 text-white text-xs flex items-center justify-center font-extrabold">2</span>
+                Stan budynku / Typ inwestycji:
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <label class="radio-card cursor-pointer">
+                  <input type="radio" name="building-type" value="new" checked class="hidden">
+                  <div class="p-4 rounded-xl bg-slate-800 border border-slate-700 hover:border-slate-600 transition-all flex items-center justify-between">
+                    <div>
+                      <span class="font-bold text-sm text-slate-100 block">Nowy budynek</span>
+                      <span class="text-xs text-slate-400">Stan surowy / deweloperski</span>
+                    </div>
+                    <div class="w-5 h-5 rounded-full border border-slate-500 flex items-center justify-center check-indicator">
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    </div>
+                  </div>
+                </label>
+                <label class="radio-card cursor-pointer">
+                  <input type="radio" name="building-type" value="renovation" class="hidden">
+                  <div class="p-4 rounded-xl bg-slate-800 border border-slate-700 hover:border-slate-600 transition-all flex items-center justify-between">
+                    <div>
+                      <span class="font-bold text-sm text-slate-100 block">Modernizacja / Remont</span>
+                      <span class="text-xs text-slate-400">System suchy / frezowanie</span>
+                    </div>
+                    <div class="w-5 h-5 rounded-full border border-slate-500 flex items-center justify-center check-indicator">
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 3: Screed Selection -->
+            <div>
+              <label class="text-base font-bold text-white flex items-center gap-2 mb-3">
+                <span class="w-6 h-6 rounded-full bg-orange-600 text-white text-xs flex items-center justify-center font-extrabold">3</span>
+                Rodzaj wylewki posadzkowej:
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <label class="radio-card cursor-pointer">
+                  <input type="radio" name="screed-type" value="anhydrite" checked class="hidden">
+                  <div class="p-3.5 rounded-xl bg-slate-800 border border-slate-700 hover:border-slate-600 transition-all">
+                    <span class="font-bold text-xs text-orange-400 uppercase tracking-wider block mb-1">Rekomendowana</span>
+                    <span class="font-bold text-sm text-slate-100 block">Wylewka Anhydrytowa</span>
+                    <span class="text-[11px] text-slate-400 block mt-1">Szybkie nagrzewanie, idealna pod pompę ciepła</span>
+                  </div>
+                </label>
+                <label class="radio-card cursor-pointer">
+                  <input type="radio" name="screed-type" value="cement" class="hidden">
+                  <div class="p-3.5 rounded-xl bg-slate-800 border border-slate-700 hover:border-slate-600 transition-all">
+                    <span class="font-bold text-xs text-slate-400 uppercase tracking-wider block mb-1">Tradycyjna</span>
+                    <span class="font-bold text-sm text-slate-100 block">Jastrych Cementowy</span>
+                    <span class="text-[11px] text-slate-400 block mt-1">Miksokret ze zbrojeniem rozproszonym</span>
+                  </div>
+                </label>
+                <label class="radio-card cursor-pointer">
+                  <input type="radio" name="screed-type" value="none" class="hidden">
+                  <div class="p-3.5 rounded-xl bg-slate-800 border border-slate-700 hover:border-slate-600 transition-all">
+                    <span class="font-bold text-xs text-slate-400 uppercase tracking-wider block mb-1">Wariant bazowy</span>
+                    <span class="font-bold text-sm text-slate-100 block">Sam montaż rur</span>
+                    <span class="text-[11px] text-slate-400 block mt-1">Wylewkę organizujesz we własnym zakresie</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 4: Zone Automation -->
+            <div>
+              <label class="text-base font-bold text-white flex items-center gap-2 mb-3">
+                <span class="w-6 h-6 rounded-full bg-orange-600 text-white text-xs flex items-center justify-center font-extrabold">4</span>
+                Automatyka i sterowanie strefowe:
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <label class="radio-card cursor-pointer">
+                  <input type="radio" name="control-type" value="smart" checked class="hidden">
+                  <div class="p-4 rounded-xl bg-slate-800 border border-slate-700 hover:border-slate-600 transition-all flex items-center justify-between">
+                    <div>
+                      <span class="font-bold text-sm text-slate-100 block">Sterowanie Smart (WiFi)</span>
+                      <span class="text-xs text-slate-400">Termostaty w każdym pokoju + aplikacja</span>
+                    </div>
+                    <div class="w-5 h-5 rounded-full border border-slate-500 flex items-center justify-center check-indicator">
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    </div>
+                  </div>
+                </label>
+                <label class="radio-card cursor-pointer">
+                  <input type="radio" name="control-type" value="manual" class="hidden">
+                  <div class="p-4 rounded-xl bg-slate-800 border border-slate-700 hover:border-slate-600 transition-all flex items-center justify-between">
+                    <div>
+                      <span class="font-bold text-sm text-slate-100 block">Regulacja ręczna</span>
+                      <span class="text-xs text-slate-400">Rotametry na rozdzielaczu</span>
+                    </div>
+                    <div class="w-5 h-5 rounded-full border border-slate-500 flex items-center justify-center check-indicator">
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Step 5: Source Prep -->
+            <div>
+              <label class="text-base font-bold text-white flex items-center gap-2 mb-3">
+                <span class="w-6 h-6 rounded-full bg-orange-600 text-white text-xs flex items-center justify-center font-extrabold">5</span>
+                Docelowe źródło ciepła:
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <label class="radio-card cursor-pointer">
+                  <input type="radio" name="heat-source" value="heat_pump" checked class="hidden">
+                  <div class="p-4 rounded-xl bg-slate-800 border border-slate-700 hover:border-slate-600 transition-all flex items-center justify-between">
+                    <div>
+                      <span class="font-bold text-sm text-slate-100 block">Pompa Ciepła</span>
+                      <span class="text-xs text-orange-400 font-medium">Zagęszczony rozstaw pętli (10cm)</span>
+                    </div>
+                    <div class="w-5 h-5 rounded-full border border-slate-500 flex items-center justify-center check-indicator">
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    </div>
+                  </div>
+                </label>
+                <label class="radio-card cursor-pointer">
+                  <input type="radio" name="heat-source" value="boiler" class="hidden">
+                  <div class="p-4 rounded-xl bg-slate-800 border border-slate-700 hover:border-slate-600 transition-all flex items-center justify-between">
+                    <div>
+                      <span class="font-bold text-sm text-slate-100 block">Kocioł gazowy / Pellet</span>
+                      <span class="text-xs text-slate-400">Standardowy rozstaw (15cm)</span>
+                    </div>
+                    <div class="w-5 h-5 rounded-full border border-slate-500 flex items-center justify-center check-indicator">
+                      <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Dynamic Output Card (Right Side) -->
+          <div class="lg:col-span-5 bg-gradient-to-b from-slate-900 to-slate-950 p-6 sm:p-8 rounded-2xl border border-orange-500/30 shadow-xl lg:sticky lg:top-28">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+              <span class="text-xs font-bold text-orange-400 uppercase tracking-wider">Szacunkowy koszt inwestycji</span>
+              <span class="text-[11px] bg-orange-950 text-orange-300 border border-orange-800 px-2 py-0.5 rounded-full">Materiał + Montaż</span>
+            </div>
+
+            <!-- Price Output -->
+            <div class="py-6 text-center">
+              <div class="text-xs text-slate-400 mb-1">Orientacyjny zakres cenowy netto:</div>
+              <div class="text-3xl sm:text-4xl font-extrabold font-heading text-white tracking-tight flex items-center justify-center gap-2">
+                <span id="calc-price-min">18 500 zł</span>
+                <span class="text-orange-500 font-light">–</span>
+                <span id="calc-price-max">21 200 zł</span>
+              </div>
+              <div class="inline-block mt-2 px-3 py-1 bg-slate-800 rounded-full text-xs font-semibold text-orange-400" id="calc-price-m2">
+                ~168 zł/m² z materiałem
+              </div>
+            </div>
+
+            <!-- Technical metrics grid -->
+            <div class="grid grid-cols-3 gap-2 p-3.5 bg-slate-800/60 rounded-xl border border-slate-800 text-center mb-6">
+              <div>
+                <span class="block text-[11px] text-slate-400">Czas montażu:</span>
+                <span id="calc-estimated-time" class="font-bold text-sm text-slate-100">1-2 dni</span>
+              </div>
+              <div class="border-x border-slate-700">
+                <span class="block text-[11px] text-slate-400">Obiegi / Pętle:</span>
+                <span id="calc-estimated-loops" class="font-bold text-sm text-slate-100">11 sekcji</span>
+              </div>
+              <div>
+                <span class="block text-[11px] text-slate-400">Długość rur:</span>
+                <span id="calc-estimated-pipes" class="font-bold text-sm text-slate-100">~1 020 mb</span>
+              </div>
+            </div>
+
+            <!-- Inclusions list -->
+            <div class="space-y-2 text-xs text-slate-300 mb-6">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>Markowa rura wielowarstwowa PEX/AL/PEX 16x2.0</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>Rozdzielacz ze stali szlachetnej z rotametrami</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>Próba ciśnieniowa 6 bar + protokół gwarancyjny (10 lat)</span>
+              </div>
+            </div>
+
+            <!-- Transfer Button -->
+            <button id="calc-transfer-btn" class="w-full py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-600/30 transition-all flex items-center justify-center gap-2 text-sm sm:text-base group">
+              <span>Zamów bezpłatny audyt i dokładny projekt</span>
+              <svg class="w-4 h-4 group-hover:translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+            </button>
+            <p class="text-center text-[11px] text-slate-400 mt-2">
+              Przeniesie wybrane parametry do formularza na dole strony.
+            </p>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= O NAS (ABOUT US) ================= -->
+  <section id="o-nas" class="py-20 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left Image & Badges Collage -->
+        <div class="lg:col-span-5 relative">
+          <div class="rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-slate-900 h-96 relative">
+            <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80" alt="Inżynier LeSa - Home na budowie" class="w-full h-full object-cover opacity-90" />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+            <div class="absolute bottom-6 left-6 right-6 text-white">
+              <span class="text-orange-400 font-bold text-xs uppercase tracking-wider block">LeSa - Home Philosophy</span>
+              <h4 class="text-xl font-bold font-heading">„Ciepło to nie przypadek. Ciepło to obliczenia inżynierskie.”</h4>
+            </div>
+          </div>
+
+          <!-- Floating Badge -->
+          <div class="absolute -bottom-6 -right-4 sm:right-6 bg-white p-4 rounded-2xl shadow-xl border border-slate-200 flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-orange-600 text-white flex items-center justify-center text-xl font-extrabold">
+              10+
+            </div>
+            <div>
+              <span class="font-extrabold text-slate-900 text-sm block">Lat dośw. instalacyjnego</span>
+              <span class="text-xs text-slate-500">Setki zrealizowanych domów</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Content -->
+        <div class="lg:col-span-7 space-y-6">
+          <span class="text-orange-600 font-bold text-xs uppercase tracking-widest block">Poznaj LeSa - Home</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold font-heading text-slate-900 tracking-tight">
+            Budujemy fundamenty komfortu cieplnego dla nowoczesnych domów
+          </h2>
+
+          <p class="text-slate-600 leading-relaxed text-base">
+            Firma <strong>LeSa - Home</strong> powstała z pasji do nowoczesnego budownictwa energooszczędnego. Wiemy, że podłogówka to nie tylko „rozwinięcie rur na styropianie” – to precyzyjny wymiennik ciepła, który decyduje o rachunkach za ogrzewanie i komforcie domowników przez następne kilkadziesiąt lat.
+          </p>
+
+          <p class="text-slate-600 leading-relaxed text-base">
+            Dlatego w LeSa - Home każdy projekt rozpoczynamy od <strong>analizy zapotrzebowania cieplnego (OZC)</strong>. Dobieramy średnice rur, zagęszczenie pętli przy przeszkleniach tarasowych oraz idealną grubość jastrychu anhydrytowego.
+          </p>
+
+          <!-- Expansion / Partnership Vision Box -->
+          <div class="p-5 bg-orange-50/80 rounded-2xl border border-orange-200 text-slate-800 space-y-2">
+            <div class="flex items-center gap-2 font-bold text-orange-950">
+              <svg class="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z" clip-rule="evenodd"/></svg>
+              <span>Przyszłość: Kompleksowy wykonawca systemów grzewczych</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              Dzięki strategicznym partnerstwom z autoryzowanymi instalatorami pomp ciepła, kotłowni hybrydowych oraz automatyki Smart Home, zapewniamy inwestorowi <strong>pełną koordynację całego systemu grzewczego</strong> pod jednym szyldem LeSa - Home.
+            </p>
+          </div>
+
+          <!-- Pillars -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <div class="flex items-start gap-3">
+              <div class="w-5 h-5 rounded-full bg-orange-600 text-white flex items-center justify-center text-xs shrink-0 mt-0.5">✓</div>
+              <div>
+                <span class="font-bold text-sm text-slate-900 block">Tylko certyfikowane materiały</span>
+                <span class="text-xs text-slate-500">Rury z wkładką antydyfuzyjną EVOH / AL</span>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-5 h-5 rounded-full bg-orange-600 text-white flex items-center justify-center text-xs shrink-0 mt-0.5">✓</div>
+              <div>
+                <span class="font-bold text-sm text-slate-900 block">Precyzyjne równoważenie pętli</span>
+                <span class="text-xs text-slate-500">Brak przegrzanych lub zimnych stref</span>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-5 h-5 rounded-full bg-orange-600 text-white flex items-center justify-center text-xs shrink-0 mt-0.5">✓</div>
+              <div>
+                <span class="font-bold text-sm text-slate-900 block">Dokumentacja fotograficzna</span>
+                <span class="text-xs text-slate-500">Wiesz dokładnie, gdzie biegnie każda rura</span>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-5 h-5 rounded-full bg-orange-600 text-white flex items-center justify-center text-xs shrink-0 mt-0.5">✓</div>
+              <div>
+                <span class="font-bold text-sm text-slate-900 block">Próba ciśnieniowa z manometrem</span>
+                <span class="text-xs text-slate-500">Gwarancja 100% szczelności przed wylewką</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= REALIZACJE (PORTFOLIO) ================= -->
+  <section id="realizacje" class="py-20 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div>
+          <span class="text-orange-600 font-bold text-xs uppercase tracking-widest block mb-2">Portfolio & Case Studies</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold font-heading text-slate-900 tracking-tight">
+            Nasze Ostatnie Realizacje
+          </h2>
+          <p class="text-slate-600 text-sm sm:text-base mt-2">
+            Zobacz wykonane przez nas instalacje ogrzewania podłogowego w domach jednorodzinnych i modernizacjach.
+          </p>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="flex flex-wrap items-center gap-2">
+          <button data-filter="all" class="portfolio-filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-orange-600 text-white shadow-md">
+            Wszystkie
+          </button>
+          <button data-filter="new-build" class="portfolio-filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200">
+            Domy nowe
+          </button>
+          <button data-filter="heat-pump" class="portfolio-filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200">
+            Pompa Ciepła
+          </button>
+          <button data-filter="anhydrite" class="portfolio-filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200">
+            Wylewki Anhydrytowe
+          </button>
+          <button data-filter="renovation" class="portfolio-filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-slate-100 text-slate-700 hover:bg-slate-200">
+            Modernizacje
+          </button>
+        </div>
+      </div>
+
+      <!-- Projects Dynamic Grid -->
+      <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Rendered by portfolio.js -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= BAZA WIEDZY (BLOG) ================= -->
+  <section id="blog" class="py-20 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-orange-600 font-bold text-xs uppercase tracking-widest block mb-2">Baza Wiedzy Inwestora</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold font-heading text-slate-900 tracking-tight">
+          Poradniki i Artykuły Eksperckie
+        </h2>
+        <p class="text-slate-600 text-sm sm:text-base mt-3">
+          Dowiedz się, jak dobrać wylewkę, jak współpracuje podłogówka z pompą ciepła i jak uniknąć kosztownych błędów na budowie.
+        </p>
+      </div>
+
+      <!-- Articles Grid -->
+      <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Rendered by blog.js -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= OPINIE KLIENTÓW (TESTIMONIALS) ================= -->
+  <section class="py-20 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-1 text-amber-500 mb-2">
+          ★★★★★
+        </div>
+        <h2 class="text-3xl font-extrabold font-heading text-slate-900 tracking-tight">
+          Zaufali nam inwestorzy w całej Polsce
+        </h2>
+        <p class="text-slate-600 text-sm mt-2">
+          Średnia ocen 4.9/5 w opiniach Google i referencjach posprzedażowych.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Review 1 -->
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="text-amber-500 text-sm">★★★★★</div>
+            <p class="text-slate-700 text-sm italic leading-relaxed">
+              „Ekipa z LeSa - Home zrobiła u nas 170 m² podłogówki z wylewką anhydrytową w 2 dni. Bardzo duży plus za próbę ciśnieniową i doradztwo w kwestii rozstawu rur pod pompę ciepła. Rachunki za pierwszą zimę to bajka!”
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-orange-600 text-white font-bold flex items-center justify-center text-sm">
+              MK
+            </div>
+            <div>
+              <span class="font-bold text-slate-900 text-sm block">Michał K.</span>
+              <span class="text-xs text-slate-500">Dom 170 m², Wieliczka</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 2 -->
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="text-amber-500 text-sm">★★★★★</div>
+            <p class="text-slate-700 text-sm italic leading-relaxed">
+              „Szukałam firmy, która nie tylko ułoży rury, ale pomoże też z automatyką strefową. Dzięki LeSa - Home mam termostat w każdym pokoju i steruję temperaturą z telefonu. Czysto, terminowo i bez żadnych niespodzianek cenowych.”
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-slate-800 text-white font-bold flex items-center justify-center text-sm">
+              AW
+            </div>
+            <div>
+              <span class="font-bold text-slate-900 text-sm block">Agnieszka W.</span>
+              <span class="text-xs text-slate-500">Segment 130 m², Warszawa</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 3 -->
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="text-amber-500 text-sm">★★★★★</div>
+            <p class="text-slate-700 text-sm italic leading-relaxed">
+              „Modernizacja starego domu na drewnianych stropach wydawała się niemożliwa bez grzejników. LeSa zaproponowało system suchy lekki. Wszystko działa perfekcyjnie, a podłoga nagrzewa się w kilkanaście minut.”
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-slate-200 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-orange-700 text-white font-bold flex items-center justify-center text-sm">
+              TB
+            </div>
+            <div>
+              <span class="font-bold text-slate-900 text-sm block">Tomasz B.</span>
+              <span class="text-xs text-slate-500">Kamienica 90 m², Wrocław</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= FAQ SECTION ================= -->
+  <section class="py-20 bg-slate-50 border-b border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-12">
+        <span class="text-orange-600 font-bold text-xs uppercase tracking-widest block mb-2">FAQ</span>
+        <h2 class="text-3xl font-extrabold font-heading text-slate-900 tracking-tight">
+          Często Zadawane Pytania
+        </h2>
+        <p class="text-slate-600 text-sm mt-2">
+          Odpowiedzi na najważniejsze pytania przed rozpoczęciem instalacji.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        
+        <!-- FAQ 1 -->
+        <div class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+          <button class="faq-button w-full p-5 text-left font-bold text-slate-900 flex items-center justify-between gap-4 hover:text-orange-600 transition-colors">
+            <span>Ile czasu trwa montaż ogrzewania podłogowego w domu 150 m²?</span>
+            <svg class="faq-icon w-5 h-5 text-slate-400 shrink-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+            Sam montaż rur PEX wraz z izolacją termiczną i rozdzielaczami w typowym domu jednorodzinnym (120–180 m²) zajmuje nam zazwyczaj <strong>1 do 2 dni roboczych</strong>. Jeśli zamawiasz również wylewkę anhydrytową, wylanie posadzki zajmuje dodatkowo około 3–4 godziny.
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+          <button class="faq-button w-full p-5 text-left font-bold text-slate-900 flex items-center justify-between gap-4 hover:text-orange-600 transition-colors">
+            <span>Czy na ogrzewanie podłogowe można położyć panele lub drewno?</span>
+            <svg class="faq-icon w-5 h-5 text-slate-400 shrink-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+            <strong>Tak, jak najbardziej!</strong> Idealnie sprawdzają się panele winylowe (LVT/SPC) oraz laminowane z oznaczeniem producenta do ogrzewania podłogowego (niski opór cieplny R poniżej 0.15 m²K/W). Można również układać deski warstwowe (parkiet warstwowy) klejone do posadzki.
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+          <button class="faq-button w-full p-5 text-left font-bold text-slate-900 flex items-center justify-between gap-4 hover:text-orange-600 transition-colors">
+            <span>Dlaczego wykonujecie próbę ciśnieniową na 6 bar?</span>
+            <svg class="faq-icon w-5 h-5 text-slate-400 shrink-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+            Ciśnienie robocze w domowej instalacji to zwykle 1.5–2.0 bar. Próba ciśnieniowa na 6 bar jest 3-krotnie wyższa, co daje 100% pewności, że rury nie uległy uszkodzeniu mechanicznemu. Co kluczowe – posadzka wylewana jest <strong>zawsze przy instalacji pod ciśnieniem</strong>, co stabilizuje geometrię rury w jastrychu.
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="faq-item bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+          <button class="faq-button w-full p-5 text-left font-bold text-slate-900 flex items-center justify-between gap-4 hover:text-orange-600 transition-colors">
+            <span>Czy LeSa - Home realizuje także montaż pomp ciepła i kotłowni?</span>
+            <svg class="faq-icon w-5 h-5 text-slate-400 shrink-0 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+            Obecnie naszą główną specjalizacją jest instalacja ogrzewania płaszczyznowego i wylewek. Równolegle, w ramach naszej rozwijanej sieci partnerskiej, <strong>zapewniamy sprawdzonych wykonawców pomp ciepła, rekuperacji i kotłów</strong>, koordynując całość tak, aby klient otrzymał w pełni zintegrowany system grzewczy z jednym punktem kontaktu.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= KONTAKT & FORMULARZ WYCENY ================= -->
+  <section id="kontakt" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        
+        <!-- Left Contact Info -->
+        <div class="lg:col-span-5 space-y-8">
+          <div>
+            <span class="text-orange-600 font-bold text-xs uppercase tracking-widest block mb-2">Skontaktuj się z nami</span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold font-heading text-slate-900 tracking-tight">
+              Zamów Bezpłatną Wycenę i Audyt dla Twojego Domu
+            </h2>
+            <p class="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
+              Prześlij rzut budynku lub podaj orientacyjny metraż. Przygotujemy kompletny bilans materiałowy z wyceną w 24h.
+            </p>
+          </div>
+
+          <!-- Contact Details Cards -->
+          <div class="space-y-4">
+            
+            <a href="tel:+48790000000" class="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-orange-500 hover:bg-orange-50/50 transition-all flex items-center gap-4 group">
+              <div class="w-12 h-12 rounded-xl bg-orange-600 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              </div>
+              <div>
+                <span class="text-xs text-slate-500 font-semibold block">Zadzwoń bezpośrednio</span>
+                <span class="text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">+48 790 000 000</span>
+              </div>
+            </a>
+
+            <a href="https://wa.me/48790000000" target="_blank" rel="noopener" class="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 transition-all flex items-center gap-4 group">
+              <div class="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.297.144.35.491 1.199.534 1.286.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>
+              </div>
+              <div>
+                <span class="text-xs text-slate-500 font-semibold block">Napisz na WhatsApp</span>
+                <span class="text-lg font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">Szybka wycena przez czat</span>
+              </div>
+            </a>
+
+            <a href="mailto:kontakt@lesa-home.pl" class="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-orange-500 hover:bg-orange-50/50 transition-all flex items-center gap-4 group">
+              <div class="w-12 h-12 rounded-xl bg-slate-850 text-orange-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              </div>
+              <div>
+                <span class="text-xs text-slate-500 font-semibold block">E-mail do projektów</span>
+                <span class="text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">kontakt@lesa-home.pl</span>
+              </div>
+            </a>
+
+          </div>
+
+          <!-- Operating Area Box -->
+          <div class="p-5 rounded-2xl bg-slate-900 text-white space-y-2">
+            <h4 class="font-bold text-sm text-orange-400 flex items-center gap-2">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
+              Obszar działania i dojazd:
+            </h4>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Realizujemy zlecenia na terenie całego kraju (ze szczególnym uwzględnieniem woj. małopolskiego, śląskiego, mazowieckiego, dolnośląskiego i wielkopolskiego). Bezpłatny dojazd na pomiar przy zleceniach od 80 m².
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Right Form -->
+        <div class="lg:col-span-7 bg-slate-50 p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-lg">
+          <h3 class="text-xl font-bold font-heading text-slate-900 mb-2">Formularz szybkiego zapytania</h3>
+          <p class="text-xs text-slate-500 mb-6">Wypełnij poniższe pola – nasz inżynier oddzwoni z propozycją.</p>
+
+          <form id="contact-form" class="space-y-4">
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="contact-name" class="block text-xs font-bold text-slate-700 uppercase mb-1">Twoje Imię i Nazwisko *</label>
+                <input type="text" id="contact-name" required placeholder="np. Jan Kowalski" class="w-full px-4 py-3 bg-white rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-sm text-slate-900">
+              </div>
+              <div>
+                <label for="contact-phone" class="block text-xs font-bold text-slate-700 uppercase mb-1">Numer Telefonu *</label>
+                <div class="flex">
+                  <span class="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-slate-300 bg-slate-100 text-slate-600 text-xs font-semibold">+48</span>
+                  <input type="tel" id="contact-phone" required placeholder="600 000 000" class="w-full px-4 py-3 bg-white rounded-r-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-sm text-slate-900">
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="contact-email" class="block text-xs font-bold text-slate-700 uppercase mb-1">Adres E-mail</label>
+                <input type="email" id="contact-email" placeholder="jan@przyklad.pl" class="w-full px-4 py-3 bg-white rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-sm text-slate-900">
+              </div>
+              <div>
+                <label for="contact-area" class="block text-xs font-bold text-slate-700 uppercase mb-1">Powierzchnia domu (m²)</label>
+                <input type="number" id="contact-area" placeholder="np. 140" class="w-full px-4 py-3 bg-white rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-sm text-slate-900">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="contact-location" class="block text-xs font-bold text-slate-700 uppercase mb-1">Miejscowość inwestycji</label>
+                <input type="text" id="contact-location" placeholder="np. Kraków / okolice" class="w-full px-4 py-3 bg-white rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-sm text-slate-900">
+              </div>
+              <div>
+                <label for="contact-stage" class="block text-xs font-bold text-slate-700 uppercase mb-1">Planowany termin prac</label>
+                <select id="contact-stage" class="w-full px-4 py-3 bg-white rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-sm text-slate-900">
+                  <option value="asap">Jak najszybciej (najbliższy miesiąc)</option>
+                  <option value="1-3-months">Za 1-3 miesiące</option>
+                  <option value="future">W tym roku (stan surowy w trakcie)</option>
+                  <option value="planning">Dopiero planuję budowę</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="contact-message" class="block text-xs font-bold text-slate-700 uppercase mb-1">Dodatkowe informacje / Uwagi do projektu</label>
+              <textarea id="contact-message" rows="4" placeholder="Napisz, jakie masz źródło ciepła (np. pompa ciepła), czy interesuje Cię także wylewka anhydrytowa lub automatyka..." class="w-full px-4 py-3 bg-white rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-sm text-slate-900"></textarea>
+            </div>
+
+            <div class="text-xs text-slate-500 flex items-start gap-2 pt-1">
+              <input type="checkbox" id="contact-consent" required checked class="mt-0.5 rounded text-orange-600 focus:ring-orange-500">
+              <label for="contact-consent">
+                Wyrażam zgodę na kontakt telefoniczny lub e-mailowy w celu przedstawienia oferty LeSa - Home.
+              </label>
+            </div>
+
+            <button type="submit" class="w-full py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-600/30 transition-all text-base flex items-center justify-center gap-2">
+              <span>Wyślij zapytanie o darmową wycenę</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
+
+          </form>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-slate-950 text-slate-400 py-16 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
+        
+        <!-- Col 1: Brand Info -->
+        <div class="lg:col-span-2 space-y-4">
+          <a href="#glowna" class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center p-1.5 shadow-sm">
+              <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
+                <path d="M22,64 A36,36 0 1,1 76,77" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" />
+                <path d="M42,30 A20,20 0 0,1 70,58" fill="none" stroke="#fb923c" stroke-width="7.5" stroke-linecap="round" />
+                <circle cx="50" cy="50" r="4" fill="#fb923c" />
+              </svg>
+            </div>
+            <span class="text-2xl font-bold font-heading text-white">LeSa <span class="text-orange-500 font-extrabold">HOME</span></span>
+          </a>
+          <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
+            Eksperci nowoczesnego ogrzewania podłogowego, wylewek anhydrytowych i zintegrowanych systemów grzewczych w nowoczesnym budownictwie.
+          </p>
+          <div class="text-xs text-slate-500 space-y-1">
+            <p>NIP: 000-000-00-00 • REGON: 000000000</p>
+            <p>Siedziba: ul. Przykładowa 12, Polska</p>
+          </div>
+        </div>
+
+        <!-- Col 2: Navigation -->
+        <div>
+          <h4 class="text-white text-xs font-bold uppercase tracking-wider mb-4">Nawigacja</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="#glowna" class="hover:text-orange-400 transition-colors">Strona Główna</a></li>
+            <li><a href="#o-nas" class="hover:text-orange-400 transition-colors">O firmie LeSa - Home</a></li>
+            <li><a href="#dlaczego-my" class="hover:text-orange-400 transition-colors">Dlaczego nasze systemy?</a></li>
+            <li><a href="#kalkulator" class="hover:text-orange-400 transition-colors">Kalkulator kosztów</a></li>
+            <li><a href="#realizacje" class="hover:text-orange-400 transition-colors">Galeria realizacji</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Services & Future -->
+        <div>
+          <h4 class="text-white text-xs font-bold uppercase tracking-wider mb-4">Usługi & Systemy</h4>
+          <ul class="space-y-2 text-xs">
+            <li><span class="text-slate-300">Ogrzewanie podłogowe PEX</span></li>
+            <li><span class="text-slate-300">Wylewki anhydrytowe Knauf</span></li>
+            <li><span class="text-slate-300">Systemy suche lekkie</span></li>
+            <li><span class="text-slate-300">Automatyka strefowa Smart</span></li>
+            <li><span class="text-orange-400">Pompy ciepła (Sieć Partnerska)</span></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Contact -->
+        <div>
+          <h4 class="text-white text-xs font-bold uppercase tracking-wider mb-4">Kontakt</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="tel:+48790000000" class="hover:text-orange-400 transition-colors font-bold text-slate-200">+48 790 000 000</a></li>
+            <li><a href="mailto:kontakt@lesa-home.pl" class="hover:text-orange-400 transition-colors">kontakt@lesa-home.pl</a></li>
+            <li><span class="text-slate-500">Poniedziałek – Sobota: 7:00 – 19:00</span></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div>
+          © <span id="current-year">2026</span> LeSa - Home. Wszelkie prawa zastrzeżone.
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="#" class="hover:text-slate-300">Polityka Prywatności</a>
+          <a href="#" class="hover:text-slate-300">Regulamin audytu</a>
+          <a href="#" class="hover:text-slate-300">Standardy jakości PN-EN 1264</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ================= PORTFOLIO DETAIL MODAL ================= -->
+  <div id="portfolio-modal" class="modal-backdrop fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="modal-container bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-2xl relative">
+      <button id="portfolio-modal-close" class="absolute top-5 right-5 z-20 w-10 h-10 rounded-full bg-slate-900/60 hover:bg-slate-900 text-white flex items-center justify-center backdrop-blur-md transition-colors" aria-label="Zamknij podgląd">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <div id="portfolio-modal-body">
+        <!-- Rendered by portfolio.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= BLOG ARTICLE MODAL ================= -->
+  <div id="blog-modal" class="modal-backdrop fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="modal-container bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-2xl relative">
+      <button id="blog-modal-close" class="absolute top-5 right-5 z-20 w-10 h-10 rounded-full bg-slate-900/60 hover:bg-slate-900 text-white flex items-center justify-center backdrop-blur-md transition-colors" aria-label="Zamknij artykuł">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <div id="blog-modal-body">
+        <!-- Rendered by blog.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FLOATING CONTACT CTA ================= -->
+  <div id="floating-contact" class="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
+    <a href="https://wa.me/48790000000" target="_blank" rel="noopener" class="floating-contact-btn w-13 h-13 p-3.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-lg" title="Napisz na WhatsApp">
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.297.144.35.491 1.199.534 1.286.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>
+    </a>
+  </div>
+
+  <!-- ================= SUBMIT TOAST NOTIFICATION ================= -->
+  <div id="contact-toast" class="fixed bottom-6 left-6 z-50 max-w-md bg-slate-900 text-white p-4 rounded-2xl border border-orange-500/40 shadow-2xl transform translate-y-24 opacity-0 transition-all duration-300 flex items-start gap-3">
+    <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 font-bold text-sm">✓</div>
+    <div>
+      <h5 class="font-bold text-sm text-white">Zapytanie przesłane pomyślnie!</h5>
+      <p id="contact-toast-text" class="text-xs text-slate-300 mt-0.5 leading-relaxed"></p>
+    </div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/calculator.js"></script>
+  <script src="js/portfolio.js"></script>
+  <script src="js/blog.js"></script>
+  <script src="js/contact.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

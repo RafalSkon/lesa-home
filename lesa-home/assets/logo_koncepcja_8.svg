@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="grad-warm-8" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </linearGradient>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#ffffff" />
+  
+  <g transform="translate(400, 220)">
+    <!-- Outer Rounded Square / Pill Container with Soft Background -->
+    <rect x="-110" y="-110" width="220" height="220" rx="44" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2" />
+    
+    <!-- Minimalist Precision Monogram L + S -->
+    <!-- Pillar L (Solid Slate) -->
+    <path d="M-55,-60 L-25,-60 L-25,25 L35,25 L35,55 L-55,55 Z" 
+          fill="#0f172a" 
+          rx="6" />
+    
+    <!-- Minimalist Interlocking S Bar (Warm Ember Orange) -->
+    <path d="M-20,-55 L55,-55 L55,-15 L10,-15 L10,0 L55,0 L55,40 L10,40" 
+          fill="none" 
+          stroke="url(#grad-warm-8)" 
+          stroke-width="20" 
+          stroke-linecap="round" 
+          stroke-linejoin="round" />
+    
+    <!-- Delicate precision dot -->
+    <circle cx="42" cy="-35" r="5" fill="#ffffff" />
+  </g>
+
+  <!-- Clean Swiss Typography -->
+  <text x="400" y="440" 
+        font-family="'Plus Jakarta Sans', -apple-system, sans-serif" 
+        font-size="48" 
+        font-weight="800" 
+        fill="#0f172a" 
+        text-anchor="middle" 
+        letter-spacing="-0.5px">
+    LeSa <tspan fill="#ea580c" font-weight="700">Home</tspan>
+  </text>
+
+  <text x="400" y="475" 
+        font-family="'Outfit', sans-serif" 
+        font-size="14" 
+        font-weight="600" 
+        fill="#64748b" 
+        text-anchor="middle" 
+        letter-spacing="6px">
+    CRAFT &amp; ENGINEERING
+  </text>
+
+  <!-- Horizontal balance divider -->
+  <line x1="320" y1="505" x2="480" y2="505" stroke="#e2e8f0" stroke-width="2" stroke-linecap="round" />
+</svg>
