@@ -109,7 +109,7 @@ Kolejnego dnia wykonano wylewkę anhydrytową Knauf, która osiągnęła gotowo�
       image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80',
       description: `W budynkach z antresolą i wysokim salonem (tzw. nowoczesna stodoła) tradycyjne grzejniki powodują, że całe ciepłe powietrze ucieka pod kalenicę. Ogrzewanie podłogowe od LeSa - Home idealnie rozwiązało ten problem!
 
-Ciepło promieniuje od podłogi do wysokości 2 metrów, zapewniając domownikom komfort termiczny przy temperaturze wody zasilającej zaledwie 28-32°C. Dodatkowo w salonie zamontowano bezprzewodowy czujnik nasłonecznienia, który dynamicznie reaguje na zyski słoneczne z przeszkleń.`,
+Ciepło promieniuje od podłogi do wysokości 2 metrów, zapewniając domownikom komfort termiczny przy temperaturze wody zasilającej zaledwie 28-32°C. Dodatkowo w salonie zastosowano automatykę strefową z kompensacją zysków słonecznych z dużych okien.`,
       highlights: [
         'Eliminacja strat ciepła pod wysokim dachem',
         'Zintegrowana krzywa grzewcza pompy ciepła',
