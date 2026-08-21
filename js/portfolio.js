@@ -15,12 +15,13 @@ const Portfolio = {
       duration: '2 dni montażu',
       heatSource: 'Pompa ciepła powietrze-woda',
       loops: '14 sekcji (2 rozdzielacze)',
-      pipe: 'PEX/AL/PEX 16x2.0 z wkładką aluminiową',
+      pipe: 'Rura 5-warstwowa z barierą tlenową EVOH 16x2.0',
       image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80',
       description: `W tej realizacji wykonaliśmy kompleksowy montaż ogrzewania podłogowego w parterowym domu energooszczędnym. Klientowi zależało na idealnym dopasowaniu parametrów do niskotemperaturowej pompy ciepła.
 
 Zastosowaliśmy zagęszczony rozstaw rur 10 cm przy dużych przeszkleniach tarasowych oraz 15 cm w pozostałych strefach dziennych i sypialniach. Całość zalana wylewką anhydrytową o grubości 45 mm, co gwarantuje błyskawiczny czas reakcji podłogówki (ponad 2-krotnie szybszy niż tradycyjny beton). Przed zalaniem wykonano 24-godzinną próbę ciśnieniową 6 bar.`,
       highlights: [
+        'Rury 5-warstwowe z barierą antydyfuzyjną EVOH',
         'Zagęszczone pętle przy oknach HS',
         'Wylewka anhydrytowa samopoziomująca',
         'Rozdzielacze ze stali szlachetnej z rotametrami',
@@ -37,12 +38,13 @@ Zastosowaliśmy zagęszczony rozstaw rur 10 cm przy dużych przeszkleniach taras
       duration: '3 dni robocze',
       heatSource: 'Gruntowa pompa ciepła + Rekuperacja',
       loops: '21 sekcji (góra + dół)',
-      pipe: 'PEX-a EVOH 5-warstwowa z barierą antydyfuzyjną',
+      pipe: 'Rura 5-warstwowa z barierą antydyfuzyjną EVOH 16x2.0',
       image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=80',
       description: `Zaawansowany projekt dla inwestora oczekującego pełnej kontroli temperatury w każdym z 9 oddzielnych pomieszczeń. 
 
 Zaprojektowaliśmy układ hydrauliczny z dwoma szafkami rozdzielaczowymi (parter i piętro). Każda pętla została wyposażona w precyzyjne siłowniki termoelektryczne sparowane ze ściennymi termostatami dotykowymi zintegrowanymi z aplikacją mobilną. System pozwala na obniżanie temperatury w nieużywanych pokojach, generując dodatkowe 18% oszczędności rocznie.`,
       highlights: [
+        'Rury 5-warstwowe z barierą tlenową EVOH',
         '9 niezależnych stref temperaturowych',
         'Pełna integracja ze smartfonem i pompą ciepła',
         'Brak jakichkolwiek widocznych grzejników',
@@ -59,7 +61,7 @@ Zaprojektowaliśmy układ hydrauliczny z dwoma szafkami rozdzielaczowymi (parter
       duration: '2 dni',
       heatSource: 'Kocioł kondensacyjny z buforem',
       loops: '8 sekcji',
-      pipe: 'PEX/AL/PE 16 mm w płytach z folią aluminiową',
+      pipe: 'Rura 5-warstwowa EVOH 16 mm w płytach z folią aluminiową',
       image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=900&q=80',
       description: `Inwestycja wymagająca specjalistycznego podejścia inżynieryjnego. Ze względu na drewniane stropy i ograniczenia nośności nie było możliwości wykonania ciężkiej wylewki betonowej.
 
@@ -81,7 +83,7 @@ Zastosowaliśmy nowoczesny system suchy (płyty EPS z wyprofilowanymi rowkami i 
       duration: '1 dzień montaż + wylewka',
       heatSource: 'Kocioł gazowy dwufunkcyjny',
       loops: '11 sekcji',
-      pipe: 'Wielowarstwowa PEX 16 mm',
+      pipe: 'Rura 5-warstwowa z barierą tlenową EVOH 16 mm',
       image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=900&q=80',
       description: `Ekspresowa i precyzyjna realizacja dla młodej rodziny. W ciągu jednego dnia rozłożyliśmy izolację termiczną, folię z rastrem, spięliśmy 11 obiegów grzewczych i podłączyliśmy rozdzielacz z szafką podtynkową.
 
@@ -103,7 +105,7 @@ Kolejnego dnia wykonano wylewkę anhydrytową Knauf, która osiągnęła gotowo�
       duration: '2 dni',
       heatSource: 'Pompa ciepła Split 8kW',
       loops: '16 sekcji',
-      pipe: 'PEX/AL/PEX laserowo zgrzewana',
+      pipe: 'Rura 5-warstwowa z barierą tlenową EVOH 16x2.0',
       image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80',
       description: `W budynkach z antresolą i wysokim salonem (tzw. nowoczesna stodoła) tradycyjne grzejniki powodują, że całe ciepłe powietrze ucieka pod kalenicę. Ogrzewanie podłogowe od LeSa - Home idealnie rozwiązało ten problem!
 
@@ -125,8 +127,8 @@ Ciepło promieniuje od podłogi do wysokości 2 metrów, zapewniając domownikom
       duration: '2 dni',
       heatSource: 'Kocioł na pellet z buforem',
       loops: '13 sekcji',
-      pipe: 'PEX 16 mm Premium',
-      image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=900&q=80',
+      pipe: 'Rura 5-warstwowa z barierą tlenową EVOH 16 mm',
+      image: 'https://images.unsplash.com/photo-16005851554526-990dced4db0d?auto=format&fit=crop&w=900&q=80',
       description: `Projekt uwzględniający zróżnicowane zapotrzebowanie cieplne poszczególnych części domu. W strefie mieszkalnej zaprojektowano temperaturę bazową 22°C, w sypialniach 19.5°C, a w garażu i kotłowni podtrzymanie 12°C.
 
 Zastosowaliśmy zawory termostatyczne z bezpośrednim nastawem przepływów na rotametrach, co umożliwia bezproblemową pracę bez konieczności ciągłej regulacji. Inwestor otrzymał pełną dokumentację fotograficzną ułożenia pętli przed zalaniem.`,

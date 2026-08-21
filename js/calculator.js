@@ -6,7 +6,7 @@
 const Calculator = {
   // Base rates in PLN per m2
   rates: {
-    baseInstallation: 95, // System tacker + markowa rura PEX/AL/PEX 16x2 + rozdzielacz
+    baseInstallation: 95, // System tacker + rura 5-warstwowa z barierą tlenową EVOH 16x2 + rozdzielacz
     buildingType: {
       new: 0,        // Standardowy nowy budynek
       renovation: 35 // Frezowanie w wylewce / system suchy lekki

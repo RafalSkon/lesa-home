@@ -20,7 +20,7 @@ const Blog = {
         <p>Tradycyjne grzejniki ścienne potrzebują wody o temperaturze 55–65°C, aby skutecznie ogrzać pomieszczenie konwekcją. Wymuszenie na pompie ciepła tak wysokiej temperatury zasilania powoduje drastyczny spadek sprawności i nawet dwukrotnie wyższe rachunki za energię elektryczną!</p>
 
         <h3>Ogrzewanie podłogowe jako ogromny grzejnik płaszczyznowy</h3>
-        <p>Dzięki temu, że ogrzewanie podłogowe oddaje ciepło całą powierzchnią posadzki (zjawisko promieniowania), woda zasilająca rury PEX ma temperaturę zaledwie <strong>28–32°C</strong>. Dla stóp podłoga jest przyjemnie letnia (ok. 23–24°C), a całe pomieszczenie nagrzewa się równomiernie od dołu do góry.</p>
+        <p>Dzięki temu, że ogrzewanie podłogowe oddaje ciepło całą powierzchnią posadzki (zjawisko promieniowania), woda zasilająca 5-warstwowe rury grzewcze z barierą EVOH ma temperaturę zaledwie <strong>28–32°C</strong>. Dla stóp podłoga jest przyjemnie letnia (ok. 23–24°C), a całe pomieszczenie nagrzewa się równomiernie od dołu do góry.</p>
 
         <div class="p-4 bg-orange-50 rounded-xl border border-orange-200 my-4 text-orange-950">
           <strong>Wskazówka eksperta LeSa - Home:</strong> Każde obniżenie temperatury zasilania instalacji o zaledwie 1°C przekłada się na około <strong>2.5% do 3% niższe zużycie energii elektrycznej</strong> przez pompę ciepła w skali całego sezonu grzewczego!
@@ -45,7 +45,7 @@ const Blog = {
       excerpt: 'Porównanie przewodności cieplnej, grubości warstwy, czasu nagrzewania oraz kosztów wylewki anhydrytowej w zestawieniu z tradycyjnym miksokretem.',
       content: `
         <h3>Serce podłogówki to nie tylko rury, ale i wylewka</h3>
-        <p>Nawet najlepsza rura PEX nie odda efektywnie ciepła do pomieszczenia, jeśli otaczająca ją warstwa jastrychu będzie miała słabą przewodność cieplną lub pęcherzyki powietrza tworzące izolator. Inwestorzy najczęściej wybierają pomiędzy tradycyjnym jastrychem cementowym (miksokret) a samopoziomującą wylewką anhydrytową na bazie siarczanu wapnia.</p>
+        <p>Nawet najlepsza rura 5-warstwowa z barierą tlenową EVOH nie odda efektywnie ciepła do pomieszczenia, jeśli otaczająca ją warstwa jastrychu będzie miała słabą przewodność cieplną lub pęcherzyki powietrza tworzące izolator. Inwestorzy najczęściej wybierają pomiędzy tradycyjnym jastrychem cementowym (miksokret) a samopoziomującą wylewką anhydrytową na bazie siarczanu wapnia.</p>
 
         <h3>Porównanie właściwości termicznych:</h3>
         <div class="overflow-x-auto my-4">
@@ -74,7 +74,7 @@ const Blog = {
                 <td class="p-3">~2 - 3 godziny</td>
               </tr>
               <tr class="border-b border-slate-200 bg-slate-50/50">
-                <td class="p-3 font-medium">Otulenie rury PEX</td>
+                <td class="p-3 font-medium">Otulenie rur grzewczych (5W EVOH)</td>
                 <td class="p-3 text-orange-700 font-bold">100% płynna masa, brak porów</td>
                 <td class="p-3">Zależne od zagęszczenia (często pory)</td>
               </tr>
@@ -138,8 +138,8 @@ const Blog = {
             <p class="text-sm text-slate-600">Układamy styropian EPS 100/150 na mijankę, taśmę brzegową z dylatacją obwodową oraz folię z rastrem kotwiczącym.</p>
           </div>
           <div class="p-4 bg-slate-50 border-l-4 border-orange-500 rounded-r-xl">
-            <h4 class="font-bold text-slate-900">Krok 3: Montaż rur PEX w jednym odcinku</h4>
-            <p class="text-sm text-slate-600">Każda pętla jest wykonana z jednego, nielączonego w posadzce kawałka rury z barierą tlenową EVOH lub wkładką aluminiową PEX/AL/PEX.</p>
+            <h4 class="font-bold text-slate-900">Krok 3: Montaż rur 5-warstwowych EVOH w jednym odcinku</h4>
+            <p class="text-sm text-slate-600">Każda pętla jest wykonana z jednego, nielączonego w posadzce odcinka certyfikowanej rury 5-warstwowej ze specjalną barierą tlenową EVOH chroniącą instalację przed zapowietrzaniem i korozją.</p>
           </div>
           <div class="p-4 bg-slate-50 border-l-4 border-orange-500 rounded-r-xl">
             <h4 class="font-bold text-slate-900">Krok 4: 24-godzinna próba ciśnieniowa na 6 bar</h4>
