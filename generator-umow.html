@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pl" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
@@ -223,8 +223,22 @@
           </div>
         </div>
 
-        <form id="contract-form" class="space-y-4">
-          
+        <form id="contract-form" class="space-y-4 pb-10">
+
+          <!-- DATABASE INTEGRATION: Wybierz projekt -->
+          <div class="bg-indigo-50 rounded-2xl border border-indigo-200 p-4 shadow-sm">
+            <label class="block text-xs font-bold text-indigo-900 mb-2">Pobierz dane z bazy (Wybierz Projekt)</label>
+            <div class="flex gap-2">
+              <select id="db-project-select" class="flex-1 px-3 py-2 text-sm border border-indigo-300 rounded-lg focus:ring-2 focus:ring-indigo-500 bg-white">
+                <option value="">-- Ładowanie projektów z bazy... --</option>
+              </select>
+              <button type="button" id="btn-load-db-project" class="px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-lg hover:bg-indigo-700 transition-colors shadow-sm whitespace-nowrap">
+                Wczytaj Dane
+              </button>
+            </div>
+            <p class="text-[10px] text-indigo-700 mt-2">Wczytanie projektu automatycznie uzupełni adres inwestycji, dane klienta oraz parametry z raportu CAD (jeśli projekt CAD został wygenerowany).</p>
+          </div>
+
           <!-- ACCORDION SECTION 1: Typ umowy i Nagłówek -->
           <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all">
             <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer accordion-trigger">

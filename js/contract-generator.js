@@ -1,4 +1,4 @@
-/**
+﻿/**
  * LeSa - Home: Legal Contract & Technical Handover Protocol Generator
  * Complete Web Application Engine for HVAC / Floor Heating Contracts
  */
@@ -127,8 +127,7 @@ const ContractApp = {
     this.bindEvents();
     this.updateCalculations();
     this.render();
-    this.updateDraftsBadge();
-  },
+    this.updateDraftsBadge();\n    this.initDbProjectSelector();\n  },
 
   loadContractorProfile() {
     try {
@@ -145,42 +144,71 @@ const ContractApp = {
     } catch (e) {}
   },
 
-  async loadActiveProjectData() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const activeProjectId = urlParams.get('projectId') || localStorage.getItem('lesa_active_project_id');
+  setDefaultDatesAndNumbers() {
+    const today = new Date();
+    const formattedToday = today.toISOString().split('T')[0];
+    const end = new Date(today);
+    end.setDate(today.getDate() + 14);
+    const start = new Date(today);
+    start.setDate(today.getDate() + 7);
+    this.data.contractNo = `UM/LES/${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}/01`;
+    this.data.contractDate = formattedToday;
+    this.data.dateStart = start.toISOString().split('T')[0];
+    this.data.dateEnd = end.toISOString().split('T')[0];
+  },
+  async loadActiveProjectData(projectId = null) {
+    const activeProjectId = projectId || new URLSearchParams(window.location.search).get('projectId') || localStorage.getItem('lesa_active_project_id');
     if (activeProjectId) {
       try {
         let projects = [];
-        if (window.ApiService) {
-           projects = await ApiService.getProjects();
-        } else {
-           projects = JSON.parse(localStorage.getItem('lesa_projects')) || [];
-        }
-        
+        if (window.ApiService) { projects = await ApiService.getProjects(); } else { projects = JSON.parse(localStorage.getItem('lesa_projects')) || []; }
         const project = projects.find(p => p.id === activeProjectId);
         if (project) {
           this.data.clientName = project.clientName || '';
           this.data.clientAddress = project.clientAddress || '';
-    
-    // Future date + 14 days for completion
-    const end = new Date(today);
-    end.setDate(today.getDate() + 14);
-    const formattedEnd = end.toISOString().split('T')[0];
-
-    const start = new Date(today);
-    start.setDate(today.getDate() + 7);
-    const formattedStart = start.toISOString().split('T')[0];
-
-    // Generate unique smart contract number: UM/LES/YYYY/MM/DD/01
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    const autoNo = `UM/LES/${yyyy}/${mm}/${dd}/01`;
-
-    this.data.contractNo = autoNo;
-    this.data.contractDate = formattedToday;
-    this.data.dateStart = formattedStart;
-    this.data.dateEnd = formattedEnd;
+          this.data.investmentAddress = project.investmentAddress || project.clientAddress || '';
+          this.data.clientNip = project.clientNip ? `NIP: ${project.clientNip}` : '';
+          this.data.clientPesel = project.clientPesel || '';
+          this.data.clientIdCard = project.clientIdCard || '';
+          this.data.clientPhone = project.clientPhone || '';
+          this.data.clientEmail = project.clientEmail || '';
+          if (project.clientNip) {
+              this.data.contractType = 'B2B';
+          } else {
+              this.data.contractType = 'B2C';
+          }
+          if (project.cadData) {
+              if (project.cadData.area) this.data.area = project.cadData.area;
+              if (project.cadData.loopsCount) this.data.loops = project.cadData.loopsCount;
+              if (project.cadData.pipeLen) this.data.pipeLen = project.cadData.pipeLen;
+          }
+        }
+      } catch (e) { console.error('Error loading project:', e); }
+    }
+  },
+  async initDbProjectSelector() {
+    const select = document.getElementById('db-project-select');
+    const btnLoad = document.getElementById('btn-load-db-project');
+    if (!select || !btnLoad) return;
+    try {
+        let projects = [];
+        if (window.ApiService) { projects = await ApiService.getProjects(); } else { projects = JSON.parse(localStorage.getItem('lesa_projects')) || []; }
+        select.innerHTML = '<option value="">-- Wybierz projekt z bazy --</option>';
+        projects.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = `${p.clientName} - ${p.name || 'Brak nazwy'} (${new Date(p.createdAt || Date.now()).toLocaleDateString()})`;
+            select.appendChild(opt);
+        });
+        btnLoad.addEventListener('click', async () => {
+            if (!select.value) { this.showToast('Wybierz projekt z listy!'); return; }
+            await this.loadActiveProjectData(select.value);
+            this.bindDomElements(); this.updateCalculations(); this.render();
+            this.showToast('Wczytano dane z projektu!');
+        });
+    } catch (e) {
+        select.innerHTML = '<option value="">-- Błąd pobierania bazy --</option>';
+    }
   },
 
   parseUrlParams() {
@@ -880,7 +908,7 @@ const ContractApp = {
         localStorage.setItem('lesa_contracts_history', JSON.stringify(list.slice(0, 30)));
     }
     this.updateDraftsBadge();
-    this.showToast(Zapisano umow� dla: );
+    this.showToast(Zapisano umow� dla: );
   },
 
   async getSavedDrafts() {

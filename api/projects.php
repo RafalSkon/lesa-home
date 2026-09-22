@@ -44,15 +44,35 @@ switch ($method) {
             $filesByProject[$pid][] = $file;
         }
 
+        // Get all clients to map their names and addresses
+        $clientsStmt = $db->query("SELECT id, name, address, nip, pesel, id_card, phone, email FROM clients");
+        $allClients = $clientsStmt->fetchAll();
+        $clientsById = [];
+        foreach ($allClients as $client) {
+            $clientsById[$client['id']] = $client;
+        }
+
         foreach ($projects as &$p) {
             $p['files'] = isset($filesByProject[$p['id']]) ? $filesByProject[$p['id']] : [];
-            // Map keys for compatibility with admin.js / monter.js
+            // Map keys for compatibility with admin.js / monter.js / contract-generator.js
             $p['clientId'] = $p['client_id'];
             $p['projectTitle'] = $p['title'];
             $p['investmentAddress'] = $p['address'];
             $p['investmentCity'] = $p['city'];
             $p['createdAt'] = intval($p['created_at']);
             $p['cadData'] = !empty($p['cad_data']) ? json_decode($p['cad_data'], true) : null;
+            
+            // Map client data
+            if (isset($clientsById[$p['client_id']])) {
+                $c = $clientsById[$p['client_id']];
+                $p['clientName'] = $c['name'];
+                $p['clientAddress'] = $c['address'];
+                $p['clientNip'] = $c['nip'];
+                $p['clientPesel'] = $c['pesel'];
+                $p['clientIdCard'] = $c['id_card'];
+                $p['clientPhone'] = $c['phone'];
+                $p['clientEmail'] = $c['email'];
+            }
         }
 
         jsonResponse(['success' => true, 'projects' => $projects]);
