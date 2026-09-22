@@ -1,4 +1,4 @@
-﻿/**
+/**
  * LeSa - Home: Admin Hub & CAD Engineering Controller
  * Authentication, Dashboard KPIs, Contracts Registry, CAD Loop Engine, CRM Leads
  */
@@ -652,13 +652,12 @@ const AdminApp = {
       const data = await res.json();
       
       if (res.ok && data.result && data.result.subject) {
-        const subject = data.result.subject;
-        
-        let compName = subject.name || '';
-        // Skracanie nazwy spĂłĹ‚ki
-        compName = compName.replace(/SPĂ“ĹKA Z OGRANICZONÄ„ ODPOWIEDZIALNOĹšCIÄ„/ig, 'sp. z o.o.');
-        
-        document.getElementById('modal-client-name').value = compName;
+          const subject = data.result.subject;
+          
+          let compName = subject.name || '';
+          compName = compName.replace(/SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ/ig, 'sp. z o.o.');
+          
+          document.getElementById('modal-client-name').value = compName;
         
         const fullAddress = subject.workingAddress || subject.residenceAddress || '';
         let street = fullAddress;
