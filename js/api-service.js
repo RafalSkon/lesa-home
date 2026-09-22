@@ -1,4 +1,4 @@
-﻿/**
+/**
  * LeSa Home - ApiService
  * Central client-side data service with in-browser image compression,
  * automatic environment detection (Server SQLite vs LocalStorage),
@@ -259,7 +259,7 @@ const ApiService = {
     const isOnline = await this.checkServer();
     if (isOnline) {
       try {
-        const res = await fetch(this.getBaseUrl() + 'projects.php');
+        const res = await fetch(this.getBaseUrl() + 'projects.php?_t=' + new Date().getTime());
         const json = await res.json();
         if (json.success) {
           localStorage.setItem('lesa_projects', JSON.stringify(json.projects));
