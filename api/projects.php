@@ -90,13 +90,16 @@ switch ($method) {
         $address = !empty($body['investmentAddress']) ? trim($body['investmentAddress']) : (isset($body['address']) ? trim($body['address']) : '');
         $city = !empty($body['investmentCity']) ? trim($body['investmentCity']) : (isset($body['city']) ? trim($body['city']) : '');
         $status = !empty($body['status']) ? trim($body['status']) : 'Nowy';
-        $cadFile = !empty($body['cad_file']) ? trim($body['cad_file']) : '';
-        $cadData = !empty($body['cadData']) ? json_encode($body['cadData'], JSON_UNESCAPED_UNICODE) : (!empty($body['cad_data']) ? $body['cad_data'] : '');
-        $createdAt = !empty($body['createdAt']) ? intval($body['createdAt']) : (!empty($body['created_at']) ? intval($body['created_at']) : time() * 1000);
-
-        $checkStmt = $db->prepare("SELECT id FROM projects WHERE id = ?");
+        $checkStmt = $db->prepare("SELECT * FROM projects WHERE id = ?");
         $checkStmt->execute([$id]);
-        $exists = $checkStmt->fetch();
+        $exists = $checkStmt->fetch(PDO::FETCH_ASSOC);
+
+        $cadFile = !empty($body['cad_file']) ? trim($body['cad_file']) : ($exists ? $exists['cad_file'] : '');
+        
+        $cadDataInput = !empty($body['cadData']) ? json_encode($body['cadData'], JSON_UNESCAPED_UNICODE) : (!empty($body['cad_data']) ? $body['cad_data'] : '');
+        $cadData = !empty($cadDataInput) ? $cadDataInput : ($exists ? $exists['cad_data'] : '');
+        
+        $createdAt = !empty($body['createdAt']) ? intval($body['createdAt']) : (!empty($body['created_at']) ? intval($body['created_at']) : time() * 1000);
 
         if ($exists) {
             $stmt = $db->prepare("
