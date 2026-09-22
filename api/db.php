@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * LeSa Home - Database & API Core (PHP + SQLite)
  * Auto-creates SQLite database and required tables on SeoHost NVMe storage.
@@ -85,6 +85,8 @@ try {
             email TEXT DEFAULT '',
             address TEXT DEFAULT '',
             city TEXT DEFAULT '',
+            address_home TEXT DEFAULT '',
+            address_company TEXT DEFAULT '',
             notes TEXT DEFAULT '',
             created_at INTEGER NOT NULL
         );
@@ -95,6 +97,8 @@ try {
             title TEXT NOT NULL,
             address TEXT DEFAULT '',
             city TEXT DEFAULT '',
+            address_home TEXT DEFAULT '',
+            address_company TEXT DEFAULT '',
             status TEXT DEFAULT 'Nowy',
             cad_file TEXT DEFAULT '',
             cad_data TEXT DEFAULT '',
@@ -159,6 +163,21 @@ try {
             created_at INTEGER NOT NULL
         );
     ");
+
+    
+    // Migration: Add address_home and address_company to clients table if missing
+    $columns = $db->query("PRAGMA table_info(clients)")->fetchAll(PDO::FETCH_ASSOC);
+    $hasAddressHome = false;
+    foreach ($columns as $col) {
+        if ($col['name'] === 'address_home') {
+            $hasAddressHome = true;
+            break;
+        }
+    }
+    if (!$hasAddressHome) {
+        $db->exec("ALTER TABLE clients ADD COLUMN address_home TEXT DEFAULT ''");
+        $db->exec("ALTER TABLE clients ADD COLUMN address_company TEXT DEFAULT ''");
+    }
 
     // Migration: Add cad_data to projects table if missing
     $columns = $db->query("PRAGMA table_info(projects)")->fetchAll(PDO::FETCH_ASSOC);

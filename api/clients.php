@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * LeSa Home - Clients API
  * Endpoints for CRM Contractors / Clients
@@ -39,6 +39,8 @@ switch ($method) {
         $nip = isset($body['nip']) ? trim($body['nip']) : '';
         $phone = isset($body['phone']) ? trim($body['phone']) : '';
         $email = isset($body['email']) ? trim($body['email']) : '';
+        $address_home = isset($body['address_home']) ? trim($body['address_home']) : '';
+        $address_company = isset($body['address_company']) ? trim($body['address_company']) : '';
         $address = isset($body['address']) ? trim($body['address']) : '';
         $city = isset($body['city']) ? trim($body['city']) : '';
         $notes = isset($body['notes']) ? trim($body['notes']) : '';
@@ -53,17 +55,17 @@ switch ($method) {
             $stmt = $db->prepare("
                 UPDATE clients SET 
                     name = ?, nip = ?, phone = ?, email = ?, 
-                    address = ?, city = ?, notes = ?
+                    address = ?, city = ?, notes = ?, address_home = ?, address_company = ?
                 WHERE id = ?
             ");
-            $stmt->execute([$name, $nip, $phone, $email, $address, $city, $notes, $id]);
+            $stmt->execute([$name, $nip, $phone, $email, $address, $city, $notes, $address_home, $address_company, $id]);
             logAction($db, 'Zaktualizowano klienta', 'client', $id, ['name' => $name, 'nip' => $nip]);
         } else {
             $stmt = $db->prepare("
-                INSERT INTO clients (id, name, nip, phone, email, address, city, notes, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO clients (id, name, nip, phone, email, address, city, notes, address_home, address_company, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
-            $stmt->execute([$id, $name, $nip, $phone, $email, $address, $city, $notes, $createdAt]);
+            $stmt->execute([$id, $name, $nip, $phone, $email, $address, $city, $notes, $address_home, $address_company, $createdAt]);
             logAction($db, 'Utworzono klienta', 'client', $id, ['name' => $name, 'nip' => $nip]);
         }
 
@@ -76,6 +78,8 @@ switch ($method) {
                 'phone' => $phone,
                 'email' => $email,
                 'address' => $address,
+                'address_home' => $address_home,
+                'address_company' => $address_company,
                 'city' => $city,
                 'notes' => $notes,
                 'createdAt' => $createdAt

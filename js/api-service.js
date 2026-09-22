@@ -1,4 +1,4 @@
-/**
+﻿/**
  * LeSa Home - ApiService
  * Central client-side data service with in-browser image compression,
  * automatic environment detection (Server SQLite vs LocalStorage),
@@ -8,13 +8,8 @@
 const ApiService = {
   // Determine API base path dynamically based on current page depth
   getBaseUrl() {
-    if (window.location.protocol === 'file:') {
-      return null; // Local file preview mode -> use localStorage fallback
-    }
-    const path = window.location.pathname;
-    if (path.includes('/lesa-cad-v2')) {
-      return '../api/';
-    }
+    if (window.location.protocol === 'file:') return null;
+    if (window.location.pathname.includes('/lesa-cad-v2')) return '../api/';
     return 'api/';
   },
 
