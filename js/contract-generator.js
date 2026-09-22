@@ -127,7 +127,9 @@ const ContractApp = {
     this.bindEvents();
     this.updateCalculations();
     this.render();
-    this.updateDraftsBadge();\n    this.initDbProjectSelector();\n  },
+    this.updateDraftsBadge();
+    this.initDbProjectSelector();
+  },
 
   loadContractorProfile() {
     try {
