@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * LeSa Home - Database & API Core (PHP + SQLite)
  * Auto-creates SQLite database and required tables on SeoHost NVMe storage.
@@ -182,14 +182,20 @@ try {
     // Migration: Add cad_data to projects table if missing
     $columns = $db->query("PRAGMA table_info(projects)")->fetchAll(PDO::FETCH_ASSOC);
     $hasCadData = false;
+    $hasCadFile = false;
     foreach ($columns as $col) {
         if ($col['name'] === 'cad_data') {
             $hasCadData = true;
-            break;
+        }
+        if ($col['name'] === 'cad_file') {
+            $hasCadFile = true;
         }
     }
     if (!$hasCadData) {
         $db->exec("ALTER TABLE projects ADD COLUMN cad_data TEXT DEFAULT ''");
+    }
+    if (!$hasCadFile) {
+        $db->exec("ALTER TABLE projects ADD COLUMN cad_file TEXT DEFAULT ''");
     }
 
     // Seed default admin user "Rafal" if not exists
