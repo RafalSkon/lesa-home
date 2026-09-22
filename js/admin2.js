@@ -664,7 +664,7 @@ const AdminApp = {
         let street = fullAddress;
         let city = '';
         
-        const match = fullAddress.match(/(.*?),s*(d{2}-d{3}s+.*)/);
+        const match = fullAddress.match(/(.*?),?\s*(\d{2}-\d{3}\s+.*)/);
         if (match) {
           street = match[1].trim();
           city = match[2].trim();
