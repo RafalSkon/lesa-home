@@ -910,7 +910,7 @@ const ContractApp = {
         localStorage.setItem('lesa_contracts_history', JSON.stringify(list.slice(0, 30)));
     }
     this.updateDraftsBadge();
-    this.showToast(Zapisano umow� dla: );
+    this.showToast(`Zapisano umowę dla: ${this.data.clientName}`);
   },
 
   async getSavedDrafts() {
