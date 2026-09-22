@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kreator Ofert | LeSa - Home</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/api-service.js?v=6"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; color: #0f172a; overflow: hidden; height: 100vh; }
+    h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', sans-serif; }
+    
+    @media print {
+      body { background: white; overflow: visible !important; height: auto !important; display: block !important; }
+      main { overflow: visible !important; height: auto !important; display: block !important; }
+      .no-print { display: none !important; }
+      .print-shadow-none { box-shadow: none !important; border: none !important; padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
+      .page-break { page-break-before: always; }
+      #offer-document { transform: scale(1) !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+      @page { margin: 8mm; }
+    }
+
+    .editable {
+      border-bottom: 1px dashed #cbd5e1;
+      min-width: 50px;
+      display: inline-block;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .editable:focus {
+      border-bottom: 1px solid #f97316;
+      background: #fff7ed;
+    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="flex flex-col sm:flex-row">
+
+  <!-- SIDEBAR (No Print) -->
+  <aside class="no-print w-full sm:w-80 bg-slate-900 text-slate-300 flex flex-col h-screen border-r border-slate-800 shrink-0 z-20 shadow-2xl">
+    <div class="p-5 border-b border-slate-800">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-xl flex items-center justify-center text-white shadow-lg">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </div>
+        <div>
+          <h1 class="text-white font-heading font-bold text-lg leading-tight">Generator Ofert</h1>
+          <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">LeSa-CAD Wyceny</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="p-5 flex flex-col gap-3">
+      <button onclick="window.print()" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-900/50 transition-all flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+        <span>Drukuj / Pobierz PDF</span>
+      </button>
+      
+      <button onclick="saveCurrentOffer()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-xl border border-slate-700 transition-all flex items-center justify-center gap-2 text-sm">
+        <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+        <span>Zapisz Ofertę (Do bazy)</span>
+      </button>
+    </div>
+    
+    <div class="flex-1 overflow-y-auto p-5 border-t border-slate-800">
+      <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Zapisane Oferty</h3>
+      <ul id="saved-offers-list" class="space-y-2">
+        <!-- Zapisane oferty -->
+      </ul>
+    </div>
+  </aside>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="flex-1 h-screen overflow-y-auto bg-slate-100 flex justify-center py-10 relative">
+    
+    <!-- Floating add button -->
+    <button onclick="addScopeRow()" class="no-print fixed bottom-8 right-8 w-14 h-14 bg-orange-600 text-white rounded-full shadow-2xl hover:bg-orange-700 flex items-center justify-center transition-all hover:scale-110 z-50 group" title="Dodaj nową pozycję do wyceny">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+      <span class="absolute right-16 bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Dodaj pozycję</span>
+    </button>
+
+    <!-- A4 Paper Container -->
+    <div id="offer-document" class="w-[210mm] min-h-[297mm] bg-white p-[15mm] sm:p-[20mm] shadow-2xl print-shadow-none text-[13px] leading-relaxed relative shrink-0">
+      
+      <!-- HEADER -->
+      <header class="flex justify-between items-start border-b-2 border-orange-500 pb-6 mb-8">
+        <div>
+          <h1 class="text-3xl font-extrabold text-slate-900 font-heading tracking-tight uppercase">OFERTA HANDLOWA</h1>
+          <div class="mt-2 text-slate-500 font-medium">Nr: <span contenteditable="true" id="offer-number" class="editable font-bold text-slate-900">OFE/2026/01</span></div>
+          <div class="mt-1 text-slate-500 font-medium">Data: <span contenteditable="true" class="editable font-bold text-slate-900" id="offer-date"></span></div>
+        </div>
+        <div class="text-right">
+          <div class="w-16 h-16 bg-orange-600 rounded-xl ml-auto mb-3 flex items-center justify-center p-2.5">
+            <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
+              <path d="M22,64 A36,36 0 1,1 76,77" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" />
+              <path d="M42,30 A20,20 0 0,1 70,58" fill="none" stroke="#fed7aa" stroke-width="7.5" stroke-linecap="round" />
+              <circle cx="50" cy="50" r="4" fill="#ffffff" />
+            </svg>
+          </div>
+          <div class="font-bold text-sm text-slate-900" id="company-name">LeSa - Home | Instalacje</div>
+          <div class="text-slate-500 text-xs mt-1" id="company-details">
+            ul. Instalatorów 15<br>
+            00-001 Warszawa<br>
+            NIP: 123-456-78-90
+          </div>
+        </div>
+      </header>
+
+      <!-- CLIENT & PROJECT INFO -->
+      <div class="grid grid-cols-2 gap-8 mb-10">
+        <div>
+          <h3 class="text-[11px] uppercase tracking-widest text-slate-400 font-bold mb-2">Dla Klienta:</h3>
+          <div id="client-info" contenteditable="true" class="editable text-base font-bold text-slate-900 min-w-[200px]">Imię i Nazwisko / Nazwa Firmy</div>
+          <div id="client-contact" contenteditable="true" class="editable text-slate-600 mt-1 min-w-[200px]">Adres kontaktowy / Telefon</div>
+        </div>
+        <div>
+          <h3 class="text-[11px] uppercase tracking-widest text-slate-400 font-bold mb-2">Dotyczy Inwestycji:</h3>
+          <div id="project-name" contenteditable="true" class="editable text-base font-bold text-slate-900 min-w-[200px] mb-1">Nazwa Projektu CAD</div>
+          <div id="project-location" contenteditable="true" class="editable text-slate-600 min-w-[200px]">Lokalizacja inwestycji</div>
+        </div>
+      </div>
+
+      <!-- INTRODUCTION -->
+      <div class="mb-10 text-slate-700">
+        <p>Szanowni Państwo,</p>
+        <p class="mt-2">W nawiązaniu do przeprowadzonych ustaleń oraz przygotowanego projektu w aplikacji LeSa-CAD, przesyłamy szczegółową ofertę na wykonanie instalacji ogrzewania podłogowego.</p>
+      </div>
+
+      <!-- TECHNICAL SUMMARY -->
+      <h2 class="text-lg font-bold text-slate-900 font-heading mb-4 border-b border-slate-200 pb-2">Zestawienie Parametrów Projektu</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+        <div class="bg-orange-50 border border-orange-100 p-5 rounded-2xl flex flex-col items-center justify-center text-center shadow-sm">
+          <span class="block text-[10px] text-orange-600/80 font-bold uppercase tracking-widest mb-1">Całkowita Powierzchnia</span>
+          <span class="text-3xl font-extrabold text-orange-600"><span id="summary-area">0</span> <span class="text-lg text-orange-400 font-medium">mÂ˛</span></span>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl flex flex-col items-center justify-center text-center shadow-sm">
+          <span class="block text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Szacowana Długość Rur</span>
+          <span class="text-3xl font-extrabold text-slate-800"><span id="summary-pipe">0</span> <span class="text-lg text-slate-400 font-medium">mb</span></span>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl flex flex-col items-center justify-center text-center shadow-sm">
+          <span class="block text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">Rozdzielacze</span>
+          <div id="summary-manifolds" class="w-full flex flex-col gap-1.5 items-center">
+            <span class="text-slate-400 text-xs font-normal">Brak danych o rozdzielaczach</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCOPE OF WORK -->
+      <h2 class="text-lg font-bold text-slate-900 font-heading mb-4 border-b border-slate-200 pb-2 flex items-center justify-between">
+        <span>Zakres Prac i Materiałów (Wycena)</span>
+      </h2>
+      <table class="w-full text-left border-collapse mb-6" id="scope-table">
+        <thead>
+          <tr class="bg-slate-100 text-slate-700 text-[11px] uppercase tracking-wider font-bold">
+            <th class="p-3 border-b-2 border-slate-300">Lp.</th>
+            <th class="p-3 border-b-2 border-slate-300 w-1/2">Opis pozycji / Zakres</th>
+            <th class="p-3 border-b-2 border-slate-300 text-center">Ilość</th>
+            <th class="p-3 border-b-2 border-slate-300 text-center">J.m.</th>
+            <th class="p-3 border-b-2 border-slate-300 text-right">C. Jedn.</th>
+            <th class="p-3 border-b-2 border-slate-300 text-right">Wartość Netto</th>
+            <th class="p-3 border-b-2 border-slate-300 text-right no-print">Opcje</th>
+          </tr>
+        </thead>
+        <tbody id="scope-tbody" class="divide-y divide-slate-200">
+          <!-- Wiersze domyślne zostaną nadpisane przez JS -->
+        </tbody>
+      </table>
+
+      <!-- TOTALS -->
+      <div class="flex justify-end mb-12">
+        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 min-w-[300px]">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm text-slate-500 font-bold">RAZEM NETTO:</span>
+            <span class="font-bold text-lg"><span id="total-net">0</span> zł</span>
+          </div>
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm text-slate-500 font-bold">VAT (8%):</span>
+            <span class="font-bold text-lg"><span id="total-vat">0</span> zł</span>
+          </div>
+          <div class="flex justify-between items-center pt-3 border-t-2 border-orange-500 text-orange-600">
+            <span class="text-base font-extrabold uppercase">RAZEM BRUTTO:</span>
+            <span class="font-extrabold text-2xl"><span id="total-gross">0</span> zł</span>
+          </div>
+          <button onclick="calculateTotal()" class="mt-4 w-full py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold rounded-lg no-print">Przelicz Podsumowanie</button>
+        </div>
+      </div>
+
+      <!-- TERMS -->
+      <div class="mb-12">
+        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-2">Dodatkowe ustalenia:</h3>
+        <div id="offer-terms" contenteditable="true" class="editable w-full min-h-[60px] p-3 bg-slate-50 rounded-lg text-sm text-slate-700 leading-relaxed border border-transparent">
+          1. Oferta ważna przez 14 dni od daty sporządzenia.<br>
+          2. Wycena nie obejmuje wykonania wylewki jastrychowej.<br>
+          3. Do rozpoczęcia prac wymagana jest zaliczka w wysokości 40% wartości brutto.<br>
+          4. Termin realizacji do uzgodnienia po akceptacji oferty.
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-20 pt-10 mt-10 border-t border-slate-200">
+        <div class="text-center">
+          <div class="border-b border-slate-400 h-10 mb-2"></div>
+          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Podpis i pieczęć Wykonawcy</div>
+        </div>
+        <div class="text-center">
+          <div class="border-b border-slate-400 h-10 mb-2"></div>
+          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Akceptacja Klienta (Podpis)</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // Inicjalizacja domyślnego zakresu prac
+    let currentScopeItems = [
+      { desc: "Wykonanie izolacji cieplnej ze styropianu EPS (układanie)", qty: 140, unit: "mÂ˛", price: 20 },
+      { desc: "Dostawa i montaż folii refleksyjnej oraz siatki Tacker", qty: 140, unit: "mÂ˛", price: 10 },
+      { desc: "Ułożenie rur ogrzewania podłogowego (wg projektu CAD)", qty: 1200, unit: "mb", price: 5 },
+      { desc: "Dostawa i montaż rozdzielaczy ogrzewania podłogowego + szafki", qty: 2, unit: "kpl", price: 1250 },
+      { desc: "Próba ciśnieniowa i odpowietrzenie układu", qty: 1, unit: "usługa", price: 500 }
+    ];
+
+    let savedOffers = [];
+
+    async function init() {
+      // Set current date
+      const today = new Date();
+      document.getElementById('offer-date').innerText = today.toLocaleDateString('pl-PL');
+
+      // Load Company Settings
+      const profile = JSON.parse(localStorage.getItem('lesa_contractor_profile'));
+      if (profile) {
+        document.getElementById('company-name').innerText = profile.name || 'LeSa - Home';
+        document.getElementById('company-details').innerHTML = (profile.address || '') + '<br>' + (profile.nip || '') + '<br>' + (profile.phone ? 'Tel: ' + profile.phone : '');
+      }
+
+      // Load Data from LeSa-CAD if navigating fresh
+      const cadOfferData = JSON.parse(localStorage.getItem('lesa_cad_offer_data'));
+      if (cadOfferData && !sessionStorage.getItem('offer_loaded')) {
+        populateFromCAD(cadOfferData);
+        sessionStorage.setItem('offer_loaded', 'true');
+      }
+
+      // Load offers from API
+      if (window.ApiService) {
+         savedOffers = await ApiService.getOffers();
+      } else {
+         savedOffers = JSON.parse(localStorage.getItem('lesa_saved_offers') || '[]');
+      }
+      renderSavedOffersList();
+
+      // CRM Integration: Load active project
+      const urlParams = new URLSearchParams(window.location.search);
+      const activeProjectId = urlParams.get('projectId') || localStorage.getItem('lesa_active_project_id');
+      
+      if (activeProjectId) {
+          let project = null;
+          if (window.ApiService) {
+             const projects = await ApiService.getProjects();
+             project = projects.find(p => p.id === activeProjectId);
+          } else {
+             const projects = JSON.parse(localStorage.getItem('lesa_projects')) || [];
+             project = projects.find(p => p.id === activeProjectId);
+          }
+
+          if (project) {
+              // Try to get client name if we can
+              let clientName = project.clientName || 'Klient z CRM';
+              if (!project.clientName && window.ApiService) {
+                 const clients = await ApiService.getClients();
+                 const c = clients.find(cl => cl.id === project.clientId);
+                 if (c) clientName = c.name;
+              }
+
+              document.getElementById('client-info').innerText = clientName;
+              document.getElementById('project-name').innerText = project.projectTitle || project.title || 'Projekt';
+              if (project.investmentAddress) {
+                  const loc = project.investmentAddress + (project.investmentCity ? ', ' + project.investmentCity : '');
+                  document.getElementById('project-location').innerText = loc;
+              }
+              // If we didn't populate from CAD directly, at least fill basic stats if they exist
+              if (!cadOfferData && project.cadData) {
+                  document.getElementById('summary-area').innerText = project.cadData.area || 0;
+                  document.getElementById('summary-pipe').innerText = project.cadData.pipeLength || 0;
+                  if(project.cadData.manifolds > 0) {
+                      document.getElementById('summary-manifolds').innerHTML = '<div class="text-xs text-slate-700 font-bold">Rozdzielacze: ' + project.cadData.manifolds + ' szt.</div>';
+                  }
+                  
+                  if (currentScopeItems.length >= 4) {
+                      currentScopeItems[0].qty = Math.round(project.cadData.area || 0);
+                      currentScopeItems[1].qty = Math.round(project.cadData.area || 0);
+                      currentScopeItems[2].qty = Math.round(project.cadData.pipeLength || 0);
+                      currentScopeItems[3].qty = project.cadData.manifolds || 1;
+                  }
+              }
+          }
+      }
+
+      renderScopeTable();
+    }
+
+    function populateFromCAD(offerData) {
+      document.getElementById('project-name').innerText = offerData.project || 'Projekt Ogrzewania Podłogowego';
+      document.getElementById('project-location').innerText = offerData.location || 'Brak lokalizacji';
+      
+      let totalArea = 0;
+      if (offerData.rooms && offerData.rooms.length > 0) {
+        totalArea = offerData.rooms.reduce((acc, r) => acc + (parseFloat(r.areaM2) || 0), 0);
+      } else {
+        totalArea = parseFloat(offerData.totalArea || 0);
+      }
+
+      const totalPipe = Math.round(offerData.totalPipeGross || offerData.totalPipeNet || 0);
+      const manifoldsCount = offerData.manifolds ? offerData.manifolds.length : 1;
+
+      document.getElementById('summary-area').innerText = totalArea.toFixed(1);
+      document.getElementById('summary-pipe').innerText = totalPipe;
+
+      // Render Manifolds
+      if (offerData.manifolds && offerData.manifolds.length > 0) {
+        document.getElementById('summary-manifolds').innerHTML = offerData.manifolds.map(m => 
+          '<div class="bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs w-full max-w-[200px] shadow-sm flex justify-between items-center"><span class="font-bold text-slate-800">' + m.name + '</span> <span class="text-slate-500 font-medium">' + m.connectedLoops + ' pętli</span></div>'
+        ).join('');
+      } else {
+        document.getElementById('summary-manifolds').innerHTML = '<span class="text-slate-400 text-xs font-normal">Brak danych o rozdzielaczach</span>';
+      }
+
+      // Update scope quantities based on CAD data
+      if (currentScopeItems.length >= 4) {
+        currentScopeItems[0].qty = Math.round(totalArea);
+        currentScopeItems[1].qty = Math.round(totalArea);
+        currentScopeItems[2].qty = Math.round(totalPipe);
+        currentScopeItems[3].qty = manifoldsCount;
+      }
+    }
+
+    function renderScopeTable() {
+      const tbody = document.getElementById('scope-tbody');
+      tbody.innerHTML = currentScopeItems.map((item, index) => {
+        const netValue = item.qty * item.price;
+        return '<tr data-index="'+index+'">' +
+          '<td class="p-3 text-slate-500 font-mono text-xs text-center row-index">' + (index + 1) + '</td>' +
+          '<td class="p-3 font-semibold"><div contenteditable="true" class="editable w-full scope-desc">' + item.desc + '</div></td>' +
+          '<td class="p-3 text-center"><div contenteditable="true" class="editable w-12 text-center scope-qty">' + item.qty + '</div></td>' +
+          '<td class="p-3 text-center"><div contenteditable="true" class="editable w-12 text-center scope-unit">' + item.unit + '</div></td>' +
+          '<td class="p-3 text-right"><div contenteditable="true" class="editable w-16 text-right scope-price">' + item.price + '</div> zł</td>' +
+          '<td class="p-3 text-right font-bold text-slate-900 row-net">' + netValue.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' zł</td>' +
+          '<td class="p-3 text-right no-print"><button onclick="removeScopeRow('+index+')" class="text-red-500 hover:text-red-700 font-bold p-1 rounded hover:bg-red-50">&times;</button></td>' +
+        '</tr>';
+      }).join('');
+      
+      bindEditableEvents();
+      calculateTotal();
+    }
+
+    function bindEditableEvents() {
+      const edits = document.querySelectorAll('#scope-tbody .editable');
+      edits.forEach(edit => {
+        edit.addEventListener('input', updateDataFromDOM);
+        edit.addEventListener('keydown', function(e) {
+            if(e.key === 'Enter') {
+                e.preventDefault();
+                edit.blur();
+            }
+        });
+      });
+    }
+
+    function updateDataFromDOM() {
+      const rows = document.querySelectorAll('#scope-tbody tr');
+      currentScopeItems = Array.from(rows).map(row => {
+        const desc = row.querySelector('.scope-desc').innerText;
+        const qtyText = row.querySelector('.scope-qty').innerText.replace(',', '.');
+        const qty = parseFloat(qtyText) || 0;
+        const unit = row.querySelector('.scope-unit').innerText;
+        const priceText = row.querySelector('.scope-price').innerText.replace(',', '.');
+        const price = parseFloat(priceText) || 0;
+        
+        const netValue = qty * price;
+        row.querySelector('.row-net').innerText = netValue.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' zł';
+        
+        return {
+          desc: desc,
+          qty: qty,
+          unit: unit,
+          price: price
+        };
+      });
+      calculateTotal();
+    }
+
+    function addScopeRow() {
+      currentScopeItems.push({ desc: "Nowa pozycja", qty: 1, unit: "szt", price: 100 });
+      renderScopeTable();
+    }
+
+    function removeScopeRow(index) {
+      currentScopeItems.splice(index, 1);
+      renderScopeTable();
+    }
+
+    function calculateTotal() {
+      let net = 0;
+      currentScopeItems.forEach(item => {
+        net += item.qty * item.price;
+      });
+
+      const vat = net * 0.08;
+      const gross = net + vat;
+
+      document.getElementById('total-net').innerText = net.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('total-vat').innerText = vat.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('total-gross').innerText = gross.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // --- SYSTEM ZAPISYWANIA OFERT ---
+    
+    async function saveCurrentOffer() {
+      const offerId = 'OFE-' + Date.now();
+      const offerData = {
+        id: offerId,
+        number: document.getElementById('offer-number').innerText,
+        date: document.getElementById('offer-date').innerText,
+        clientInfo: document.getElementById('client-info').innerText,
+        clientContact: document.getElementById('client-contact').innerText,
+        projectName: document.getElementById('project-name').innerText,
+        projectLocation: document.getElementById('project-location').innerText,
+        summaryArea: document.getElementById('summary-area').innerText,
+        summaryPipe: document.getElementById('summary-pipe').innerText,
+        summaryManifoldsHtml: document.getElementById('summary-manifolds').innerHTML,
+        scopeItems: currentScopeItems,
+        terms: document.getElementById('offer-terms').innerText
+      };
+      
+      const existingIdx = savedOffers.findIndex(o => o.number === offerData.number);
+      if (existingIdx >= 0) {
+        if(confirm('Oferta o takim numerze już istnieje. Zastąpić?')) {
+          offerData.id = savedOffers[existingIdx].id;
+        } else {
+          offerData.number = offerData.number + ' (Kopia)';
+        }
+      }
+      
+      if (window.ApiService) {
+        await ApiService.saveOffer(offerData);
+        savedOffers = await ApiService.getOffers();
+      } else {
+        if (existingIdx >= 0 && offerData.id === savedOffers[existingIdx].id) {
+            savedOffers[existingIdx] = offerData;
+        } else {
+            savedOffers.push(offerData);
+        }
+        localStorage.setItem('lesa_saved_offers', JSON.stringify(savedOffers));
+      }
+      
+      renderSavedOffersList();
+      alert('Oferta została zapisana w bazie!');
+    }
+
+    function loadOffer(id) {
+      const offer = savedOffers.find(o => o.id === id);
+      if (!offer) return;
+      
+      document.getElementById('offer-number').innerText = offer.number || '';
+      document.getElementById('offer-date').innerText = offer.date || '';
+      document.getElementById('client-info').innerText = offer.clientInfo || '';
+      document.getElementById('client-contact').innerText = offer.clientContact || '';
+      document.getElementById('project-name').innerText = offer.projectName || '';
+      document.getElementById('project-location').innerText = offer.projectLocation || '';
+      document.getElementById('summary-area').innerText = offer.summaryArea || '';
+      document.getElementById('summary-pipe').innerText = offer.summaryPipe || '';
+      document.getElementById('summary-manifolds').innerHTML = offer.summaryManifoldsHtml || '';
+      document.getElementById('offer-terms').innerText = offer.terms || '';
+      
+      currentScopeItems = offer.scopeItems || [];
+      renderScopeTable();
+    }
+
+    async function deleteOffer(id, e) {
+      e.stopPropagation();
+      if(confirm('Na pewno usunąć tę ofertę z bazy?')) {
+        if (window.ApiService) {
+            await ApiService.deleteOffer(id);
+            savedOffers = await ApiService.getOffers();
+        } else {
+            savedOffers = savedOffers.filter(o => o.id !== id);
+            localStorage.setItem('lesa_saved_offers', JSON.stringify(savedOffers));
+        }
+        renderSavedOffersList();
+      }
+    }
+
+    function renderSavedOffersList() {
+      const list = document.getElementById('saved-offers-list');
+      if (savedOffers.length === 0) {
+        list.innerHTML = '<li class="text-xs text-slate-500 italic px-2">Brak zapisanych ofert</li>';
+        return;
+      }
+      
+      list.innerHTML = savedOffers.map(o => {
+        let gross = 0;
+        if (o.scopeItems) {
+           let net = o.scopeItems.reduce((acc, curr) => acc + (curr.qty * curr.price), 0);
+           gross = net * 1.08;
+        }
+        
+        return '<li onclick="loadOffer(\''+o.id+'\')" class="p-3 bg-slate-800 hover:bg-slate-750 rounded-xl cursor-pointer border border-slate-700 transition-colors group">' +
+          '<div class="flex justify-between items-start mb-1">' +
+            '<span class="font-bold text-white text-sm">' + o.number + '</span>' +
+            '<button onclick="deleteOffer(\''+o.id+'\', event)" class="text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>' +
+          '</div>' +
+          '<div class="text-xs text-slate-400 truncate mb-1">' + (o.clientInfo || 'Brak klienta') + '</div>' +
+          '<div class="flex justify-between items-center text-[10px]">' +
+            '<span class="text-slate-500">' + (o.date || '') + '</span>' +
+            '<span class="text-emerald-400 font-bold">' + gross.toLocaleString('pl-PL', {minimumFractionDigits: 0, maximumFractionDigits: 0}) + ' zł</span>' +
+          '</div>' +
+        '</li>';
+      }).join('');
+    }
+
+    // Start
+    init();
+
+  </script>
+</body>
+</html>
+

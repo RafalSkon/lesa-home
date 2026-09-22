@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logowanie | LeSa System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-200 min-h-screen flex items-center justify-center p-4">
+
+  <div class="w-full max-w-md bg-slate-800 rounded-xl shadow-2xl overflow-hidden border border-slate-700">
+    <div class="p-6 sm:p-8 text-center bg-slate-800 border-b border-slate-700">
+      <h1 class="text-3xl font-bold tracking-tight text-white mb-2">
+        LeSa <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">System</span>
+      </h1>
+      <p class="text-sm text-slate-400" id="form-subtitle">Zaloguj się do panelu</p>
+    </div>
+
+    <!-- TABS -->
+    <div class="flex border-b border-slate-700 bg-slate-800/50">
+      <button id="tab-login" class="flex-1 py-3 text-sm font-semibold text-white border-b-2 border-orange-500 bg-slate-800 transition-colors">
+        Logowanie
+      </button>
+      <button id="tab-register" class="flex-1 py-3 text-sm font-semibold text-slate-400 border-b-2 border-transparent hover:text-white transition-colors">
+        Rejestracja
+      </button>
+    </div>
+
+    <div class="p-6 sm:p-8">
+      <!-- Error Message -->
+      <div id="error-msg" class="hidden mb-4 p-3 bg-red-900/30 border border-red-500/50 rounded-lg text-sm text-red-200 flex items-center gap-2">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span id="error-text">Błędne dane.</span>
+      </div>
+
+      <!-- Success Message -->
+      <div id="success-msg" class="hidden mb-4 p-3 bg-emerald-900/30 border border-emerald-500/50 rounded-lg text-sm text-emerald-200 flex items-start gap-2">
+        <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <span id="success-text">Utworzono konto.</span>
+      </div>
+
+            <form id="auth-form" onsubmit="event.preventDefault(); handleSubmit();">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Nazwa użytkownika</label>
+            <input type="text" id="inp-username" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all">
+          </div>
+          
+          <div id="password-container">
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Hasło</label>
+            <input type="password" id="inp-password" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all">
+          </div>
+
+          <div id="reg-fields" class="hidden space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Powtórz Hasło</label>
+              <input type="password" id="inp-password-repeat" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Preferowana Rola</label>
+              <select id="inp-role" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all">
+                <option value="monter">Monter (Ograniczony dostęp)</option>
+                <option value="admin">Administrator (Pełny dostęp)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Weryfikacja: Ile to jest 2 + 3?</label>
+              <input type="number" id="inp-captcha" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all" placeholder="Wpisz cyfrę">
+            </div>
+          </div>
+
+          <button type="submit" id="btn-submit" class="w-full mt-6 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold py-3 rounded-lg shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]">
+            Zaloguj się
+          </button>
+          
+          <div id="forgot-password-link" class="mt-4 text-center">
+            <button type="button" onclick="setMode('reset')" class="text-xs text-slate-400 hover:text-white transition-colors">Zapomniałem hasła</button>
+          </div>
+          
+          <div id="back-to-login-link" class="hidden mt-4 text-center">
+            <button type="button" onclick="setMode('login')" class="text-xs text-slate-400 hover:text-white transition-colors">Wróć do logowania</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api-service.js?v=6"></script>
+  <script>
+    let mode = 'login';
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const regFields = document.getElementById('reg-fields');
+    const pwdContainer = document.getElementById('password-container');
+    const forgotLink = document.getElementById('forgot-password-link');
+    const backLink = document.getElementById('back-to-login-link');
+    const btnSubmit = document.getElementById('btn-submit');
+    const subtitle = document.getElementById('form-subtitle');
+    const errBox = document.getElementById('error-msg');
+    const errText = document.getElementById('error-text');
+    const succBox = document.getElementById('success-msg');
+    const succText = document.getElementById('success-text');
+
+    tabLogin.addEventListener('click', () => setMode('login'));
+    tabRegister.addEventListener('click', () => setMode('register'));
+
+    function setMode(newMode) {
+      mode = newMode;
+      errBox.classList.add('hidden');
+      succBox.classList.add('hidden');
+      
+      document.getElementById('inp-password').required = (mode !== 'reset');
+      
+      if (mode === 'login') {
+        tabLogin.classList.replace('text-slate-400', 'text-white');
+        tabLogin.classList.replace('border-transparent', 'border-orange-500');
+        tabLogin.classList.add('bg-slate-800');
+        
+        tabRegister.classList.replace('text-white', 'text-slate-400');
+        tabRegister.classList.replace('border-orange-500', 'border-transparent');
+        tabRegister.classList.remove('bg-slate-800');
+
+        regFields.classList.add('hidden');
+        pwdContainer.classList.remove('hidden');
+        forgotLink.classList.remove('hidden');
+        backLink.classList.add('hidden');
+        
+        btnSubmit.textContent = 'Zaloguj się';
+        subtitle.textContent = 'Zaloguj się do panelu';
+      } else if (mode === 'register') {
+        tabRegister.classList.replace('text-slate-400', 'text-white');
+        tabRegister.classList.replace('border-transparent', 'border-orange-500');
+        tabRegister.classList.add('bg-slate-800');
+        
+        tabLogin.classList.replace('text-white', 'text-slate-400');
+        tabLogin.classList.replace('border-orange-500', 'border-transparent');
+        tabLogin.classList.remove('bg-slate-800');
+
+        regFields.classList.remove('hidden');
+        pwdContainer.classList.remove('hidden');
+        forgotLink.classList.add('hidden');
+        backLink.classList.add('hidden');
+        
+        btnSubmit.textContent = 'Utwórz konto';
+        subtitle.textContent = 'Załóż nowe konto';
+      } else if (mode === 'reset') {
+        tabLogin.classList.replace('text-white', 'text-slate-400');
+        tabLogin.classList.replace('border-orange-500', 'border-transparent');
+        tabLogin.classList.remove('bg-slate-800');
+        
+        tabRegister.classList.replace('text-white', 'text-slate-400');
+        tabRegister.classList.replace('border-orange-500', 'border-transparent');
+        tabRegister.classList.remove('bg-slate-800');
+        
+        regFields.classList.add('hidden');
+        pwdContainer.classList.add('hidden');
+        forgotLink.classList.add('hidden');
+        backLink.classList.remove('hidden');
+        
+        btnSubmit.textContent = 'Poproś o reset hasła';
+        subtitle.textContent = 'Odzyskiwanie dostępu';
+      }
+    }
+
+    async function handleSubmit() {
+      errBox.classList.add('hidden');
+      succBox.classList.add('hidden');
+      
+      const username = document.getElementById('inp-username').value;
+      const pass = document.getElementById('inp-password').value;
+      
+      if (!window.ApiService) {
+        showError('Błąd połączenia. Upewnij się, że api-service.js jest załadowany.');
+        return;
+      }
+
+      btnSubmit.disabled = true;
+      btnSubmit.classList.add('opacity-50', 'cursor-not-allowed');
+
+      try {
+        if (mode === 'login') {
+          const res = await ApiService.login(username, pass);
+          if (res.success && res.user) {
+            localStorage.setItem('lesa_user', JSON.stringify(res.user));
+            if (res.user.role === 'admin') {
+              localStorage.setItem('lesa_admin_auth', 'true');
+              window.location.href = 'admin.html';
+            } else {
+              localStorage.setItem('lesa_monter_auth', 'true');
+              window.location.href = 'monter.html';
+            }
+          } else {
+            showError(res.error || 'Błąd logowania.');
+          }
+        } else if (mode === 'register') {
+          const passRepeat = document.getElementById('inp-password-repeat').value;
+          const role = document.getElementById('inp-role').value;
+          const captcha = document.getElementById('inp-captcha').value;
+          
+          if (pass !== passRepeat) {
+            showError('Hasła nie są identyczne.');
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+            return;
+          }
+          if (captcha !== '5') {
+            showError('Błędna weryfikacja antyspamowa (2 + 3).');
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+            return;
+          }
+          
+          const res = await ApiService.register(username, pass, role);
+          if (res.success) {
+            showSuccess(res.message);
+            document.getElementById('auth-form').reset();
+            setTimeout(() => setMode('login'), 3000);
+          } else {
+            showError(res.error || 'Błąd rejestracji.');
+          }
+        } else if (mode === 'reset') {
+          const res = await ApiService.resetPasswordRequest(username);
+          if (res.success) {
+            showSuccess(res.message);
+            document.getElementById('auth-form').reset();
+            setTimeout(() => setMode('login'), 3000);
+          } else {
+            showError(res.error || 'Wystąpił błąd.');
+          }
+        }
+      } catch (e) {
+        showError('Wystąpił nieoczekiwany błąd. Spróbuj ponownie.');
+      }
+
+      btnSubmit.disabled = false;
+      btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
+
+    function showError(msg) {
+      errText.textContent = msg;
+      errBox.classList.remove('hidden');
+    }
+    
+    function showSuccess(msg) {
+      succText.textContent = msg;
+      succBox.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+

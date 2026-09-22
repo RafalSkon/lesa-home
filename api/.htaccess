@@ -1,0 +1,31 @@
+# LeSa Home - Apache/LiteSpeed Server Configuration
+# Disable Directory Browsing
+Options -Indexes
+
+# UTF-8 Encoding
+AddDefaultCharset UTF-8
+
+# Security: Block direct web access to SQLite database and data directory
+<FilesMatch "\.(sqlite|sqlite3|db|log)$">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
+
+# Allow PHP execution and generous upload limits for photos & CAD
+<IfModule mod_php.c>
+    php_value upload_max_filesize 32M
+    php_value post_max_size 32M
+    php_value memory_limit 128M
+</IfModule>
+
+# Security: Block access to data directory and sensitive files
+<FilesMatch "\.(zip|bak|sql|log|sqlite|sqlite3|db|env)$">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
+
+# Block rate limit files from web access
+<FilesMatch "^\.rate_limit_">
+    Order deny,allow
+    Deny from all
+</FilesMatch>

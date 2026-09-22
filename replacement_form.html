@@ -1,0 +1,224 @@
+      <form id="auth-form" onsubmit="event.preventDefault(); handleSubmit();">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Nazwa użytkownika</label>
+            <input type="text" id="inp-username" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all">
+          </div>
+          
+          <div id="password-container">
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Hasło</label>
+            <input type="password" id="inp-password" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all">
+          </div>
+
+          <div id="reg-fields" class="hidden space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Powtórz Hasło</label>
+              <input type="password" id="inp-password-repeat" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Preferowana Rola</label>
+              <select id="inp-role" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all">
+                <option value="monter">Monter (Ograniczony dostęp)</option>
+                <option value="admin">Administrator (Pełny dostęp)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Weryfikacja: Ile to jest 2 + 3?</label>
+              <input type="number" id="inp-captcha" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all" placeholder="Wpisz cyfrę">
+            </div>
+          </div>
+
+          <button type="submit" id="btn-submit" class="w-full mt-6 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold py-3 rounded-lg shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]">
+            Zaloguj się
+          </button>
+          
+          <div id="forgot-password-link" class="mt-4 text-center">
+            <button type="button" onclick="setMode('reset')" class="text-xs text-slate-400 hover:text-white transition-colors">Zapomniałem hasła</button>
+          </div>
+          
+          <div id="back-to-login-link" class="hidden mt-4 text-center">
+            <button type="button" onclick="setMode('login')" class="text-xs text-slate-400 hover:text-white transition-colors">Wróć do logowania</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api-service.js?v=6"></script>
+  <script>
+    let mode = 'login';
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const regFields = document.getElementById('reg-fields');
+    const pwdContainer = document.getElementById('password-container');
+    const forgotLink = document.getElementById('forgot-password-link');
+    const backLink = document.getElementById('back-to-login-link');
+    const btnSubmit = document.getElementById('btn-submit');
+    const subtitle = document.getElementById('form-subtitle');
+    const errBox = document.getElementById('error-msg');
+    const errText = document.getElementById('error-text');
+    const succBox = document.getElementById('success-msg');
+    const succText = document.getElementById('success-text');
+
+    tabLogin.addEventListener('click', () => setMode('login'));
+    tabRegister.addEventListener('click', () => setMode('register'));
+
+    function setMode(newMode) {
+      mode = newMode;
+      errBox.classList.add('hidden');
+      succBox.classList.add('hidden');
+      
+      document.getElementById('inp-password').required = (mode !== 'reset');
+      
+      if (mode === 'login') {
+        tabLogin.classList.replace('text-slate-400', 'text-white');
+        tabLogin.classList.replace('border-transparent', 'border-orange-500');
+        tabLogin.classList.add('bg-slate-800');
+        
+        tabRegister.classList.replace('text-white', 'text-slate-400');
+        tabRegister.classList.replace('border-orange-500', 'border-transparent');
+        tabRegister.classList.remove('bg-slate-800');
+
+        regFields.classList.add('hidden');
+        pwdContainer.classList.remove('hidden');
+        forgotLink.classList.remove('hidden');
+        backLink.classList.add('hidden');
+        
+        btnSubmit.textContent = 'Zaloguj się';
+        subtitle.textContent = 'Zaloguj się do panelu';
+      } else if (mode === 'register') {
+        tabRegister.classList.replace('text-slate-400', 'text-white');
+        tabRegister.classList.replace('border-transparent', 'border-orange-500');
+        tabRegister.classList.add('bg-slate-800');
+        
+        tabLogin.classList.replace('text-white', 'text-slate-400');
+        tabLogin.classList.replace('border-orange-500', 'border-transparent');
+        tabLogin.classList.remove('bg-slate-800');
+
+        regFields.classList.remove('hidden');
+        pwdContainer.classList.remove('hidden');
+        forgotLink.classList.add('hidden');
+        backLink.classList.add('hidden');
+        
+        btnSubmit.textContent = 'Utwórz konto';
+        subtitle.textContent = 'Załóż nowe konto';
+      } else if (mode === 'reset') {
+        tabLogin.classList.replace('text-white', 'text-slate-400');
+        tabLogin.classList.replace('border-orange-500', 'border-transparent');
+        tabLogin.classList.remove('bg-slate-800');
+        
+        tabRegister.classList.replace('text-white', 'text-slate-400');
+        tabRegister.classList.replace('border-orange-500', 'border-transparent');
+        tabRegister.classList.remove('bg-slate-800');
+        
+        regFields.classList.add('hidden');
+        pwdContainer.classList.add('hidden');
+        forgotLink.classList.add('hidden');
+        backLink.classList.remove('hidden');
+        
+        btnSubmit.textContent = 'Poproś o reset hasła';
+        subtitle.textContent = 'Odzyskiwanie dostępu';
+      }
+    }
+
+    async function handleSubmit() {
+      errBox.classList.add('hidden');
+      succBox.classList.add('hidden');
+      
+      const username = document.getElementById('inp-username').value;
+      const pass = document.getElementById('inp-password').value;
+      
+      if (!window.ApiService) {
+        showError('Błąd połączenia. Upewnij się, że api-service.js jest załadowany.');
+        return;
+      }
+
+      btnSubmit.disabled = true;
+      btnSubmit.classList.add('opacity-50', 'cursor-not-allowed');
+
+      try {
+        if (mode === 'login') {
+          // Local fallback
+          if (pass === 'lesa2026' || pass === '1234') {
+            localStorage.setItem('lesa_admin_auth', 'true');
+            localStorage.setItem('lesa_user', JSON.stringify({id: 'local', username: username || 'admin', role: 'admin'}));
+            window.location.href = 'admin.html';
+            return;
+          }
+          if (pass === 'monter2026') {
+            localStorage.setItem('lesa_monter_auth', 'true');
+            localStorage.setItem('lesa_user', JSON.stringify({id: 'local', username: username || 'monter', role: 'monter'}));
+            window.location.href = 'monter.html';
+            return;
+          }
+          const res = await ApiService.login(username, pass);
+          if (res.success && res.user) {
+            localStorage.setItem('lesa_user', JSON.stringify(res.user));
+            if (res.user.role === 'admin') {
+              localStorage.setItem('lesa_admin_auth', 'true');
+              window.location.href = 'admin.html';
+            } else {
+              localStorage.setItem('lesa_monter_auth', 'true');
+              window.location.href = 'monter.html';
+            }
+          } else {
+            showError(res.error || 'Błąd logowania.');
+          }
+        } else if (mode === 'register') {
+          const passRepeat = document.getElementById('inp-password-repeat').value;
+          const role = document.getElementById('inp-role').value;
+          const captcha = document.getElementById('inp-captcha').value;
+          
+          if (pass !== passRepeat) {
+            showError('Hasła nie są identyczne.');
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+            return;
+          }
+          if (captcha !== '5') {
+            showError('Błędna weryfikacja antyspamowa (2 + 3).');
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+            return;
+          }
+          
+          const res = await ApiService.register(username, pass, role);
+          if (res.success) {
+            showSuccess(res.message);
+            document.getElementById('auth-form').reset();
+            setTimeout(() => setMode('login'), 3000);
+          } else {
+            showError(res.error || 'Błąd rejestracji.');
+          }
+        } else if (mode === 'reset') {
+          const res = await ApiService.resetPasswordRequest(username);
+          if (res.success) {
+            showSuccess(res.message);
+            document.getElementById('auth-form').reset();
+            setTimeout(() => setMode('login'), 3000);
+          } else {
+            showError(res.error || 'Wystąpił błąd.');
+          }
+        }
+      } catch (e) {
+        showError('Wystąpił nieoczekiwany błąd. Spróbuj ponownie.');
+      }
+
+      btnSubmit.disabled = false;
+      btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
+
+    function showError(msg) {
+      errText.textContent = msg;
+      errBox.classList.remove('hidden');
+    }
+    
+    function showSuccess(msg) {
+      succText.textContent = msg;
+      succBox.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+# LeSa Home - Root Security Configuration
+# ==========================================
+
+# Disable directory browsing
+Options -Indexes
+
+# UTF-8 Encoding
+AddDefaultCharset UTF-8
+
+# ==========================================
+# SECURITY HEADERS
+# ==========================================
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    
+    # HSTS - force HTTPS (uncomment after confirming HTTPS works)
+    # Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+</IfModule>
+
+# ==========================================
+# BLOCK SENSITIVE FILES FROM DIRECT ACCESS
+# ==========================================
+
+# Block database files
+<FilesMatch "\.(sqlite|sqlite3|db|sql)$">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
+
+# Block archives (source code leaks!)
+<FilesMatch "\.(zip|tar|gz|rar|7z|bak)$">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
+
+# Block log files
+<FilesMatch "\.(log)$">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
+
+# Block environment/config files
+<FilesMatch "\.(env|ini|cfg|conf)$">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
+
+# Block test/backup files
+<FilesMatch "(test_|_backup|\.vbs$)">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
+
+# Block .htaccess from being served
+<FilesMatch "^\.ht">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
+
+# Block GEMINI.md and other agent config
+<FilesMatch "(GEMINI\.md|\.agents)">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
+
+# ==========================================
+# FORCE HTTPS (uncomment after confirming)
+# ==========================================
+# <IfModule mod_rewrite.c>
+#     RewriteEngine On
+#     RewriteCond %{HTTPS} off
+#     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# </IfModule>

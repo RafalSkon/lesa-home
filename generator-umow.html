@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generator Umów i Protokołów Odbioru | LeSa - Home</title>
+  <meta name="description" content="Profesjonalny konfigurator i generator prawnych umów o montaż instalacji ogrzewania podłogowego i systemów HVAC dla klientów indywidualnych i partnerów B2B.">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              200: '#fed7aa',
+              300: '#fdba74',
+              400: '#fb923c',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+              800: '#9a3412',
+              900: '#7c2d12',
+            },
+            slate: {
+              850: '#151f32',
+              950: '#090d16',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            doc: ['Times New Roman', 'Liberation Serif', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    /* Styling for the A4 Document Canvas Preview */
+    .document-page {
+      background: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0,0,0,0.06);
+      width: 100%;
+      max-width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 24px auto;
+      padding: 18mm 16mm 18mm 16mm;
+      box-sizing: border-box;
+      position: relative;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: #1e293b;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .document-page:last-child {
+      margin-bottom: 0;
+    }
+
+    @media screen and (max-width: 768px) {
+      .document-page {
+        padding: 10mm 8mm;
+        font-size: 11.5px;
+      }
+    }
+
+    @page { margin: 8mm; }
+
+    /* Print Stylesheet Overrides */
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .document-page {
+        box-shadow: none !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: auto !important;
+        padding: 0 !important;
+        page-break-after: always !important;
+        break-inside: avoid !important;
+      }
+      .document-page:last-child {
+        page-break-after: auto !important;
+      }
+      .print-only {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 antialiased min-h-screen flex flex-col selection:bg-orange-500 selection:text-white">
+
+  <!-- ================= TOP APP BAR (NO PRINT) ================= -->
+  <header class="no-print bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-2.5 hover:opacity-90 transition-opacity">
+          <div class="w-9 h-9 rounded-xl bg-orange-600 flex items-center justify-center p-1.5 shadow-md shadow-orange-600/30">
+            <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
+              <path d="M22,64 A36,36 0 1,1 76,77" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" />
+              <path d="M42,30 A20,20 0 0,1 70,58" fill="none" stroke="#fed7aa" stroke-width="7.5" stroke-linecap="round" />
+              <circle cx="50" cy="50" r="4" fill="#ffffff" />
+            </svg>
+          </div>
+          <div>
+            <span class="text-lg font-bold font-heading tracking-tight text-white flex items-center gap-1">
+              LeSa <span class="text-orange-400 font-extrabold">HOME</span>
+            </span>
+            <span class="text-[9px] tracking-wider uppercase font-semibold text-slate-400 block -mt-1">
+              Panel Wykonawcy &bull; Generator Umów
+            </span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Quick Switcher Tabs & Actions -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- View Toggle for Mobile/Small Screens -->
+        <div class="lg:hidden flex bg-slate-800 p-1 rounded-lg border border-slate-700 text-xs">
+          <button id="tab-btn-form" class="px-3 py-1.5 rounded-md font-semibold text-white bg-orange-600 transition-all">Edytor</button>
+          <button id="tab-btn-doc" class="px-3 py-1.5 rounded-md font-semibold text-slate-400 hover:text-white transition-all">Podgląd A4</button>
+        </div>
+
+        <button id="btn-reset-form" title="Wyczyść / Nowy formularz" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors border border-slate-700">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          <span>Nowa</span>
+        </button>
+
+        <button id="btn-save-draft" title="Zapisz umowę w pamięci przeglądarki" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors border border-slate-700">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+          <span class="hidden md:inline">Zapisz</span>
+        </button>
+
+        <button id="btn-load-drafts" title="Zapisane umowy" class="relative inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors border border-slate-700">
+          <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+          <span class="hidden md:inline">Historia</span>
+          <span id="saved-count-badge" class="hidden absolute -top-1.5 -right-1.5 w-4 h-4 bg-orange-600 text-white rounded-full text-[10px] items-center justify-center font-bold">0</span>
+        </button>
+
+        <button id="btn-copy-text" title="Skopiuj treść umowy do schowka" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors border border-slate-700">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+          <span>Kopiuj</span>
+        </button>
+
+        <!-- PRINT / PDF BUTTON -->
+        <button id="btn-print-doc" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white text-xs sm:text-sm font-bold rounded-lg shadow-md shadow-orange-600/30 transition-all hover:scale-105 active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          <span>Drukuj / Pobierz PDF</span>
+        </button>
+
+        <a href="admin.html?tab=contracts" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-orange-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg border border-orange-500/30 transition-all" title="Wróć do Panelu Administracyjnego">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+          <span class="hidden sm:inline">Panel Admina</span>
+        </a>
+
+        <a href="index.html" class="text-xs text-slate-400 hover:text-orange-400 p-2 ml-1" title="Powrót do strony głównej">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= MAIN APP WORKSPACE ================= -->
+  <main class="flex-1 max-w-[1680px] w-full mx-auto p-4 sm:p-6 lg:p-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- ================= LEFT COLUMN: FORM CONTROLS ================= -->
+      <div id="editor-container" class="lg:col-span-5 xl:col-span-5 space-y-6 no-print">
+        
+        <!-- Notice / Mode Banner -->
+        <div class="bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-transparent border-l-4 border-orange-500 p-4 rounded-r-xl bg-white shadow-sm">
+          <div class="flex items-start justify-between">
+            <div>
+              <h1 class="text-base font-bold text-slate-900 font-heading">Konfigurator Umowy &bull; Roboty Montażowe HVAC</h1>
+              <p class="text-xs text-slate-600 mt-1">
+                Wypełnij formularz. Wszystkie zmiany są w czasie rzeczywistym naniesione na prawy arkusz A4. Gotowy dokument możesz od razu wydrukować do formatu PDF lub podpisać z inwestorem.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Presets -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Szybki szablon / Profil klienta:</label>
+          <div class="grid grid-cols-3 gap-2">
+            <button type="button" data-preset="b2c_house" class="preset-btn px-2.5 py-2 text-xs font-semibold rounded-xl border border-orange-200 bg-orange-50/60 hover:bg-orange-100 text-orange-800 transition-all text-center">
+              🏡 Dom B2C (140m²)
+            </button>
+            <button type="button" data-preset="b2b_dev" class="preset-btn px-2.5 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 transition-all text-center">
+              🏢 Deweloper B2B
+            </button>
+            <button type="button" data-preset="protocol_only" class="preset-btn px-2.5 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 transition-all text-center">
+              📋 Sam Protokół
+            </button>
+          </div>
+        </div>
+
+        <form id="contract-form" class="space-y-4">
+          
+          <!-- ACCORDION SECTION 1: Typ umowy i Nagłówek -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+            <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer accordion-trigger">
+              <div class="flex items-center gap-2.5">
+                <span class="w-6 h-6 rounded-full bg-orange-600 text-white text-xs font-bold flex items-center justify-center">1</span>
+                <h2 class="text-sm font-bold text-slate-900">Typ Umowy i Metadane</h2>
+              </div>
+              <svg class="w-4 h-4 text-slate-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="p-5 space-y-4 accordion-content">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Wariant prawny umowy:</label>
+                <div class="grid grid-cols-2 gap-3">
+                  <label class="flex items-center gap-2 p-3 rounded-xl border border-slate-200 hover:border-orange-500 cursor-pointer text-xs font-medium">
+                    <input type="radio" name="contract_type" value="B2C" checked class="text-orange-600 focus:ring-orange-500">
+                    <div>
+                      <span class="font-bold block text-slate-900">Klient Indywidualny (B2C)</span>
+                      <span class="text-[11px] text-slate-500">Konsument, stawka VAT 8%</span>
+                    </div>
+                  </label>
+                  <label class="flex items-center gap-2 p-3 rounded-xl border border-slate-200 hover:border-orange-500 cursor-pointer text-xs font-medium">
+                    <input type="radio" name="contract_type" value="B2B" class="text-orange-600 focus:ring-orange-500">
+                    <div>
+                      <span class="font-bold block text-slate-900">Firma / Partner (B2B)</span>
+                      <span class="text-[11px] text-slate-500">Przedsiębiorca, NIP, VAT 23%</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Numer umowy:</label>
+                  <input type="text" id="inp_contract_no" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 font-mono">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Data zawarcia:</label>
+                  <input type="date" id="inp_contract_date" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Miejscowość zawarcia umowy:</label>
+                <input type="text" id="inp_contract_place" value="Warszawa" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+              </div>
+            </div>
+          </div>
+
+          <!-- ACCORDION SECTION 2: Strony Umowy -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+            <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer accordion-trigger">
+              <div class="flex items-center gap-2.5">
+                <span class="w-6 h-6 rounded-full bg-orange-600 text-white text-xs font-bold flex items-center justify-center">2</span>
+                <h2 class="text-sm font-bold text-slate-900">Strony Umowy (Wykonawca & Inwestor)</h2>
+              </div>
+              <svg class="w-4 h-4 text-slate-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="p-5 space-y-4 accordion-content">
+              
+              <!-- Wykonawca (LeSa) -->
+              <div class="p-3.5 bg-orange-50/50 rounded-xl border border-orange-200">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-bold text-orange-900 uppercase tracking-wide flex items-center gap-1">
+                    🏢 Wykonawca (Twoja Firma)
+                  </span>
+                  <span class="text-[10px] text-orange-700 bg-orange-200/60 px-2 py-0.5 rounded-full font-semibold">LeSa - Home</span>
+                </div>
+                <div class="space-y-2">
+                  <input type="text" id="inp_contractor_name" value="LeSa - Home | Rafał Skowroński" placeholder="Nazwa firmy wykonawcy" class="w-full px-3 py-1.5 text-xs border border-orange-300 bg-white rounded-lg focus:ring-2 focus:ring-orange-500">
+                  <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="inp_contractor_nip" value="NIP: 0000000000" placeholder="NIP" class="w-full px-3 py-1.5 text-xs border border-orange-300 bg-white rounded-lg">
+                    <input type="text" id="inp_contractor_regon" value="REGON: 000000000" placeholder="REGON / KRS" class="w-full px-3 py-1.5 text-xs border border-orange-300 bg-white rounded-lg">
+                  </div>
+                  <input type="text" id="inp_contractor_address" value="ul. Instalatorów 15, 00-001 Warszawa" placeholder="Adres siedziby" class="w-full px-3 py-1.5 text-xs border border-orange-300 bg-white rounded-lg">
+                  <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="inp_contractor_phone" value="+48 790 000 000" placeholder="Telefon" class="w-full px-3 py-1.5 text-xs border border-orange-300 bg-white rounded-lg">
+                    <input type="text" id="inp_contractor_email" value="kontakt@lesa-home.pl" placeholder="E-mail" class="w-full px-3 py-1.5 text-xs border border-orange-300 bg-white rounded-lg">
+                  </div>
+                  <input type="text" id="inp_contractor_bank" value="PL 12 1020 0000 0000 1234 5678 9012 (PKO BP)" placeholder="Nr konta bankowego do rozliczeń" class="w-full px-3 py-1.5 text-xs border border-orange-300 bg-white rounded-lg font-mono">
+                </div>
+              </div>
+
+              <!-- Inwestor / Zamawiający -->
+              <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                <span class="text-xs font-bold text-slate-800 uppercase tracking-wide block mb-2">
+                  👤 Zamawiający / Inwestor
+                </span>
+                <div class="space-y-2">
+                  <input type="text" id="inp_client_name" value="Jan Kowalski" placeholder="Imię i nazwisko lub Pełna nazwa firmy" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 font-medium">
+                  
+                  <div id="client_b2c_fields" class="grid grid-cols-2 gap-2">
+                    <input type="text" id="inp_client_pesel" value="85051201234" placeholder="PESEL" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg">
+                    <input type="text" id="inp_client_id_card" value="ABC 123456" placeholder="Seria i nr dowodu osobistego" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg">
+                  </div>
+
+                  <div id="client_b2b_fields" class="hidden grid grid-cols-2 gap-2">
+                    <input type="text" id="inp_client_nip" placeholder="NIP firmy zamawiającej" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg font-mono">
+                    <input type="text" id="inp_client_rep" placeholder="Osoba reprezentująca (np. Prezes Zarządu)" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg">
+                  </div>
+
+                  <input type="text" id="inp_client_address" value="ul. Przykładowa 12/4, 05-500 Piaseczno" placeholder="Adres zamieszkania / Siedziby firmy" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg">
+                  
+                  <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="inp_client_phone" value="+48 600 123 456" placeholder="Telefon kontaktowy" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg">
+                    <input type="text" id="inp_client_email" value="jan.kowalski@email.pl" placeholder="Adres E-mail" class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Miejsce inwestycji -->
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Adres inwestycji / montażu instalacji:</label>
+                <input type="text" id="inp_investment_address" value="Działka nr 142/5, ul. Słoneczna, 05-500 Piaseczno" placeholder="Dokładny adres placu budowy" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 font-medium">
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ACCORDION SECTION 3: Zakres Prac i Parametry Techniczne -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+            <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer accordion-trigger">
+              <div class="flex items-center gap-2.5">
+                <span class="w-6 h-6 rounded-full bg-orange-600 text-white text-xs font-bold flex items-center justify-center">3</span>
+                <h2 class="text-sm font-bold text-slate-900">Zakres Prac & Parametry Techniczne</h2>
+              </div>
+              <svg class="w-4 h-4 text-slate-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="p-5 space-y-4 accordion-content">
+              
+              <div class="grid grid-cols-3 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Powierzchnia [m²]:</label>
+                  <input type="number" id="inp_tech_area" value="140" min="10" max="1000" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 font-bold">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Liczba pętli / sekcji:</label>
+                  <input type="number" id="inp_tech_loops" value="13" min="1" max="60" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 font-bold">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Szacowana dł. rur [mb]:</label>
+                  <input type="number" id="inp_tech_pipe_len" value="1190" min="50" max="10000" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 font-bold">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Rodzaj rury grzewczej:</label>
+                  <select id="inp_tech_pipe_type" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500">
+                    <option value="Rura 5-warstwowa PE-RT II / EVOH 16x2.0 mm (z barierą antydyfuzyjną)">PE-RT II / EVOH 16x2.0 (5-warstwowa)</option>
+                    <option value="Rura wielowarstwowa PEX/AL/PE 16x2.0 mm (z wkładką aluminiową)">PEX/AL/PE 16x2.0 (Aluminium)</option>
+                    <option value="Rura PE-Xa 16x2.0 mm z barierą tlenową EVOH">PE-Xa 16x2.0 (Wysoka elastyczność)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Typ rozdzielaczy:</label>
+                  <select id="inp_tech_manifold" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500">
+                    <option value="Stal nierdzewna szlachetna z przepływomierzami (rotametry magnetyczne) + odpowietrzniki auto">Stal nierdzewna + rotametry + auto-odpowietrznik</option>
+                    <option value="Mosiądz niklowany z zaworami regulacyjno-odcinającymi">Mosiądz niklowany standard</option>
+                    <option value="Rozdzielacz poliamidowy z przepływomierzami">Poliamid (tworzywo)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Wylewka posadzkowa:</label>
+                  <select id="inp_tech_screed" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500">
+                    <option value="Wylewka anhydrytowa samopoziomująca gr. ~50mm (w zakresie Wykonawcy)">Wylewka anhydrytowa (w zakresie LeSa)</option>
+                    <option value="Tradycyjny miksokret cementowy (w zakresie Wykonawcy)">Miksokret cementowy (w zakresie LeSa)</option>
+                    <option value="Po stronie Zamawiającego (brak wylewki w umowie)">Po stronie Zamawiającego (tylko rury)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Sterowanie i automatyka:</label>
+                  <select id="inp_tech_control" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500">
+                    <option value="Smart Home: termostaty bezprzewodowe w każdym pokoju + listwa sterująca">Smart Home: Termostaty pokojowe + siłowniki</option>
+                    <option value="Sterowanie manualne rotametrami na rozdzielaczu">Manualne (na rozdzielaczu)</option>
+                    <option value="Doprowadzenie okablowania pod automatykę przyszłościową">Przygotowanie pod okablowanie</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Checkbox options -->
+              <div class="space-y-2 pt-2 border-t border-slate-200">
+                <span class="block text-xs font-bold text-slate-700">Usługi i elementy w cenie umowy:</span>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox" id="chk_test_pressure" checked class="rounded text-orange-600 focus:ring-orange-500">
+                    <span>Próba ciśnieniowa (6 bar) + Protokół</span>
+                  </label>
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox" id="chk_thermal_audit" checked class="rounded text-orange-600 focus:ring-orange-500">
+                    <span>Projekt ułożenia pętli i bilans cieplny</span>
+                  </label>
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox" id="chk_edge_tape" checked class="rounded text-orange-600 focus:ring-orange-500">
+                    <span>Taśma brzegowa dylatacyjna + folia</span>
+                  </label>
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox" id="chk_tacker" checked class="rounded text-orange-600 focus:ring-orange-500">
+                    <span>System montażu Tacker / Spinki</span>
+                  </label>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ACCORDION SECTION 4: Finanse, Zaliczki i Terminy Płatności -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+            <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer accordion-trigger">
+              <div class="flex items-center gap-2.5">
+                <span class="w-6 h-6 rounded-full bg-orange-600 text-white text-xs font-bold flex items-center justify-center">4</span>
+                <h2 class="text-sm font-bold text-slate-900">Wynagrodzenie & Harmonogram Płatności</h2>
+              </div>
+              <svg class="w-4 h-4 text-slate-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="p-5 space-y-4 accordion-content">
+              
+              <div class="grid grid-cols-3 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Kwota Netto [PLN]:</label>
+                  <input type="number" id="inp_price_netto" value="19500" step="100" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 font-bold">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Stawka VAT:</label>
+                  <select id="inp_vat_rate" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 font-bold">
+                    <option value="8">8% (Mieszkaniowy B2C)</option>
+                    <option value="23">23% (B2B / Usługi)</option>
+                    <option value="0">0% / ZW</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Kwota Brutto [PLN]:</label>
+                  <input type="number" id="inp_price_brutto" value="21060" readonly class="w-full px-3 py-2 text-xs border border-slate-300 bg-slate-100 rounded-lg text-orange-600 font-extrabold">
+                </div>
+              </div>
+
+              <!-- Payment schedule distribution -->
+              <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
+                <span class="text-xs font-bold text-slate-800 uppercase tracking-wide block">
+                  Harmonogram Transz Płatności:
+                </span>
+                
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <label class="block text-slate-600 mb-0.5">I Transza (Zadatek / Materiały) [%]:</label>
+                    <div class="flex items-center gap-1.5">
+                      <input type="number" id="inp_deposit_pct" value="40" min="0" max="100" class="w-16 px-2 py-1 border border-slate-300 rounded text-xs font-bold">
+                      <span id="deposit_amount_display" class="font-bold text-slate-900">= 8 424 zł</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-slate-600 mb-0.5">Płatność końcowa (po odbiorze) [%]:</label>
+                    <div class="flex items-center gap-1.5">
+                      <input type="number" id="inp_final_pct" value="60" min="0" max="100" class="w-16 px-2 py-1 border border-slate-300 rounded text-xs font-bold">
+                      <span id="final_amount_display" class="font-bold text-slate-900">= 12 636 zł</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="text-[11px] text-slate-500 pt-1 border-t border-slate-200">
+                  Termin płatności transzy końcowej: <input type="number" id="inp_payment_days" value="3" class="w-12 px-1.5 py-0.5 border border-slate-300 rounded text-center font-bold"> dni od podpisania Protokołu Odbioru.
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ACCORDION SECTION 5: Harmonogram i Gwarancja -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+            <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer accordion-trigger">
+              <div class="flex items-center gap-2.5">
+                <span class="w-6 h-6 rounded-full bg-orange-600 text-white text-xs font-bold flex items-center justify-center">5</span>
+                <h2 class="text-sm font-bold text-slate-900">Terminy Realizacji & Gwarancja</h2>
+              </div>
+              <svg class="w-4 h-4 text-slate-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="p-5 space-y-4 accordion-content">
+              
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Planowany start prac:</label>
+                  <input type="date" id="inp_date_start" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 font-medium">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Planowane zakończenie:</label>
+                  <input type="date" id="inp_date_end" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 font-medium">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Gwarancja na rury i szczelność:</label>
+                  <select id="inp_warranty_pipes" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 font-medium">
+                    <option value="10 lat">10 lat (Gwarancja producenta/systemowa)</option>
+                    <option value="15 lat">15 lat (Premium)</option>
+                    <option value="5 lat">5 lat</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Gwarancja na montaż i osprzęt:</label>
+                  <select id="inp_warranty_work" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 font-medium">
+                    <option value="36 miesięcy (3 lata)">36 miesięcy (3 lata)</option>
+                    <option value="24 miesiące (2 lata)">24 miesiące (2 lata)</option>
+                    <option value="60 miesięcy (5 lat)">60 miesięcy (5 lat)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Attachments toggles -->
+              <div class="space-y-2 pt-2 border-t border-slate-200">
+                <span class="block text-xs font-bold text-slate-700">Załączniki generowane z umową:</span>
+                <div class="space-y-1.5 text-xs">
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox" id="chk_attach_protocol" checked class="rounded text-orange-600 focus:ring-orange-500">
+                    <span><strong>Załącznik nr 1:</strong> Protokół Próby Ciśnieniowej i Odbioru Końcowego</span>
+                  </label>
+                  <label class="flex items-center gap-2">
+                    <input type="checkbox" id="chk_attach_spec" checked class="rounded text-orange-600 focus:ring-orange-500">
+                    <span><strong>Załącznik nr 2:</strong> Zestawienie Parametrów Pętli i Materiałów</span>
+                  </label>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+
+      <!-- ================= RIGHT COLUMN: LIVE A4 DOCUMENT PREVIEW ================= -->
+      <div id="preview-container" class="lg:col-span-7 xl:col-span-7 flex flex-col items-center">
+        
+        <!-- Document Toolbar (no-print) -->
+        <div class="no-print w-full max-w-[210mm] mb-4 flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-slate-200 shadow-sm text-xs">
+          <div class="flex items-center gap-2">
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="font-bold text-slate-700 uppercase tracking-wider text-[11px]">Podgląd dokumentu na żywo</span>
+          </div>
+          <div class="flex items-center gap-2 text-slate-500">
+            <span>Format: <strong>A4 (Standard)</strong></span>
+            <span>&bull;</span>
+            <button id="btn-quick-print" class="text-orange-600 font-bold hover:underline flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+              Drukuj teraz
+            </button>
+          </div>
+        </div>
+
+        <!-- THE RENDERED A4 DOCUMENT CANVAS -->
+        <div id="rendered-contract" class="w-full flex flex-col items-center">
+          <!-- Document pages injected dynamically by JavaScript -->
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ================= SAVED CONTRACTS MODAL ================= -->
+  <div id="history-modal" class="modal-backdrop fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="modal-container bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[85vh]">
+      <div class="p-5 bg-slate-900 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <h3 class="font-bold font-heading text-base">Historia Zapisanych Umów w Przeglądarce</h3>
+        </div>
+        <button id="btn-close-modal" class="text-slate-400 hover:text-white p-1 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto flex-1 space-y-3" id="saved-contracts-list">
+        <!-- Loaded dynamically -->
+      </div>
+      <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+        <span>Dane przechowywane są bezpiecznie w Twojej przeglądarce (LocalStorage).</span>
+        <button id="btn-clear-all-drafts" class="text-rose-600 hover:underline font-semibold">Usuń całą historię</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Scripts -->
+  <script src="js/api-service.js?v=6"></script>
+  <script src="js/contract-generator.js"></script>
+</body>
+</html>

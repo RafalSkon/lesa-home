@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Administracyjny &amp; Hub Wykonawcy | LeSa - Home</title>
+  <meta name="description" content="Centralny panel administracyjny LeSa - Home: zarządzanie umowami, projektowanie pętli w LeSa-CAD, baza klientów i wycen.">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <script>
+    window.addEventListener('error', function(e) {
+      alert("Błąd JS: " + e.message + " na linii " + e.lineno);
+    });
+    window.addEventListener('unhandledrejection', function(e) {
+      alert("Błąd Promise: " + (e.reason ? (e.reason.message || e.reason) : 'nieznany'));
+    });
+  </script>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              200: '#fed7aa',
+              300: '#fdba74',
+              400: '#fb923c',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+              800: '#9a3412',
+              900: '#7c2d12',
+            },
+            slate: {
+              850: '#151f32',
+              950: '#090d16',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    /* CAD Canvas styles */
+    #cad-canvas {
+      background-color: #0f172a;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+      background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
+      cursor: crosshair;
+    }
+    
+    .nav-item.active {
+      background-color: rgba(234, 88, 12, 0.12);
+      color: #ea580c;
+      border-left: 3px solid #ea580c;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 antialiased min-h-screen flex flex-col selection:bg-orange-500 selection:text-white font-sans">
+
+  <!-- AUTHENTICATING SPINNER -->
+  <div id="auth-screen" class="fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center p-4">
+    <div class="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+    <p class="text-slate-400 text-sm font-semibold animate-pulse">Weryfikacja tożsamości...</p>
+    <script>setTimeout(function(){var a=document.getElementById('auth-screen');if(a)a.style.display='none';var b=document.getElementById('admin-app');if(b)b.classList.remove('hidden');}, 2000);</script>
+  </div>
+
+  <!-- ================= MAIN ADMIN DASHBOARD LAYOUT ================= -->
+  <div id="admin-app" class="hidden flex-1 flex flex-col min-h-screen">
+    
+    <!-- Top Bar -->
+    <header class="bg-slate-900 text-white border-b border-slate-800 h-16 sticky top-0 z-40 px-4 sm:px-6 flex items-center justify-between shadow-md">
+      <div class="flex items-center gap-4">
+        <button id="mobile-sidebar-toggle" class="lg:hidden p-2 text-slate-400 hover:text-white rounded-lg">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+
+        <a href="index.html" class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-orange-600 flex items-center justify-center p-1.5 shadow-md shadow-orange-600/30">
+            <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
+              <path d="M22,64 A36,36 0 1,1 76,77" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" />
+              <path d="M42,30 A20,20 0 0,1 70,58" fill="none" stroke="#fed7aa" stroke-width="7.5" stroke-linecap="round" />
+              <circle cx="50" cy="50" r="4" fill="#ffffff" />
+            </svg>
+          </div>
+          <div>
+            <span class="text-base font-bold font-heading tracking-tight text-white flex items-center gap-1">
+              LeSa <span class="text-orange-400 font-extrabold">ADMIN HUB</span>
+            </span>
+            <span class="text-[9px] tracking-wider uppercase font-semibold text-slate-400 block -mt-1">
+              Centrum Operacyjne &bull; v2.4
+            </span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Top Right User & Actions -->
+      <div class="flex items-center gap-3">
+        <a href="index.html" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors border border-slate-700">
+          <svg class="w-3.5 h-3.5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          <span>Podgląd strony</span>
+        </a>
+
+        <!-- User profile badge -->
+        <div class="flex items-center gap-2.5 pl-3 border-l border-slate-800">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-orange-600 to-amber-500 text-white font-bold text-xs flex items-center justify-center shadow-sm">
+            RS
+          </div>
+          <div class="hidden md:block text-left">
+            <span class="text-xs font-bold text-slate-200 block leading-tight">Rafał Skowroński</span>
+            <span class="text-[10px] text-emerald-400 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              Administrator
+            </span>
+          </div>
+        </div>
+
+        <!-- Logout button -->
+        <button id="btn-logout" title="Wyloguj z panelu" class="p-2 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition-colors ml-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace with Sidebar -->
+    <div class="flex-1 flex overflow-hidden">
+      
+      <!-- ================= SIDEBAR NAVIGATION ================= -->
+      <aside id="admin-sidebar" class="w-64 bg-slate-900 text-slate-300 flex-shrink-0 flex flex-col justify-between border-r border-slate-800 p-4 transition-transform lg:translate-x-0 -translate-x-full fixed lg:static inset-y-16 z-30">
+        <div class="space-y-6">
+          
+          <div>
+            <span class="text-[10px] uppercase tracking-wider text-slate-500 font-bold px-3 block mb-2">Główne Moduły</span>
+            <nav class="space-y-1">
+              <button data-tab="dashboard" class="nav-item active w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all text-left">
+                <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                <span>Pulpit &bull; Przegląd</span>
+              </button>
+
+              <button data-tab="contracts" class="nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all text-left">
+                <div class="flex items-center gap-3">
+                  <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                  <span>Generator Umów &amp; PDF</span>
+                </div>
+                <span id="badge-contracts-count" class="bg-orange-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+              </button>
+
+              <a href="lesa-cad-v2/index.html" target="_blank" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all text-left">
+                <div class="flex items-center gap-3">
+                  <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
+                  <span>LeSa-CAD (Otwórz)</span>
+                </div>
+                <span class="bg-cyan-500/20 text-cyan-300 text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">Nowa Karta</span>
+              </a>
+
+              <button data-tab="clients" class="nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all text-left">
+                <div class="flex items-center gap-3">
+                  <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                  <span>Baza Klientów</span>
+                </div>
+                <span id="badge-clients-count" class="bg-emerald-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+              </button>
+
+              <button data-tab="projects" class="nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all text-left">
+                <div class="flex items-center gap-3">
+                  <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                  <span>Baza Projektów</span>
+                </div>
+                <span id="badge-projects-count" class="bg-emerald-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+              </button>
+              
+              <a href="oferta.html" target="_blank" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all text-left">
+                <div class="flex items-center gap-3">
+                  <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                  <span>Generator Ofert</span>
+                </div>
+                <span class="bg-emerald-500/20 text-emerald-300 text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">Nowa Karta</span>
+              </a>
+
+              <a href="protokol-szczelnosci.html" target="_blank" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all text-left">
+                <div class="flex items-center gap-3">
+                  <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                  <span>Protokół Szczelności</span>
+                </div>
+                <span class="bg-purple-500/20 text-purple-300 text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">Nowa Karta</span>
+              </a>
+
+              <a href="protokol-odbioru.html" target="_blank" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all text-left">
+                <div class="flex items-center gap-3">
+                  <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                  <span>Protokół Odbioru</span>
+                </div>
+                <span class="bg-indigo-500/20 text-indigo-300 text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">Nowa Karta</span>
+              </a>
+            </nav>
+          </div>
+
+          <div>
+            <span class="text-[10px] uppercase tracking-wider text-slate-500 font-bold px-3 block mb-2">Konfiguracja</span>
+            <nav class="space-y-1">
+              <button data-tab="users" class="nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all text-left">
+                <div class="flex items-center gap-3">
+                  <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                  <span>Użytkownicy</span>
+                </div>
+              </button>
+
+              <button data-tab="settings" class="nav-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all text-left">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <span>Ustawienia Wykonawcy</span>
+              </button>
+              <button id="nav-history-btn" data-tab="history" class="nav-item hidden w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all text-left">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span>Historia (Logi)</span>
+              </button>
+            </nav>
+          </div>
+
+        </div>
+
+        <!-- Sidebar footer status -->
+        <div class="p-3 bg-slate-800/60 rounded-xl border border-slate-800 text-xs">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="font-bold text-slate-200">System aktywny</span>
+          </div>
+          <p class="text-[10.5px] text-slate-400">Baza danych: LocalStorage &bull; Gotowość CAD: 100%</p>
+        </div>
+      </aside>
+
+      <!-- ================= MAIN CONTENT AREA ================= -->
+      <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-slate-100">
+        
+        <!-- ================= TAB 1: DASHBOARD ================= -->
+        <section id="tab-dashboard" class="tab-pane space-y-6">
+          
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-bold font-heading text-slate-900">Pulpit Wykonawcy</h1>
+              <p class="text-xs text-slate-500 mt-0.5">Podsumowanie aktywności, wycen z kalkulatora oraz bazy umów LeSa Home.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="AdminApp.switchTab('contracts')" class="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl shadow-md shadow-orange-600/20 transition-all flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                <span>Nowa Umowa</span>
+              </button>
+              <a href="lesa-cad-v2/index.html" target="_blank" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center gap-2">
+                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
+                <span>Otwórz LeSa-CAD</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- KPI Cards Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Wystawione Umowy</span>
+                <span id="kpi-contracts-count" class="text-2xl font-extrabold font-heading text-slate-900 mt-1 block">0</span>
+                <span class="text-[11px] text-emerald-600 font-semibold mt-0.5 block">&bull; B2C &amp; B2B</span>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Wartość Inwestycji</span>
+                <span id="kpi-total-val" class="text-2xl font-extrabold font-heading text-slate-900 mt-1 block">0 zł</span>
+                <span class="text-[11px] text-slate-400 font-medium mt-0.5 block">Suma umów brutto</span>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Zaprojektowana Powierzchnia</span>
+                <span id="kpi-total-area" class="text-2xl font-extrabold font-heading text-slate-900 mt-1 block">0 mÂ˛</span>
+                <span class="text-[11px] text-orange-600 font-medium mt-0.5 block">Średnio ~140mÂ˛ / obiekt</span>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Status Modułu LeSa-CAD</span>
+                <span class="text-xl font-extrabold font-heading text-cyan-600 mt-1 block">Gotowy do pracy</span>
+                <span class="text-[11px] text-cyan-700 font-semibold mt-0.5 block">&check; Silnik wektorowy 2D</span>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-cyan-100 text-cyan-600 flex items-center justify-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Recent Contracts & Quick CAD Launch Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Recent Contracts Table -->
+            <div class="lg:col-span-8 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-orange-600"></span>
+                  <h2 class="text-sm font-bold text-slate-900">Ostatnio sporządzone umowy i protokoły</h2>
+                </div>
+                <button onclick="AdminApp.switchTab('contracts')" class="text-xs text-orange-600 hover:underline font-bold">
+                  Przejdź do Generatora &rarr;
+                </button>
+              </div>
+
+              <div id="dashboard-recent-contracts" class="space-y-3">
+                <!-- Injected dynamically -->
+              </div>
+            </div>
+
+            <!-- LeSa-CAD Quick Launcher Widget -->
+            <div class="lg:col-span-4 bg-gradient-to-br from-slate-900 via-slate-850 to-slate-950 text-white p-6 rounded-2xl border border-slate-800 shadow-xl flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-[10px] bg-cyan-500/20 text-cyan-300 font-mono font-bold px-2 py-0.5 rounded border border-cyan-500/30">MODUĹ INŻYNIERSKI</span>
+                  <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                </div>
+                <h3 class="text-lg font-bold font-heading text-white">Aplikacja LeSa-CAD</h3>
+                <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                  Profesjonalny kreator pętli ogrzewania podłogowego. Wczytaj rzut architektoniczny budynku, nanieś sekcje grzewcze z rozstawem 10cm/15cm i wygeneruj gotową specyfikację pod umowę.
+                </p>
+                <div class="mt-4 space-y-1.5 text-xs text-slate-300">
+                  <div class="flex items-center gap-2">
+                    <span class="text-cyan-400">&check;</span>
+                    <span>Siatka montażowa Tacker &amp; rozdzielacze</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-cyan-400">&check;</span>
+                    <span>Automatyczny bilans hydrauliczny mb rur</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-cyan-400">&check;</span>
+                    <span>Eksport prosto do Umowy i Protokołu</span>
+                  </div>
+                </div>
+              </div>
+
+              <a href="lesa-cad-v2/index.html" target="_blank" class="mt-6 w-full py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl text-xs shadow-lg shadow-cyan-600/30 transition-all flex items-center justify-center gap-2">
+                <span>Uruchom projektant LeSa-CAD</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </a>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ================= TAB 2: CONTRACTS & HANDOVERS ================= -->
+        <section id="tab-contracts" class="tab-pane hidden space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-bold font-heading text-slate-900">Baza Umów &amp; Generator Prawny</h1>
+              <p class="text-xs text-slate-500 mt-0.5">Zarządzaj umowami montażowymi, twórz nowe wersje dla klientów i generuj gotowe pliki PDF.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <a href="generator-umow.html" target="_blank" class="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl shadow-md shadow-orange-600/20 transition-all flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                <span>Otwórz Pełny Generator A4</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Contracts Management Table -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div class="flex items-center gap-2">
+                <input type="text" id="filter-contracts-search" placeholder="Szukaj klienta, nr umowy, adresu..." class="px-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 w-64 bg-white">
+              </div>
+              <span class="text-xs text-slate-500">Wszystkie umowy zapisują się automatycznie w bezpiecznej pamięci.</span>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead class="bg-slate-900 text-white text-[11px] uppercase tracking-wider">
+                  <tr>
+                    <th class="p-3.5">Nr Umowy</th>
+                    <th class="p-3.5">Klient / Inwestor</th>
+                    <th class="p-3.5">Adres Inwestycji</th>
+                    <th class="p-3.5">Metraż &bull; Pętle</th>
+                    <th class="p-3.5">Wartość Brutto</th>
+                    <th class="p-3.5">Status</th>
+                    <th class="p-3.5 text-right">Akcje</th>
+                  </tr>
+                </thead>
+                <tbody id="contracts-table-body" class="divide-y divide-slate-200">
+                  <!-- Injected dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Quick Action Guide -->
+          <div class="p-4 bg-orange-50/60 border border-orange-200 rounded-2xl flex items-start gap-3">
+            <div class="w-8 h-8 rounded-xl bg-orange-600 text-white flex items-center justify-center shrink-0 text-sm font-bold">â„ąď¸Ź</div>
+            <div class="text-xs text-slate-700 space-y-1">
+              <strong class="text-slate-900 block font-heading">Jak działa moduł prawny?</strong>
+              <p>Każda umowa zawiera gotowy <strong>Załącznik nr 1 (Protokół Próby Ciśnieniowej 6 bar)</strong> oraz <strong>Załącznik nr 2 (Zestawienie pętli)</strong>. Przed wejściem na budowę możesz wydrukować gotowy zestaw lub podpisać go bezpośrednio z inwestorem na tablecie.</p>
+            </div>
+          </div>
+        </section>
+
+
+
+        <!-- ================= TAB 3.5: CLIENTS ================= -->
+        <section id="tab-clients" class="tab-pane hidden space-y-6">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-bold font-heading text-slate-900">Baza Kontrahentów</h1>
+              <p class="text-xs text-slate-500 mt-0.5">Zarządzaj informacjami o klientach i śledź przypisane do nich zlecenia.</p>
+            </div>
+            <button onclick="AdminApp.openClientModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              <span>Nowy Klient</span>
+            </button>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col md:flex-row min-h-[500px]">
+            
+            <!-- Lista klientów -->
+            <div class="w-full md:w-1/3 border-r border-slate-200 bg-slate-50 flex flex-col">
+              <div class="p-4 border-b border-slate-200">
+                <input type="text" id="filter-clients-search" placeholder="Szukaj klienta, NIP..." class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+              </div>
+              <div class="flex-1 overflow-y-auto" id="clients-list-container">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+
+            <!-- Detale klienta -->
+            <div class="w-full md:w-2/3 p-6 flex flex-col justify-center items-center bg-white" id="client-details-empty">
+              <svg class="w-16 h-16 text-slate-200 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+              <p class="text-sm font-bold text-slate-400">Wybierz klienta, aby zobaczyć szczegóły i statystyki projektów.</p>
+            </div>
+
+            <div class="w-full md:w-2/3 p-6 bg-white hidden" id="client-details-active">
+              <div class="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
+                <div>
+                  <h2 id="cd-client-name" class="text-xl font-bold text-slate-900">Imię Nazwisko / Firma</h2>
+                  <p id="cd-nip" class="text-xs text-slate-500 mt-1 font-mono">NIP: Brak</p>
+                </div>
+                <div>
+                  <button onclick="AdminApp.editClient()" class="text-xs text-blue-500 hover:text-blue-700 font-bold px-3 py-1 rounded bg-blue-50 hover:bg-blue-100 transition-colors mr-2">Edytuj</button>
+                  <button onclick="AdminApp.deleteClient()" class="text-xs text-red-500 hover:text-red-700 font-bold px-3 py-1 rounded bg-red-50 hover:bg-red-100 transition-colors">Usuń</button>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                  <span class="block text-[10px] text-slate-500 uppercase tracking-wider mb-1">Dane Kontaktowe</span>
+                  <div class="text-sm text-slate-900" id="cd-address">ul. Przykład 1</div>
+                  <div class="text-sm text-slate-900" id="cd-city">00-000 Miasto</div>
+                  <div class="text-sm text-slate-600 mt-2 flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg><span id="cd-phone">Brak telefonu</span></div>
+                  <div class="text-sm text-slate-600 mt-1 flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg><span id="cd-email">Brak e-mail</span></div>
+                </div>
+
+                <div class="p-4 bg-orange-50 rounded-xl border border-orange-200">
+                  <span class="block text-[10px] text-slate-500 uppercase tracking-wider mb-2">Statystyki Zamówień</span>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <span class="block text-xl font-extrabold text-orange-600 font-heading" id="cd-stat-projects">0</span>
+                      <span class="text-[10px] text-slate-500 uppercase tracking-wider">Projektów</span>
+                    </div>
+                    <div>
+                      <span class="block text-xl font-extrabold text-emerald-600 font-heading" id="cd-stat-area">0 mÂ˛</span>
+                      <span class="text-[10px] text-slate-500 uppercase tracking-wider">Ĺączny metraż</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between border-t border-slate-100 pt-6 mb-4">
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Projekty tego klienta</h3>
+                <button onclick="AdminApp.openProjectModalForClient()" class="text-xs px-3 py-1.5 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 font-bold rounded-lg transition-colors">
+                  + Utwórz nowy projekt
+                </button>
+              </div>
+
+              <div id="cd-projects-list" class="space-y-2">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= TAB 4: PROJECTS (CRM) ================= -->
+        <section id="tab-projects" class="tab-pane hidden space-y-6">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-bold font-heading text-slate-900">Baza Projektów (Zlecenia)</h1>
+              <p class="text-xs text-slate-500 mt-0.5">Zarządzaj dokumentacją projektów, powiązanych z Twoimi Klientami.</p>
+            </div>
+            <button onclick="AdminApp.openProjectModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              <span>Nowy Projekt</span>
+            </button>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col md:flex-row min-h-[500px]">
+            
+            <!-- Lista projektów -->
+            <div class="w-full md:w-1/3 border-r border-slate-200 bg-slate-50 flex flex-col">
+              <div class="p-4 border-b border-slate-200">
+                <input type="text" id="filter-projects-search" placeholder="Szukaj projektu, klienta..." class="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+              </div>
+              <div class="flex-1 overflow-y-auto" id="projects-list-container">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+
+            <!-- Detale projektu -->
+            <div class="w-full md:w-2/3 p-6 flex flex-col justify-center items-center bg-white" id="project-details-empty">
+              <svg class="w-16 h-16 text-slate-200 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+              <p class="text-sm font-bold text-slate-400">Wybierz projekt z listy po lewej, aby zarządzać jego dokumentacją.</p>
+            </div>
+
+            <div class="w-full md:w-2/3 p-6 bg-white hidden" id="project-details-active">
+              <div class="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
+                <div>
+                  <h2 id="pd-project-title" class="text-xl font-bold text-slate-900">Nazwa Projektu</h2>
+                  <p id="pd-client-info" class="text-sm text-slate-500 mt-1">Powiązany Klient: <a href="#" onclick="AdminApp.switchTab('clients')" class="text-emerald-600 hover:underline" id="pd-client-link">...</a></p>
+                  <p id="pd-project-address" class="text-xs text-slate-500 mt-0.5">Adres inwestycji: Brak</p>
+                </div>
+                <div>
+                  <button onclick="AdminApp.editProject()" class="text-xs text-blue-500 hover:text-blue-700 font-bold px-3 py-1 rounded bg-blue-50 hover:bg-blue-100 transition-colors mr-2">Edytuj</button>
+                  <button onclick="AdminApp.deleteProject()" class="text-xs text-red-500 hover:text-red-700 font-bold px-3 py-1 rounded bg-red-50 hover:bg-red-100 transition-colors">Usuń</button>
+                </div>
+              </div>
+
+              <!-- Workflow Buttons Grid -->
+              <div class="space-y-4">
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">Przepływ Dokumentacji Projektu</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  
+                  <button onclick="AdminApp.openProjectInTool('cad')" class="p-4 rounded-xl border border-cyan-200 bg-cyan-50 hover:bg-cyan-100 transition-colors text-left flex items-start gap-3 group">
+                    <div class="w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center shrink-0">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z"/></svg>
+                    </div>
+                    <div>
+                      <span class="block text-sm font-bold text-slate-900 group-hover:text-cyan-700">1. LeSa-CAD (Projekt)</span>
+                      <span class="block text-[10px] text-slate-500 mt-1">Zaprojektuj pętle grzewcze i wyznacz ilości materiałowe. Dane zapiszą się w tym projekcie.</span>
+                    </div>
+                  </button>
+
+                  <button onclick="AdminApp.openProjectInTool('oferta')" class="p-4 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 transition-colors text-left flex items-start gap-3 group">
+                    <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    </div>
+                    <div>
+                      <span class="block text-sm font-bold text-slate-900 group-hover:text-emerald-700">2. Generuj Ofertę</span>
+                      <span class="block text-[10px] text-slate-500 mt-1">Otwiera kreator ofert z wypełnionymi danymi klienta oraz ilościami z CAD.</span>
+                    </div>
+                  </button>
+
+                  <button onclick="AdminApp.openProjectInTool('umowa')" class="p-4 rounded-xl border border-orange-200 bg-orange-50 hover:bg-orange-100 transition-colors text-left flex items-start gap-3 group">
+                    <div class="w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center shrink-0">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    </div>
+                    <div>
+                      <span class="block text-sm font-bold text-slate-900 group-hover:text-orange-700">3. Podpisz Umowę</span>
+                      <span class="block text-[10px] text-slate-500 mt-1">Generuje umowę montażową korzystając z tych samych danych.</span>
+                    </div>
+                  </button>
+
+                  <button onclick="AdminApp.openProjectInTool('szczelnosc')" class="p-4 rounded-xl border border-purple-200 bg-purple-50 hover:bg-purple-100 transition-colors text-left flex items-start gap-3 group">
+                    <div class="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shrink-0">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                    </div>
+                    <div>
+                      <span class="block text-sm font-bold text-slate-900 group-hover:text-purple-700">4. Protokół Szczelności</span>
+                      <span class="block text-[10px] text-slate-500 mt-1">Po instalacji. Uzupełnia parametry techniczne wprost z rysunku z LeSa-CAD.</span>
+                      <span id="badge-status-szczelnosc" class="hidden mt-2 items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700">
+                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                         Wypełniony
+                      </span>
+                    </div>
+                  </button>
+
+                  <button onclick="AdminApp.openProjectInTool('gwarancja')" class="p-4 rounded-xl border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 transition-colors text-left flex items-start gap-3 group sm:col-span-2">
+                    <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                    </div>
+                    <div>
+                      <span class="block text-sm font-bold text-slate-900 group-hover:text-indigo-700">5. Karta Gwarancyjna / Odbiór</span>
+                      <span class="block text-[10px] text-slate-500 mt-1">Finalny dokument z zestawieniem pętli na poszczególnych rozdzielaczach (z danych CAD).</span>
+                    </div>
+                  </button>
+
+                </div>
+              </div>
+              
+              <!-- Podgląd z CAD -->
+              <div class="mt-8 pt-6 border-t border-slate-100">
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">Parametry Projektu (Pobrane z CAD)</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-center">
+                  <div>
+                    <span class="block text-[10px] text-slate-500 uppercase tracking-wider">Powierzchnia</span>
+                    <span class="block text-base font-bold text-slate-900" id="pd-area">- mÂ˛</span>
+                  </div>
+                  <div>
+                    <span class="block text-[10px] text-slate-500 uppercase tracking-wider">Ilość Pętli</span>
+                    <span class="block text-base font-bold text-slate-900" id="pd-loops">-</span>
+                  </div>
+                  <div>
+                    <span class="block text-[10px] text-slate-500 uppercase tracking-wider">Rozdzielacze</span>
+                    <span class="block text-base font-bold text-slate-900" id="pd-manifolds">-</span>
+                  </div>
+                  <div>
+                    <span class="block text-[10px] text-slate-500 uppercase tracking-wider">Dł. Rury</span>
+                    <span class="block text-base font-bold text-slate-900" id="pd-pipe">- mb</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pliki LeSa-CAD i Zdjęcia z Montażu na Serwerze -->
+              <div class="mt-8 pt-6 border-t border-slate-100 space-y-6">
+                <!-- Pliki CAD -->
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                      <svg class="w-4 h-4 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z"/></svg>
+                      Pliki Projektu LeSa-CAD (.s1c) na Serwerze
+                    </h3>
+                    <button onclick="AdminApp.openProjectInTool('cad')" class="text-xs px-3 py-1 bg-cyan-600 hover:bg-cyan-700 text-white font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-sm">
+                      <span>Otwórz w CAD</span> &rarr;
+                    </button>
+                  </div>
+                  <div id="pd-cad-files-list" class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-500">
+                    Brak wgranego pliku CAD. Zaprojektuj rzut w LeSa-CAD i kliknij "Zapisz na serwerze".
+                  </div>
+                </div>
+
+                <!-- Zdjęcia z Montażu -->
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                      <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                      Dokumentacja Zdjęciowa z Montażu
+                    </h3>
+                    <label class="cursor-pointer text-xs px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition-colors flex items-center gap-1.5 shadow-sm">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                      <span>Dodaj zdjęcie</span>
+                      <input type="file" accept="image/*" class="hidden" id="admin-photo-upload-input" onchange="AdminApp.handleAdminPhotoUpload(event)">
+                    </label>
+                  </div>
+                  <div id="pd-photos-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200 min-h-[90px]">
+                    <div class="col-span-full text-center text-xs text-slate-400 py-4">Brak zdjęć z montażu dla tego projektu. Monter może je dodać telefonem z budowy.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ================= TAB: USERS ================= -->
+        <section id="tab-users" class="tab-pane hidden space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-2xl font-bold font-heading text-slate-800">Użytkownicy i Uprawnienia</h2>
+              <p class="text-xs text-slate-500 mt-1">Zarządzaj dostępem dla pracowników i podwykonawców.</p>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm whitespace-nowrap">
+                <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase text-[10px] tracking-wider">
+                  <tr>
+                    <th class="px-6 py-4">Użytkownik (Email)</th>
+                    <th class="px-6 py-4">Status</th>
+                    <th class="px-6 py-4">Rola</th>
+                    <th class="px-6 py-4">Akcje</th>
+                  </tr>
+                </thead>
+                <tbody id="users-table-body" class="divide-y divide-slate-100">
+                  <tr>
+                    <td colspan="4" class="px-6 py-8 text-center text-slate-400 italic text-sm">Trwa ładowanie...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= TAB 5: SETTINGS ================= -->
+        <section id="tab-settings" class="tab-pane hidden space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl font-bold font-heading text-slate-900">Ustawienia Wykonawcy &amp; Domyślne Szablony</h1>
+              <p class="text-xs text-slate-500 mt-0.5">Dane Twojej firmy, które automatycznie uzupełniają się na każdej umowie i protokole.</p>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm max-w-3xl space-y-4">
+            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider pb-2 border-b border-slate-200">Dane Podstawowe Firmy</h3>
+            
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Nazwa Firmy / Imię i Nazwisko:</label>
+                <input type="text" id="set-company-name" value="LeSa - Home | Rafał Skowroński" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">NIP:</label>
+                <input type="text" id="set-company-nip" value="NIP: 0000000000" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg font-mono">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Adres siedziby:</label>
+                <input type="text" id="set-company-address" value="ul. Instalatorów 15, 00-001 Warszawa" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Numer konta bankowego do umów:</label>
+                <input type="text" id="set-company-bank" value="PL 12 1020 0000 0000 1234 5678 9012 (PKO BP)" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg font-mono">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Telefon kontaktowy:</label>
+                <input type="text" id="set-company-phone" value="+48 790 000 000" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">E-mail do umów:</label>
+                <input type="text" id="set-company-email" value="kontakt@lesa-home.pl" class="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg">
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-200 flex justify-end">
+              <button id="btn-save-settings" class="px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">
+                Zapisz Ustawienia
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section id="tab-history" class="tab-pane hidden space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl font-bold font-heading text-slate-900">Historia systemowa (Logi)</h1>
+              <p class="text-xs text-slate-500 mt-0.5">Śledzenie wszystkich akcji użytkowników w systemie (tylko dla Administratora Głównego).</p>
+            </div>
+            <button onclick="window.fetchAuditLogs()" class="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-colors">
+              Odśwież
+            </button>
+          </div>
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-100 text-xs text-slate-500 uppercase tracking-wider">
+                    <th class="px-6 py-4 font-semibold w-40">Data i czas</th>
+                    <th class="px-6 py-4 font-semibold">Użytkownik</th>
+                    <th class="px-6 py-4 font-semibold">Akcja</th>
+                    <th class="px-6 py-4 font-semibold">Szczegóły</th>
+                    <th class="px-6 py-4 font-semibold">IP</th>
+                  </tr>
+                </thead>
+                <tbody id="audit-logs-table-body" class="divide-y divide-slate-100 text-sm">
+                  <tr><td colspan="5" class="px-6 py-8 text-center text-slate-400">Ĺadowanie logów...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- Modal: Edit / Create Client -->
+  <div id="client-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/50 backdrop-blur-sm transition-opacity">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-transform" id="client-modal-content">
+      <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+        <h3 class="text-lg font-bold text-slate-900 font-heading" id="client-modal-title">Nowy Kontrahent</h3>
+        <button onclick="AdminApp.closeClientModal()" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+        <input type="hidden" id="modal-client-id">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Nazwa Firmy / Imię i Nazwisko</label>
+          <input type="text" id="modal-client-name" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="np. Jan Kowalski" required>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">NIP / PESEL</label>
+            <input type="text" id="modal-client-nip" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="np. 1234567890">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Telefon kontaktowy</label>
+            <input type="text" id="modal-client-phone" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="np. +48 600 123 456">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Adres E-mail</label>
+          <input type="email" id="modal-client-email" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="np. kontakt@dom.pl">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Adres Siedziby (Ulica, nr dom/mieszkanie)</label>
+          <input type="text" id="modal-client-address" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="np. ul. Kwiatowa 12/4">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Miejscowość z kodem</label>
+          <input type="text" id="modal-client-city" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="np. 00-001 Warszawa">
+        </div>
+      </div>
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
+        <button onclick="AdminApp.closeClientModal()" class="px-4 py-2 text-sm font-bold text-slate-600 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition-colors">Anuluj</button>
+        <button onclick="AdminApp.saveClientModal()" class="px-4 py-2 text-sm font-bold text-white bg-emerald-600 rounded-xl hover:bg-emerald-700 shadow-md transition-colors">Zapisz Klienta</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Edit / Create Project -->
+  <div id="project-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/50 backdrop-blur-sm transition-opacity">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-transform" id="project-modal-content">
+      <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-2xl">
+        <h3 class="text-lg font-bold text-slate-900 font-heading" id="project-modal-title">Nowy Projekt</h3>
+        <button onclick="AdminApp.closeProjectModal()" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto relative z-20">
+        <input type="hidden" id="modal-project-id">
+        <div class="relative w-full z-[9999]" id="client-dropdown-container">
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Wybierz Kontrahenta / Inwestora</label>
+          <input type="hidden" id="modal-project-client-id" value="">
+          <button type="button" onclick="AdminApp.toggleClientDropdown()" class="w-full flex items-center justify-between h-10 px-3 bg-white text-left text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none hover:bg-slate-50 transition-colors">
+            <span id="client-dropdown-text" class="text-slate-500 font-medium truncate">-- Wybierz klienta z listy --</span>
+            <svg class="w-4 h-4 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          
+          <div id="client-dropdown-menu" class="hidden mt-2 mb-4 bg-slate-50 border border-slate-200 rounded-xl shadow-inner max-h-56 overflow-y-auto transition-all">
+            <ul id="client-dropdown-ul" class="py-1 flex flex-col gap-0.5 px-1">
+              <!-- JS to wypelni -->
+            </ul>
+          </div>
+          <p class="text-[10px] text-slate-500 mt-1">Jeśli klienta nie ma na liście, dodaj go w zakładce "Baza Klientów".</p>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Nazwa Zlecenia / Projektu</label>
+          <input type="text" id="modal-project-title" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="np. Instalacja parter - Dom A" required>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Adres Inwestycji (Ulica, nr dom/mieszkanie)</label>
+          <input type="text" id="modal-project-address" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="np. ul. Inwestycyjna 12">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Miejscowość Inwestycji z kodem</label>
+          <input type="text" id="modal-project-city" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="np. 01-234 Inne Miasto">
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Data Montażu</label>
+            <input type="date" id="modal-project-installation-date" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Czas trwania (dni)</label>
+            <input type="number" id="modal-project-installation-days" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" min="1" value="1">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Status Zlecenia</label>
+            <select id="modal-project-status" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
+              <option value="Wycena">Wycena / Wstępne</option>
+              <option value="Do Montażu">Zlecone do Montażu</option>
+              <option value="Zakończone">Zakończone</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
+        <button onclick="AdminApp.closeProjectModal()" class="px-4 py-2 text-sm font-bold text-slate-600 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition-colors">Anuluj</button>
+        <button onclick="AdminApp.saveProjectModal()" class="px-4 py-2 text-sm font-bold text-white bg-emerald-600 rounded-xl hover:bg-emerald-700 shadow-md transition-colors">Zapisz Projekt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Scripts -->
+  <script src="js/api-service.js?v=1"></script>
+  <script src="js/admin2.js?v=14"></script>
+</body>
+</html>
+
+
+
+
+
