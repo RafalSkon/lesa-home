@@ -532,13 +532,13 @@ const ContractApp = {
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;1.</span> Przedmiot umowy</h2>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Zamawiający zleca, a Wykonawca przyjmuje do wykonania instalację wodnego ogrzewania podłogowego w budynku położonym pod adresem: <strong>${d.investmentAddress}</strong>.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Zamawiający zleca, a Wykonawca przyjmuje do wykonania instalację wodnego ogrzewania podłogowego w budynku położonym pod adresem: <strong>${d.investmentAddress}</strong>.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Przedmiotem umowy jest wykonanie instalacji ogrzewania podłogowego w systemie mokrym, z rurami grzewczymi mocowanymi do izolacji termicznej za pomocą klipsów/takerów, zgodnie z zakresem określonym w niniejszej umowie, ofercie oraz Załączniku Technicznym.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Przedmiotem umowy jest wykonanie instalacji ogrzewania podłogowego w systemie mokrym, z rurami grzewczymi mocowanymi do izolacji termicznej za pomocą klipsów/takerów, zgodnie z zakresem określonym w niniejszej umowie, ofercie oraz Załączniku Technicznym.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Szczegółowy zakres prac, rodzaj zastosowanych materiałów, średnice rur, rozstaw rur, liczba obiegów, lokalizacja rozdzielaczy oraz pozostałe parametry określa:
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Szczegółowy zakres prac, rodzaj zastosowanych materiałów, średnice rur, rozstaw rur, liczba obiegów, lokalizacja rozdzielaczy oraz pozostałe parametry określa:
         </p>
         <div class="pl-4 text-[11.5px] text-slate-700 space-y-0.5 mb-1">
           <div>a) niniejsza umowa,</div>
@@ -547,17 +547,17 @@ const ContractApp = {
           <div>d) zaakceptowany rysunek/schemat wykonawczy, jeżeli został sporządzony.</div>
         </div>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Dokumenty wymienione w ust. 3 stanowią integralną część umowy. W przypadku rozbieżności pierwszeństwo mają, w kolejności: niniejsza umowa, zaakceptowane pisemne zmiany do umowy, Załącznik Techniczny, oferta, rysunek wykonawczy – z zastrzeżeniem, że w zakresie technicznym rysunek może uszczegóławiać sposób prowadzenia instalacji.
+          <span class="text-slate-400 font-semibold select-none mr-1">4.</span>Dokumenty wymienione w ust. 3 stanowią integralną część umowy. W przypadku rozbieżności pierwszeństwo mają, w kolejności: niniejsza umowa, zaakceptowane pisemne zmiany do umowy, Załącznik Techniczny, oferta, rysunek wykonawczy – z zastrzeżeniem, że w zakresie technicznym rysunek może uszczegóławiać sposób prowadzenia instalacji.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          Załącznik nr 1 – Specyfikacja Techniczna stanowi integralną część umowy wyłącznie wtedy, gdy został sporządzony i fizycznie dołączony do niniejszej umowy oraz parafowany przez obie strony. W przypadku niedołączenia Załącznika Technicznego, szczegółowe parametry techniczne instalacji określa wyłącznie treść niniejszej umowy oraz oferta Wykonawcy.
+          <span class="text-slate-400 font-semibold select-none mr-1">5.</span>Załącznik nr 1 – Specyfikacja Techniczna stanowi integralną część umowy wyłącznie wtedy, gdy został sporządzony i fizycznie dołączony do niniejszej umowy oraz parafowany przez obie strony. W przypadku niedołączenia Załącznika Technicznego, szczegółowe parametry techniczne instalacji określa wyłącznie treść niniejszej umowy oraz oferta Wykonawcy.
         </p>
       </div>
 
       <!-- §2 -->
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;2.</span> Zakres prac Wykonawcy</h2>
-        <p class="text-[11.5px] text-slate-700 mb-1">W zakresie umowy Wykonawca wykonuje w szczególności:</p>
+        <p class="text-[11.5px] text-slate-700 mb-1"><span class="text-slate-400 font-semibold select-none mr-1">1.</span>W zakresie umowy Wykonawca wykonuje w szczególności:</p>
         <ul class="list-disc list-inside text-[11.5px] text-slate-700 pl-2 space-y-0.5 mb-1">
           <li>przygotowanie i rozplanowanie obiegów ogrzewania podłogowego,</li>
           <li>montaż rur grzewczych na przygotowanej izolacji termicznej,</li>
@@ -571,9 +571,9 @@ const ContractApp = {
           <li>przekazanie Zamawiającemu informacji o wykonanej instalacji.</li>
         </ul>
         <p class="text-[11.5px] text-slate-700 mb-1">
-          Zakres obejmuje wyłącznie prace wskazane w umowie i ofercie. Prace niewymienione nie są objęte wynagrodzeniem ryczałtowym.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Zakres obejmuje wyłącznie prace wskazane w umowie i ofercie. Prace niewymienione nie są objęte wynagrodzeniem ryczałtowym.
         </p>
-        <p class="text-[11.5px] text-slate-700 mb-1">Jeżeli oferta nie stanowi inaczej, Wykonawca nie wykonuje:</p>
+        <p class="text-[11.5px] text-slate-700 mb-1"><span class="text-slate-400 font-semibold select-none mr-1">3.</span>Jeżeli oferta nie stanowi inaczej, Wykonawca nie wykonuje:</p>
         <ul class="list-disc list-inside text-[11.5px] text-slate-600 pl-2 space-y-0.5 mb-1">
           <li>izolacji termicznej podłogi ze styropianu,</li>
           <li>wykonania i naprawy podłoża konstrukcyjnego,</li>
@@ -588,7 +588,7 @@ const ContractApp = {
           <li>napraw szkód powstałych wskutek działań innych ekip po zakończeniu prac Wykonawcy.</li>
         </ul>
         <p class="text-[11.5px] text-slate-700">
-          Montaż siłowników, termostatów, automatyki oraz uruchomienie całego systemu grzewczego stanowi odrębny zakres, jeżeli nie został jednoznacznie wskazany w ofercie.
+          <span class="text-slate-400 font-semibold select-none mr-1">4.</span>Montaż siłowników, termostatów, automatyki oraz uruchomienie całego systemu grzewczego stanowi odrębny zakres, jeżeli nie został jednoznacznie wskazany w ofercie.
         </p>
       </div>
 
@@ -607,27 +607,27 @@ const ContractApp = {
       <!-- §3 -->
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;3.</span> Dokumentacja i sposób zaprojektowania instalacji</h2>
-        <p class="text-[11.5px] text-slate-700 mb-1">Instalacja jest wykonywana:</p>
+        <p class="text-[11.5px] text-slate-700 mb-1"><span class="text-slate-400 font-semibold select-none mr-1">1.</span>Instalacja jest wykonywana:</p>
         <div class="pl-2 text-[11.5px] text-slate-700 space-y-0.5 mb-1">
           <div>&#9744; na podstawie dokumentacji dostarczonej przez Zamawiającego,</div>
           <div>&#9744; na podstawie dokumentacji projektowej sporządzonej przez uprawnionego projektanta,</div>
           <div>&#9746; na podstawie opracowania technicznego / schematu wykonawczego Wykonawcy w zakresie objętym ofertą.</div>
         </div>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Jeżeli Wykonawca nie wykonuje pełnego projektu instalacji, sporządzony przez niego rysunek rozdzielaczy i rozkład rur stanowi dokumentację wykonawczą i nie jest projektem budowlanym w rozumieniu przepisów prawa budowlanego, chyba że strony wyraźnie ustalą inaczej.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Jeżeli Wykonawca nie wykonuje pełnego projektu instalacji, sporządzony przez niego rysunek rozdzielaczy i rozkład rur stanowi dokumentację wykonawczą i nie jest projektem budowlanym w rozumieniu przepisów prawa budowlanego, chyba że strony wyraźnie ustalą inaczej.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          W przypadku wykonywania instalacji na podstawie dokumentacji Zamawiającego lub osoby trzeciej Wykonawca wykonuje roboty zgodnie z przekazaną dokumentacją w zakresie objętym umową. Jeżeli Wykonawca stwierdzi, że dokumentacja, materiał, podłoże lub warunki na budowie mogą uniemożliwić prawidłowe wykonanie instalacji, zobowiązany jest poinformować o tym Zamawiającego przed wykonaniem spornych prac.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>W przypadku wykonywania instalacji na podstawie dokumentacji Zamawiającego lub osoby trzeciej Wykonawca wykonuje roboty zgodnie z przekazaną dokumentacją w zakresie objętym umową. Jeżeli Wykonawca stwierdzi, że dokumentacja, materiał, podłoże lub warunki na budowie mogą uniemożliwić prawidłowe wykonanie instalacji, zobowiązany jest poinformować o tym Zamawiającego przed wykonaniem spornych prac.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          Wykonawca nie odpowiada za błędy lub niekompletność dokumentacji dostarczonej przez Zamawiającego lub osobę trzecią, jeżeli po zachowaniu należytej staranności nie było podstaw do ich stwierdzenia.
+          <span class="text-slate-400 font-semibold select-none mr-1">4.</span>Wykonawca nie odpowiada za błędy lub niekompletność dokumentacji dostarczonej przez Zamawiającego lub osobę trzecią, jeżeli po zachowaniu należytej staranności nie było podstaw do ich stwierdzenia.
         </p>
       </div>
 
       <!-- §4 -->
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;4.</span> Warunki rozpoczęcia prac</h2>
-        <p class="text-[11.5px] text-slate-700 mb-1">Zamawiający zobowiązuje się zapewnić przed rozpoczęciem prac:</p>
+        <p class="text-[11.5px] text-slate-700 mb-1"><span class="text-slate-400 font-semibold select-none mr-1">1.</span>Zamawiający zobowiązuje się zapewnić przed rozpoczęciem prac:</p>
         <ul class="list-disc list-inside text-[11.5px] text-slate-700 pl-2 space-y-0.5 mb-1">
           <li>dostęp do budynku i pomieszczeń, możliwość bezpiecznego prowadzenia robót,</li>
           <li>gotową konstrukcję podłogi zgodną z projektem, prawidłowo wykonane i stabilne podłoże,</li>
@@ -637,17 +637,17 @@ const ContractApp = {
           <li>informacje o przebiegu instalacji i innych elementów znajdujących się w warstwach podłogi.</li>
         </ul>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Izolacja termiczna, na której montowana jest instalacja, musi być ułożona stabilnie, bez miejscowych zapadnięć i bez uszkodzeń uniemożliwiających prawidłowe zamocowanie rur.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Izolacja termiczna, na której montowana jest instalacja, musi być ułożona stabilnie, bez miejscowych zapadnięć i bez uszkodzeń uniemożliwiających prawidłowe zamocowanie rur.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          Wykonawca może odmówić rozpoczęcia prac do czasu usunięcia stwierdzonych przeszkód technicznych. Jeżeli usunięcie przeszkód powoduje dodatkowe koszty lub konieczność dodatkowych prac, ich wykonanie wymaga uzgodnienia z Zamawiającym.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Wykonawca może odmówić rozpoczęcia prac do czasu usunięcia stwierdzonych przeszkód technicznych. Jeżeli usunięcie przeszkód powoduje dodatkowe koszty lub konieczność dodatkowych prac, ich wykonanie wymaga uzgodnienia z Zamawiającym.
         </p>
       </div>
 
       <!-- §5 -->
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;5.</span> Dylatacje i taśma brzegowa</h2>
-        <p class="text-[11.5px] text-slate-700 mb-1">Zamawiający zobowiązany jest przed rozpoczęciem montażu przekazać Wykonawcy informację o:</p>
+        <p class="text-[11.5px] text-slate-700 mb-1"><span class="text-slate-400 font-semibold select-none mr-1">1.</span>Zamawiający zobowiązany jest przed rozpoczęciem montażu przekazać Wykonawcy informację o:</p>
         <ul class="list-disc list-inside text-[11.5px] text-slate-700 pl-2 space-y-0.5 mb-1">
           <li>lokalizacji istniejących dylatacji konstrukcyjnych,</li>
           <li>planowanych dylatacjach jastrychu,</li>
@@ -655,26 +655,26 @@ const ContractApp = {
           <li>przebiegu dylatacji wynikającym z dokumentacji budowlanej lub technologii wykonania posadzki.</li>
         </ul>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Obieg grzewczy nie może przechodzić przez dylatację bez zastosowania rozwiązania technicznego przewidzianego dla tego miejsca. W miejscach przejścia przewodu przez dylatację stosuje się rurę ochronną/peszel zgodnie z przyjętym rozwiązaniem wykonawczym.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Obieg grzewczy nie może przechodzić przez dylatację bez zastosowania rozwiązania technicznego przewidzianego dla tego miejsca. W miejscach przejścia przewodu przez dylatację stosuje się rurę ochronną/peszel zgodnie z przyjętym rozwiązaniem wykonawczym.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Jeżeli Zamawiający lub kierownik budowy nie przekaże Wykonawcy informacji o planowanym przebiegu dylatacji przed rozpoczęciem montażu, Wykonawca może zastosować rozwiązanie przewidziane w Załączniku Technicznym, w szczególności prowadzenie przewodów w rurach ochronnych w miejscach wymagających zabezpieczenia. Wykonawca nie odpowiada za skutki niewłaściwego wykonania dylatacji przez inną ekipę, jeżeli Wykonawca wykonał instalację zgodnie z przekazanymi informacjami.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Jeżeli Zamawiający lub kierownik budowy nie przekaże Wykonawcy informacji o planowanym przebiegu dylatacji przed rozpoczęciem montażu, Wykonawca może zastosować rozwiązanie przewidziane w Załączniku Technicznym, w szczególności prowadzenie przewodów w rurach ochronnych w miejscach wymagających zabezpieczenia. Wykonawca nie odpowiada za skutki niewłaściwego wykonania dylatacji przez inną ekipę, jeżeli Wykonawca wykonał instalację zgodnie z przekazanymi informacjami.
         </p>
-        <p class="text-[11.5px] text-slate-700 mb-1">Taśma brzegowa: ${edgeTapeText}</p>
+        <p class="text-[11.5px] text-slate-700 mb-1"><span class="text-slate-400 font-semibold select-none mr-1">4.</span>Taśma brzegowa: ${edgeTapeText}</p>
         <p class="text-[11.5px] text-slate-700">
-          Jeżeli taśma brzegowa lub wykonanie dylatacji nie są objęte zakresem Wykonawcy, odpowiedzialność za ich prawidłowe wykonanie ponosi podmiot, który je wykonuje.
+          <span class="text-slate-400 font-semibold select-none mr-1">5.</span>Jeżeli taśma brzegowa lub wykonanie dylatacji nie są objęte zakresem Wykonawcy, odpowiedzialność za ich prawidłowe wykonanie ponosi podmiot, który je wykonuje.
         </p>
       </div>
 
       <!-- §6 -->
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;6.</span> Zasady wykonania instalacji</h2>
-        <p class="text-[11.5px] text-slate-700 mb-1">Instalacja zostanie wykonana zgodnie z: dokumentacją techniczną, zasadami wiedzy technicznej, wymaganiami technicznymi producentów zastosowanych materiałów, postanowieniami Załącznika Technicznego, normami wskazanymi w §15.</p>
+        <p class="text-[11.5px] text-slate-700 mb-1"><span class="text-slate-400 font-semibold select-none mr-1">1.</span>Instalacja zostanie wykonana zgodnie z: dokumentacją techniczną, zasadami wiedzy technicznej, wymaganiami technicznymi producentów zastosowanych materiałów, postanowieniami Załącznika Technicznego, normami wskazanymi w §15.</p>
         <p class="text-[11.5px] text-slate-700 mb-1">
-          Rozstaw rur zostanie określony w dokumentacji lub Załączniku Technicznym. Trasa każdego obiegu zostanie wykonana w sposób umożliwiający prawidłową pracę instalacji, odpowietrzenie oraz regulację hydrauliczną. Rury należy prowadzić w sposób ograniczający ryzyko ich uszkodzenia przez kolejne ekipy budowlane.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Rozstaw rur zostanie określony w dokumentacji lub Załączniku Technicznym. Trasa każdego obiegu zostanie wykonana w sposób umożliwiający prawidłową pracę instalacji, odpowietrzenie oraz regulację hydrauliczną. Rury należy prowadzić w sposób ograniczający ryzyko ich uszkodzenia przez kolejne ekipy budowlane.
         </p>
         <p class="text-[11.5px] text-slate-700">
-          Po wykonaniu instalacji Wykonawca oznacza poszczególne obiegi zgodnie z przyjętym schematem. Położenie rur, rozdzielaczy i innych elementów instalacji może zostać udokumentowane fotografiami wykonanymi przez Wykonawcę jako dokumentacja robót zanikających.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Po wykonaniu instalacji Wykonawca oznacza poszczególne obiegi zgodnie z przyjętym schematem. Położenie rur, rozdzielaczy i innych elementów instalacji może zostać udokumentowane fotografiami wykonanymi przez Wykonawcę jako dokumentacja robót zanikających.
         </p>
       </div>
 
@@ -682,16 +682,16 @@ const ContractApp = {
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;7.</span> Próba szczelności i przekazanie instalacji</h2>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Przed zakryciem instalacji przez jastrych instalacja zostanie poddana próbie szczelności. Parametry próby wynikają z obowiązujących wymagań technicznych, przyjętej technologii oraz dokumentacji producentów zastosowanych elementów. Próbę należy wykonać z użyciem czynnika oraz przy ciśnieniu odpowiednim dla zastosowanych elementów instalacji. Wynik próby zostanie potwierdzony protokołem.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Przed zakryciem instalacji przez jastrych instalacja zostanie poddana próbie szczelności. Parametry próby wynikają z obowiązujących wymagań technicznych, przyjętej technologii oraz dokumentacji producentów zastosowanych elementów. Próbę należy wykonać z użyciem czynnika oraz przy ciśnieniu odpowiednim dla zastosowanych elementów instalacji. Wynik próby zostanie potwierdzony protokołem.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Do czasu wykonania jastrychu instalacja powinna pozostawać pod nadzorem Zamawiającego lub wykonawcy jastrychu w sposób określony w protokole i dokumentacji technicznej.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Do czasu wykonania jastrychu instalacja powinna pozostawać pod nadzorem Zamawiającego lub wykonawcy jastrychu w sposób określony w protokole i dokumentacji technicznej.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Zamawiający przyjmuje do wiadomości, że od chwili zakończenia robót Wykonawcy instalacja może zostać uszkodzona przez: chodzenie po nieosłoniętej instalacji, transport materiałów, kotwienie innych elementów, wiercenie, cięcie, montaż innych instalacji, wykonywanie jastrychu, prace innych ekip.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Zamawiający przyjmuje do wiadomości, że od chwili zakończenia robót Wykonawcy instalacja może zostać uszkodzona przez: chodzenie po nieosłoniętej instalacji, transport materiałów, kotwienie innych elementów, wiercenie, cięcie, montaż innych instalacji, wykonywanie jastrychu, prace innych ekip.
         </p>
         <p class="text-[11.5px] text-slate-700">
-          Wykonawca nie odpowiada za uszkodzenia instalacji powstałe po jej odbiorze, jeżeli nie wynikają one z wad wykonawczych istniejących przed odbiorem.
+          <span class="text-slate-400 font-semibold select-none mr-1">4.</span>Wykonawca nie odpowiada za uszkodzenia instalacji powstałe po jej odbiorze, jeżeli nie wynikają one z wad wykonawczych istniejących przed odbiorem.
         </p>
       </div>
 
@@ -711,13 +711,13 @@ const ContractApp = {
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;8.</span> Jastrych / wylewka</h2>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Wykonanie jastrychu nie jest przedmiotem umowy, chyba że oferta stanowi inaczej. Za dobór rodzaju jastrychu, jego grubość, klasę, skład, zbrojenie, dylatacje, warunki dojrzewania i wykonanie odpowiada wykonawca jastrychu w zakresie powierzonych mu prac.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Wykonanie jastrychu nie jest przedmiotem umowy, chyba że oferta stanowi inaczej. Za dobór rodzaju jastrychu, jego grubość, klasę, skład, zbrojenie, dylatacje, warunki dojrzewania i wykonanie odpowiada wykonawca jastrychu w zakresie powierzonych mu prac.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Wykonawca instalacji nie odpowiada za pękanie jastrychu, odspajanie jastrychu, uszkodzenia powierzchni posadzki lub inne skutki nieprawidłowego wykonania jastrychu, jeżeli nie wynikają one z nieprawidłowości instalacji wykonanej przez Wykonawcę.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Wykonawca instalacji nie odpowiada za pękanie jastrychu, odspajanie jastrychu, uszkodzenia powierzchni posadzki lub inne skutki nieprawidłowego wykonania jastrychu, jeżeli nie wynikają one z nieprawidłowości instalacji wykonanej przez Wykonawcę.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          Wykonawca jastrychu zobowiązany jest wykonywać swoje prace w sposób niepowodujący uszkodzenia instalacji. Jeżeli podczas wykonywania jastrychu dojdzie do uszkodzenia rury lub elementu instalacji, należy przerwać prace w miejscu uszkodzenia i niezwłocznie poinformować Wykonawcę instalacji.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Wykonawca jastrychu zobowiązany jest wykonywać swoje prace w sposób niepowodujący uszkodzenia instalacji. Jeżeli podczas wykonywania jastrychu dojdzie do uszkodzenia rury lub elementu instalacji, należy przerwać prace w miejscu uszkodzenia i niezwłocznie poinformować Wykonawcę instalacji.
         </p>
       </div>
 
@@ -725,13 +725,13 @@ const ContractApp = {
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;9.</span> Uruchomienie i regulacja instalacji</h2>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Wykonanie instalacji podłogowej nie jest równoznaczne z uruchomieniem całego systemu grzewczego budynku. Uruchomienie źródła ciepła, ustawienie temperatury zasilania, automatyki pogodowej, krzywej grzewczej, bufora, pompy ciepła, kotła lub innych urządzeń nie jest przedmiotem umowy, chyba że oferta stanowi inaczej.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Wykonanie instalacji podłogowej nie jest równoznaczne z uruchomieniem całego systemu grzewczego budynku. Uruchomienie źródła ciepła, ustawienie temperatury zasilania, automatyki pogodowej, krzywej grzewczej, bufora, pompy ciepła, kotła lub innych urządzeń nie jest przedmiotem umowy, chyba że oferta stanowi inaczej.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Wykonawca może dokonać wstępnej regulacji przepływów na rozdzielaczu zgodnie z dokumentacją wykonawczą. Ostateczna regulacja hydrauliczna może wymagać pracy instalacji przy rzeczywistych parametrach źródła ciepła oraz po zakończeniu pozostałych prac budowlanych.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Wykonawca może dokonać wstępnej regulacji przepływów na rozdzielaczu zgodnie z dokumentacją wykonawczą. Ostateczna regulacja hydrauliczna może wymagać pracy instalacji przy rzeczywistych parametrach źródła ciepła oraz po zakończeniu pozostałych prac budowlanych.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          Wykonawca nie gwarantuje osiągnięcia konkretnej temperatury powietrza w pomieszczeniach, jeżeli na jej osiągnięcie wpływają elementy pozostające poza zakresem niniejszej umowy, w szczególności: izolacyjność budynku, straty ciepła, moc źródła ciepła, parametry zasilania, regulacja automatyki, rodzaj i opór cieplny okładziny podłogowej, sposób użytkowania budynku, nieprawidłowe działanie urządzeń innych wykonawców.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Wykonawca nie gwarantuje osiągnięcia konkretnej temperatury powietrza w pomieszczeniach, jeżeli na jej osiągnięcie wpływają elementy pozostające poza zakresem niniejszej umowy, w szczególności: izolacyjność budynku, straty ciepła, moc źródła ciepła, parametry zasilania, regulacja automatyki, rodzaj i opór cieplny okładziny podłogowej, sposób użytkowania budynku, nieprawidłowe działanie urządzeń innych wykonawców.
         </p>
       </div>
 
@@ -739,10 +739,10 @@ const ContractApp = {
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;10.</span> Materiały dostarczone przez Zamawiającego</h2>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Jeżeli materiały dostarcza Zamawiający, ponosi on odpowiedzialność za ich jakość, pochodzenie, właściwości oraz przydatność do zastosowania w instalacji. Wykonawca ma obowiązek poinformować Zamawiającego o stwierdzonych przed rozpoczęciem lub w trakcie robót wadach materiałów, które mogą mieć wpływ na prawidłowe wykonanie instalacji.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Jeżeli materiały dostarcza Zamawiający, ponosi on odpowiedzialność za ich jakość, pochodzenie, właściwości oraz przydatność do zastosowania w instalacji. Wykonawca ma obowiązek poinformować Zamawiającego o stwierdzonych przed rozpoczęciem lub w trakcie robót wadach materiałów, które mogą mieć wpływ na prawidłowe wykonanie instalacji.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          W przypadku zastosowania materiałów dostarczonych przez Zamawiającego Wykonawca nie ponosi odpowiedzialności za wady wynikające z właściwości tych materiałów, ich niezgodności z wymaganiami technicznymi lub nieprawidłowego przechowywania, jeżeli przyczyna wady leży po stronie tych materiałów.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>W przypadku zastosowania materiałów dostarczonych przez Zamawiającego Wykonawca nie ponosi odpowiedzialności za wady wynikające z właściwości tych materiałów, ich niezgodności z wymaganiami technicznymi lub nieprawidłowego przechowywania, jeżeli przyczyna wady leży po stronie tych materiałów.
         </p>
       </div>
 
@@ -750,13 +750,13 @@ const ContractApp = {
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;11.</span> Roboty dodatkowe i zmiany</h2>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Robotami dodatkowymi są prace nieobjęte zakresem umowy lub wynikające ze zmiany decyzji Zamawiającego, projektu albo warunków zastanych na budowie. Roboty dodatkowe wymagają uzgodnienia zakresu i wynagrodzenia.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Robotami dodatkowymi są prace nieobjęte zakresem umowy lub wynikające ze zmiany decyzji Zamawiającego, projektu albo warunków zastanych na budowie. Roboty dodatkowe wymagają uzgodnienia zakresu i wynagrodzenia.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          W przypadku konieczności wykonania prac dodatkowych z przyczyn technicznych ujawnionych po rozpoczęciu prac Wykonawca informuje Zamawiającego o zakresie tych prac przed ich wykonaniem, o ile pozwalają na to warunki na budowie.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>W przypadku konieczności wykonania prac dodatkowych z przyczyn technicznych ujawnionych po rozpoczęciu prac Wykonawca informuje Zamawiającego o zakresie tych prac przed ich wykonaniem, o ile pozwalają na to warunki na budowie.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          Zmiany przebiegu obiegów, lokalizacji rozdzielaczy, średnic rur, rozstawu lub innych istotnych parametrów po wykonaniu części robót mogą powodować dodatkowe wynagrodzenie.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Zmiany przebiegu obiegów, lokalizacji rozdzielaczy, średnic rur, rozstawu lub innych istotnych parametrów po wykonaniu części robót mogą powodować dodatkowe wynagrodzenie.
         </p>
       </div>
 
@@ -768,13 +768,13 @@ const ContractApp = {
           <div>Planowany termin zakończenia prac: <strong>${endFmt}</strong></div>
         </div>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Termin może ulec zmianie, jeżeli wystąpią przeszkody niezależne od Wykonawcy, w szczególności: brak przygotowania placu budowy, brak dostępu do obiektu, opóźnienia innych wykonawców, konieczność usunięcia wad podłoża, zmiany dokumentacji, brak materiałów po stronie Zamawiającego, warunki uniemożliwiające bezpieczne wykonanie prac.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Termin może ulec zmianie, jeżeli wystąpią przeszkody niezależne od Wykonawcy, w szczególności: brak przygotowania placu budowy, brak dostępu do obiektu, opóźnienia innych wykonawców, konieczność usunięcia wad podłoża, zmiany dokumentacji, brak materiałów po stronie Zamawiającego, warunki uniemożliwiające bezpieczne wykonanie prac.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Opóźnienie spowodowane koniecznością wykonania prac przez inne ekipy lub brakiem współdziałania Zamawiającego nie stanowi opóźnienia Wykonawcy.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Opóźnienie spowodowane koniecznością wykonania prac przez inne ekipy lub brakiem współdziałania Zamawiającego nie stanowi opóźnienia Wykonawcy.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          O każdej zmianie terminu Wykonawca informuje Zamawiającego niezwłocznie, wskazując przyczynę oraz nowy planowany termin. Termin realizacji ulega przedłużeniu o czas trwania przeszkody powiększony o czas niezbędny do wznowienia prac.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>O każdej zmianie terminu Wykonawca informuje Zamawiającego niezwłocznie, wskazując przyczynę oraz nowy planowany termin. Termin realizacji ulega przedłużeniu o czas trwania przeszkody powiększony o czas niezbędny do wznowienia prac.
         </p>
       </div>
 
@@ -790,7 +790,7 @@ const ContractApp = {
           </div>
           <div>Wynagrodzenie ma charakter: <strong>&#9746; ryczałtowy</strong> &#9744; kosztorysowy.</div>
         </div>
-        <p class="text-[11.5px] text-slate-700 mb-1"><strong>Terminy płatności:</strong></p>
+        <p class="text-[11.5px] text-slate-700 mb-1"><span class="text-slate-400 font-semibold select-none mr-1">1.</span><strong>Terminy płatności:</strong></p>
         <div class="pl-2 text-[11.5px] text-slate-700 space-y-0.5 mb-1">
           <div>Zaliczka: <strong>${depositAmtStr}</strong>, płatna do <strong>${depositDateFmt}</strong></div>
           <div>I rata: <strong>${rata1AmtStr}</strong>, płatna <strong>${rata1DateFmt}</strong></div>
@@ -798,17 +798,17 @@ const ContractApp = {
           <div class="text-[11px] text-slate-600">Nr konta Wykonawcy: <span class="font-mono">${d.contractorBank}</span></div>
         </div>
         <p class="text-[11.5px] text-slate-700 mb-1">
-          Za dzień zapłaty uznaje się dzień uznania rachunku bankowego Wykonawcy. Materiały lub prace dodatkowe niewskazane w ofercie mogą zostać rozliczone odrębnie na podstawie uzgodnienia stron.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Za dzień zapłaty uznaje się dzień uznania rachunku bankowego Wykonawcy. Materiały lub prace dodatkowe niewskazane w ofercie mogą zostać rozliczone odrębnie na podstawie uzgodnienia stron.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          W przypadku opóźnienia Zamawiającego w zapłacie zaliczki, raty lub innej należności przekraczającego 3 dni robocze od terminu płatności, Wykonawcy przysługują odsetki ustawowe za opóźnienie oraz prawo do wstrzymania wykonywania prac do czasu zaksięgowania zaległej wpłaty na rachunku bankowym Wykonawcy. Terminy realizacji, o których mowa w §12, ulegają wówczas przedłużeniu o czas trwania wstrzymania prac.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>W przypadku opóźnienia Zamawiającego w zapłacie zaliczki, raty lub innej należności przekraczającego 3 dni robocze od terminu płatności, Wykonawcy przysługują odsetki ustawowe za opóźnienie oraz prawo do wstrzymania wykonywania prac do czasu zaksięgowania zaległej wpłaty na rachunku bankowym Wykonawcy. Terminy realizacji, o których mowa w §12, ulegają wówczas przedłużeniu o czas trwania wstrzymania prac.
         </p>
       </div>
 
       <!-- §14 -->
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;14.</span> Odbiór</h2>
-        <p class="text-[11.5px] text-slate-700 mb-1">Po zakończeniu prac Wykonawca zgłasza gotowość do odbioru. Odbiór obejmuje w szczególności:</p>
+        <p class="text-[11.5px] text-slate-700 mb-1"><span class="text-slate-400 font-semibold select-none mr-1">1.</span>Po zakończeniu prac Wykonawca zgłasza gotowość do odbioru. Odbiór obejmuje w szczególności:</p>
         <ul class="list-disc list-inside text-[11.5px] text-slate-700 pl-2 space-y-0.5 mb-1">
           <li>wizualną ocenę wykonanych prac,</li>
           <li>sprawdzenie zgodności z zakresem umowy,</li>
@@ -817,10 +817,10 @@ const ContractApp = {
           <li>przekazanie dokumentacji wskazanej w umowie.</li>
         </ul>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Usterki lub uwagi stwierdzone podczas odbioru zostaną wpisane do protokołu wraz z terminem ich usunięcia, jeżeli są zasadne. Usterki niemające wpływu na możliwość bezpiecznego zakrycia instalacji nie stanowią podstawy do odmowy odbioru całego przedmiotu umowy, z zastrzeżeniem bezwzględnie obowiązujących przepisów prawa. W przypadku wad uniemożliwiających prawidłowe wykonanie lub zakrycie instalacji odbiór może zostać odroczony do czasu ich usunięcia.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Usterki lub uwagi stwierdzone podczas odbioru zostaną wpisane do protokołu wraz z terminem ich usunięcia, jeżeli są zasadne. Usterki niemające wpływu na możliwość bezpiecznego zakrycia instalacji nie stanowią podstawy do odmowy odbioru całego przedmiotu umowy, z zastrzeżeniem bezwzględnie obowiązujących przepisów prawa. W przypadku wad uniemożliwiających prawidłowe wykonanie lub zakrycie instalacji odbiór może zostać odroczony do czasu ich usunięcia.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          Jeżeli Zamawiający nie stawi się na odbiór w terminie wyznaczonym przez Wykonawcę, nie krótszym niż 3 dni robocze od dnia wezwania, lub odmawia podpisania protokołu odbioru bez podania uzasadnionych przyczyn technicznych, Wykonawca jest uprawniony do sporządzenia jednostronnego protokołu odbioru. Jednostronny protokół odbioru wywołuje takie same skutki jak protokół podpisany przez obie strony i stanowi podstawę do wystawienia faktury końcowej oraz rozliczenia wynagrodzenia.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Jeżeli Zamawiający nie stawi się na odbiór w terminie wyznaczonym przez Wykonawcę, nie krótszym niż 3 dni robocze od dnia wezwania, lub odmawia podpisania protokołu odbioru bez podania uzasadnionych przyczyn technicznych, Wykonawca jest uprawniony do sporządzenia jednostronnego protokołu odbioru. Jednostronny protokół odbioru wywołuje takie same skutki jak protokół podpisany przez obie strony i stanowi podstawę do wystawienia faktury końcowej oraz rozliczenia wynagrodzenia.
         </p>
       </div>
 
@@ -839,7 +839,7 @@ const ContractApp = {
       <!-- §15 -->
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;15.</span> Normy, przepisy i zasady techniczne</h2>
-        <p class="text-[11.5px] text-slate-700 mb-1">Instalacja wykonywana jest z uwzględnieniem obowiązujących przepisów prawa, zasad wiedzy technicznej oraz następujących Polskich Norm:</p>
+        <p class="text-[11.5px] text-slate-700 mb-1"><span class="text-slate-400 font-semibold select-none mr-1">1.</span>Instalacja wykonywana jest z uwzględnieniem obowiązujących przepisów prawa, zasad wiedzy technicznej oraz następujących Polskich Norm:</p>
         <ul class="list-disc list-inside text-[11px] text-slate-600 pl-2 space-y-0.5 mb-1">
           <li>PN-EN 1264-1:2021-10 – Wodne wbudowane systemy ogrzewania i chłodzenia płaszczyznowego – Część 1: Definicje i symbole;</li>
           <li>PN-EN 1264-2:2021-10 – Część 2: metody określania mocy cieplnej;</li>
@@ -849,7 +849,7 @@ const ContractApp = {
           <li>PN-EN 12831-1:2017-08 – Charakterystyka energetyczna budynków – Metoda obliczania projektowego obciążenia cieplnego – Część 1.</li>
         </ul>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          W przypadku zmiany lub zastąpienia powyższych norm zastosowanie ma ich aktualne wydanie, o ile strony nie postanowią inaczej. W odniesieniu do poszczególnych materiałów i elementów instalacji stosuje się również wymagania producentów oraz dokumentację techniczną tych wyrobów.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>W przypadku zmiany lub zastąpienia powyższych norm zastosowanie ma ich aktualne wydanie, o ile strony nie postanowią inaczej. W odniesieniu do poszczególnych materiałów i elementów instalacji stosuje się również wymagania producentów oraz dokumentację techniczną tych wyrobów.
         </p>
       </div>
 
@@ -857,13 +857,13 @@ const ContractApp = {
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;16.</span> Odpowiedzialność Wykonawcy</h2>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Wykonawca odpowiada za prawidłowość wykonania prac objętych umową w zakresie wynikającym z niniejszej umowy i obowiązujących przepisów prawa. Wykonawca nie odpowiada za elementy instalacji lub budynku pozostające poza zakresem jego prac, chyba że strony wyraźnie postanowiły inaczej.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Wykonawca odpowiada za prawidłowość wykonania prac objętych umową w zakresie wynikającym z niniejszej umowy i obowiązujących przepisów prawa. Wykonawca nie odpowiada za elementy instalacji lub budynku pozostające poza zakresem jego prac, chyba że strony wyraźnie postanowiły inaczej.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          W szczególności odpowiedzialność Wykonawcy nie obejmuje wad: konstrukcji budynku, izolacji wykonanej przez inną ekipę, jastrychu, posadzki, źródła ciepła, automatyki, instalacji elektrycznych, instalacji innych wykonawców, materiałów dostarczonych przez Zamawiającego, jeżeli wada wynika z właściwości tych materiałów.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>W szczególności odpowiedzialność Wykonawcy nie obejmuje wad: konstrukcji budynku, izolacji wykonanej przez inną ekipę, jastrychu, posadzki, źródła ciepła, automatyki, instalacji elektrycznych, instalacji innych wykonawców, materiałów dostarczonych przez Zamawiającego, jeżeli wada wynika z właściwości tych materiałów.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          Powyższe ograniczenia nie wyłączają odpowiedzialności Wykonawcy za szkody lub wady powstałe z jego winy w zakresie, w jakim odpowiedzialność taka wynika z bezwzględnie obowiązujących przepisów prawa.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Powyższe ograniczenia nie wyłączają odpowiedzialności Wykonawcy za szkody lub wady powstałe z jego winy w zakresie, w jakim odpowiedzialność taka wynika z bezwzględnie obowiązujących przepisów prawa.
         </p>
       </div>
 
@@ -875,10 +875,10 @@ const ContractApp = {
           <div>Gwarancja na montaż i osprzęt: <strong>${d.warrantyMonths} miesięcy</strong> od dnia odbioru</div>
         </div>
         <p class="text-[11.5px] text-slate-700 mb-1">
-          Gwarancja obejmuje w szczególności wady wykonawcze instalacji powstałe z przyczyn leżących po stronie Wykonawcy. Gwarancja nie obejmuje uszkodzeń powstałych wskutek: ingerencji osób trzecich, wiercenia, kotwienia, cięcia lub innych prac w podłodze, uszkodzenia rur przez inne ekipy, niewłaściwego wykonania jastrychu, nieprawidłowej eksploatacji, zamrożenia instalacji, niewłaściwych parametrów pracy źródła ciepła, zastosowania nieprawidłowych materiałów dostarczonych przez Zamawiającego, samowolnych zmian instalacji.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Gwarancja obejmuje w szczególności wady wykonawcze instalacji powstałe z przyczyn leżących po stronie Wykonawcy. Gwarancja nie obejmuje uszkodzeń powstałych wskutek: ingerencji osób trzecich, wiercenia, kotwienia, cięcia lub innych prac w podłodze, uszkodzenia rur przez inne ekipy, niewłaściwego wykonania jastrychu, nieprawidłowej eksploatacji, zamrożenia instalacji, niewłaściwych parametrów pracy źródła ciepła, zastosowania nieprawidłowych materiałów dostarczonych przez Zamawiającego, samowolnych zmian instalacji.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          Udzielona gwarancja nie ogranicza uprawnień Zamawiającego wynikających z przepisów prawa. Zgłoszenia wad Zamawiający dokonuje w formie pisemnej, dokumentowej lub elektronicznej (e-mail) na adres wskazany w umowie, z opisem wady i terminem weryfikacji. Wykonawca ustosunkuje się do zgłoszenia w terminie 7 dni roboczych i przystąpi do usunięcia uznanej wady w terminie uzgodnionym z Zamawiającym, nie dłuższym niż 30 dni, chyba że charakter wady wymaga terminu dłuższego.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Udzielona gwarancja nie ogranicza uprawnień Zamawiającego wynikających z przepisów prawa. Zgłoszenia wad Zamawiający dokonuje w formie pisemnej, dokumentowej lub elektronicznej (e-mail) na adres wskazany w umowie, z opisem wady i terminem weryfikacji. Wykonawca ustosunkuje się do zgłoszenia w terminie 7 dni roboczych i przystąpi do usunięcia uznanej wady w terminie uzgodnionym z Zamawiającym, nie dłuższym niż 30 dni, chyba że charakter wady wymaga terminu dłuższego.
         </p>
       </div>
 
@@ -886,7 +886,7 @@ const ContractApp = {
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;18.</span> Zamrożenie instalacji</h2>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          Instalacja wodnego ogrzewania podłogowego nie może zostać narażona na zamarznięcie. Jeżeli instalacja zostanie napełniona wodą przed uruchomieniem źródła ciepła, Zamawiający zobowiązuje się zapewnić temperaturę budynku uniemożliwiającą zamarznięcie instalacji albo uzgodnić z Wykonawcą inne zabezpieczenie. Wykonawca nie odpowiada za szkody wynikające z zamarznięcia instalacji po jej przekazaniu Zamawiającemu.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Instalacja wodnego ogrzewania podłogowego nie może zostać narażona na zamarznięcie. Jeżeli instalacja zostanie napełniona wodą przed uruchomieniem źródła ciepła, Zamawiający zobowiązuje się zapewnić temperaturę budynku uniemożliwiającą zamarznięcie instalacji albo uzgodnić z Wykonawcą inne zabezpieczenie. Wykonawca nie odpowiada za szkody wynikające z zamarznięcia instalacji po jej przekazaniu Zamawiającemu.
         </p>
       </div>
 
@@ -894,7 +894,7 @@ const ContractApp = {
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;19.</span> Zmiany umowy</h2>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          Wszelkie zmiany zakresu, wynagrodzenia lub istotnych warunków umowy wymagają formy dokumentowej lub pisemnej, z zastrzeżeniem przepisów bezwzględnie obowiązujących. Uzgodnienia dokonane pocztą elektroniczną mogą stanowić podstawę wykonania dodatkowych prac, jeżeli pozwalają jednoznacznie ustalić ich zakres i wynagrodzenie.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Wszelkie zmiany zakresu, wynagrodzenia lub istotnych warunków umowy wymagają formy dokumentowej lub pisemnej, z zastrzeżeniem przepisów bezwzględnie obowiązujących. Uzgodnienia dokonane pocztą elektroniczną mogą stanowić podstawę wykonania dodatkowych prac, jeżeli pozwalają jednoznacznie ustalić ich zakres i wynagrodzenie.
         </p>
       </div>
 
@@ -902,13 +902,13 @@ const ContractApp = {
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;20.</span> Postanowienia dotyczące konsumenta</h2>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Jeżeli Zamawiający jest konsumentem, do umowy stosuje się przepisy dotyczące ochrony konsumentów w zakresie, w jakim mają zastosowanie. Jeżeli umowa została zawarta na odległość lub poza lokalem przedsiębiorstwa, Zamawiającemu przysługują prawa wynikające z ustawy o prawach konsumenta.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Jeżeli Zamawiający jest konsumentem, do umowy stosuje się przepisy dotyczące ochrony konsumentów w zakresie, w jakim mają zastosowanie. Jeżeli umowa została zawarta na odległość lub poza lokalem przedsiębiorstwa, Zamawiającemu przysługują prawa wynikające z ustawy o prawach konsumenta.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Jeżeli umowa została zawarta poza lokalem przedsiębiorstwa Wykonawcy lub na odległość, Zamawiającemu będącemu konsumentem przysługuje prawo odstąpienia od umowy w terminie 14 dni od dnia jej zawarcia, bez podania przyczyny, zgodnie z ustawą z dnia 30 maja 2014 r. o prawach konsumenta, poprzez złożenie Wykonawcy jednoznacznego oświadczenia o odstąpieniu (np. pismem lub pocztą elektroniczną).
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Jeżeli umowa została zawarta poza lokalem przedsiębiorstwa Wykonawcy lub na odległość, Zamawiającemu będącemu konsumentem przysługuje prawo odstąpienia od umowy w terminie 14 dni od dnia jej zawarcia, bez podania przyczyny, zgodnie z ustawą z dnia 30 maja 2014 r. o prawach konsumenta, poprzez złożenie Wykonawcy jednoznacznego oświadczenia o odstąpieniu (np. pismem lub pocztą elektroniczną).
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Jeżeli Zamawiający będący konsumentem chce, aby Wykonawca rozpoczął wykonywanie usługi przed upływem terminu do odstąpienia od umowy, zobowiązany jest złożyć odrębne, wyraźne oświadczenie w tym zakresie. Niezłożenie takiego oświadczenia oznacza, że Wykonawca rozpocznie prace dopiero po upływie terminu do odstąpienia od umowy.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Jeżeli Zamawiający będący konsumentem chce, aby Wykonawca rozpoczął wykonywanie usługi przed upływem terminu do odstąpienia od umowy, zobowiązany jest złożyć odrębne, wyraźne oświadczenie w tym zakresie. Niezłożenie takiego oświadczenia oznacza, że Wykonawca rozpocznie prace dopiero po upływie terminu do odstąpienia od umowy.
         </p>
         <div class="bg-amber-50 border border-amber-200 rounded-lg p-2.5 text-[11.5px] text-slate-800 mb-1">
           <p class="font-semibold mb-1">Oświadczenie Zamawiającego (dotyczy wyłącznie konsumentów):</p>
@@ -916,13 +916,15 @@ const ContractApp = {
           <div>${consYes} Zamawiający składa powyższe oświadczenie</div>
           <div>${consNo} Zamawiający nie składa powyższego oświadczenia</div>
         </div>
-        <p class="text-[11.5px] text-slate-700">W przypadku przepisów chroniących konsumenta postanowienia umowy nie mogą ograniczać praw Zamawiającego przyznanych mu bezwzględnie obowiązującymi przepisami.</p>
+        <p class="text-[11.5px] text-slate-700">
+          <span class="text-slate-400 font-semibold select-none mr-1">4.</span>W przypadku przepisów chroniących konsumenta postanowienia umowy nie mogą ograniczać praw Zamawiającego przyznanych mu bezwzględnie obowiązującymi przepisami.
+        </p>
       </div>
 
       <!-- §21 -->
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;21.</span> Dokumentacja powykonawcza</h2>
-        <p class="text-[11.5px] text-slate-700 mb-1">Po zakończeniu prac Wykonawca przekazuje – w zakresie określonym ofertą – następującą dokumentację:</p>
+        <p class="text-[11.5px] text-slate-700 mb-1"><span class="text-slate-400 font-semibold select-none mr-1">1.</span>Po zakończeniu prac Wykonawca przekazuje – w zakresie określonym ofertą – następującą dokumentację:</p>
         <div class="pl-2 text-[11.5px] text-slate-700 space-y-0.5">
           <div>${cb(d.docProtocol)} protokół próby szczelności,</div>
           <div>${cb(d.docSchema)} schemat instalacji,</div>
@@ -937,7 +939,7 @@ const ContractApp = {
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;22.</span> Odpowiedzialność za inne roboty budowlane</h2>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          Każda ze stron odpowiada za zakres robót, który został jej powierzony. Zamawiający zobowiązuje się poinformować innych wykonawców o przebiegu instalacji ogrzewania podłogowego przed wykonaniem prac mogących ją uszkodzić. Dokumentacja fotograficzna wykonanej instalacji może służyć do ustalenia przebiegu rur i lokalizacji poszczególnych obiegów. Wykonawca nie ponosi odpowiedzialności za uszkodzenie instalacji przez osoby trzecie po jej odbiorze.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Każda ze stron odpowiada za zakres robót, który został jej powierzony. Zamawiający zobowiązuje się poinformować innych wykonawców o przebiegu instalacji ogrzewania podłogowego przed wykonaniem prac mogących ją uszkodzić. Dokumentacja fotograficzna wykonanej instalacji może służyć do ustalenia przebiegu rur i lokalizacji poszczególnych obiegów. Wykonawca nie ponosi odpowiedzialności za uszkodzenie instalacji przez osoby trzecie po jej odbiorze.
         </p>
       </div>
 
@@ -945,10 +947,10 @@ const ContractApp = {
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;23.</span> Ochrona danych osobowych (RODO)</h2>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Administratorem danych osobowych Zamawiającego będącego osobą fizyczną jest Wykonawca. Dane osobowe przetwarzane są w celu zawarcia i wykonania niniejszej umowy, dochodzenia ewentualnych roszczeń oraz wypełnienia obowiązków wynikających z przepisów prawa (w tym podatkowych i rachunkowych).
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Administratorem danych osobowych Zamawiającego będącego osobą fizyczną jest Wykonawca. Dane osobowe przetwarzane są w celu zawarcia i wykonania niniejszej umowy, dochodzenia ewentualnych roszczeń oraz wypełnienia obowiązków wynikających z przepisów prawa (w tym podatkowych i rachunkowych).
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          Podstawę prawną przetwarzania danych osobowych stanowi art. 6 ust. 1 lit. b) i c) Rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. (RODO). Szczegółowe informacje o przetwarzaniu danych osobowych, w tym o przysługujących Zamawiającemu prawach, zostaną przekazane odrębnie w formie klauzuli informacyjnej stanowiącej załącznik do umowy.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Podstawę prawną przetwarzania danych osobowych stanowi art. 6 ust. 1 lit. b) i c) Rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. (RODO). Szczegółowe informacje o przetwarzaniu danych osobowych, w tym o przysługujących Zamawiającemu prawach, zostaną przekazane odrębnie w formie klauzuli informacyjnej stanowiącej załącznik do umowy.
         </p>
       </div>
 
@@ -956,7 +958,7 @@ const ContractApp = {
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;24.</span> Zastrzeżenie własności materiałów</h2>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          Materiały i urządzenia dostarczone przez Wykonawcę (w tym rury, rozdzielacze, szafki i pozostałe elementy instalacji) pozostają jego własnością aż do uiszczenia przez Zamawiającego całości wynagrodzenia należnego na podstawie niniejszej umowy, zgodnie z art. 589 Kodeksu cywilnego.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Materiały i urządzenia dostarczone przez Wykonawcę (w tym rury, rozdzielacze, szafki i pozostałe elementy instalacji) pozostają jego własnością aż do uiszczenia przez Zamawiającego całości wynagrodzenia należnego na podstawie niniejszej umowy, zgodnie z art. 589 Kodeksu cywilnego.
         </p>
       </div>
 
@@ -964,10 +966,10 @@ const ContractApp = {
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;25.</span> Siła wyższa</h2>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          Żadna ze stron nie ponosi odpowiedzialności za niewykonanie lub nienależyte wykonanie zobowiązań wynikających z umowy, jeżeli jest to spowodowane działaniem siły wyższej, rozumianej jako zdarzenie zewnętrzne, niemożliwe do przewidzenia i zapobieżenia, w szczególności: klęski żywiołowe, stan wyjątkowy lub stan klęski żywiołowej, działania wojenne, akty władzy publicznej uniemożliwiające wykonanie umowy.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Żadna ze stron nie ponosi odpowiedzialności za niewykonanie lub nienależyte wykonanie zobowiązań wynikających z umowy, jeżeli jest to spowodowane działaniem siły wyższej, rozumianej jako zdarzenie zewnętrzne, niemożliwe do przewidzenia i zapobieżenia, w szczególności: klęski żywiołowe, stan wyjątkowy lub stan klęski żywiołowej, działania wojenne, akty władzy publicznej uniemożliwiające wykonanie umowy.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          Strona, której dotyczy działanie siły wyższej, zobowiązana jest niezwłocznie poinformować o tym drugą stronę oraz o przewidywanym wpływie tego zdarzenia na wykonanie umowy. Terminy realizacji umowy ulegają przedłużeniu o czas trwania przeszkody spowodowanej siłą wyższą.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Strona, której dotyczy działanie siły wyższej, zobowiązana jest niezwłocznie poinformować o tym drugą stronę oraz o przewidywanym wpływie tego zdarzenia na wykonanie umowy. Terminy realizacji umowy ulegają przedłużeniu o czas trwania przeszkody spowodowanej siłą wyższą.
         </p>
       </div>
 
@@ -975,11 +977,11 @@ const ContractApp = {
       <div class="mb-5">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;26.</span> Postanowienia końcowe</h2>
         <div class="text-[11.5px] text-slate-700 space-y-1">
-          <p class="text-justify">W sprawach nieuregulowanych umową stosuje się przepisy prawa polskiego, w szczególności Kodeksu cywilnego oraz przepisy dotyczące procesu budowlanego i ochrony konsumentów, odpowiednio do statusu Zamawiającego i charakteru wykonywanych prac.</p>
-          <p class="text-justify">Jeżeli którekolwiek z postanowień umowy okaże się nieważne lub bezskuteczne, nie wpływa to na ważność pozostałych postanowień, z zastrzeżeniem bezwzględnie obowiązujących przepisów prawa.</p>
-          <p>Umowę sporządzono w dwóch jednobrzmiących egzemplarzach, po jednym dla każdej ze stron.</p>
-          <p>Integralną część umowy stanowią załączniki wymienione w umowie. Ilekroć w umowie mowa jest o „dniach roboczych", rozumie się przez to dni od poniedziałku do piątku, z wyłączeniem dni ustawowo wolnych od pracy.</p>
-          <p class="text-justify">Strony będą dążyć do polubownego rozwiązywania sporów wynikłych z niniejszej umowy. W przypadku braku porozumienia, sądem właściwym do rozstrzygania sporów jest sąd właściwy według przepisów powszechnie obowiązujących, z zastrzeżeniem bezwzględnie obowiązujących przepisów o właściwości sądu w sprawach konsumenckich.</p>
+          <p class="text-justify"><span class="text-slate-400 font-semibold select-none mr-1">1.</span>W sprawach nieuregulowanych umową stosuje się przepisy prawa polskiego, w szczególności Kodeksu cywilnego oraz przepisy dotyczące procesu budowlanego i ochrony konsumentów, odpowiednio do statusu Zamawiającego i charakteru wykonywanych prac.</p>
+          <p class="text-justify"><span class="text-slate-400 font-semibold select-none mr-1">2.</span>Jeżeli którekolwiek z postanowień umowy okaże się nieważne lub bezskuteczne, nie wpływa to na ważność pozostałych postanowień, z zastrzeżeniem bezwzględnie obowiązujących przepisów prawa.</p>
+          <p><span class="text-slate-400 font-semibold select-none mr-1">3.</span>Umowę sporządzono w dwóch jednobrzmiących egzemplarzach, po jednym dla każdej ze stron.</p>
+          <p><span class="text-slate-400 font-semibold select-none mr-1">4.</span>Integralną część umowy stanowią załączniki wymienione w umowie. Ilekroć w umowie mowa jest o „dniach roboczych", rozumie się przez to dni od poniedziałku do piątku, z wyłączeniem dni ustawowo wolnych od pracy.</p>
+          <p class="text-justify"><span class="text-slate-400 font-semibold select-none mr-1">5.</span>Strony będą dążyć do polubownego rozwiązywania sporów wynikłych z niniejszej umowy. W przypadku braku porozumienia, sądem właściwym do rozstrzygania sporów jest sąd właściwy według przepisów powszechnie obowiązujących, z zastrzeżeniem bezwzględnie obowiązujących przepisów o właściwości sądu w sprawach konsumenckich.</p>
         </div>
         <p class="text-[11px] text-slate-500 mt-2">
           <strong>Załączniki:</strong>
