@@ -674,7 +674,7 @@ const ContractApp = {
           <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Rozstaw rur zostanie określony w dokumentacji lub Załączniku Technicznym. Trasa każdego obiegu zostanie wykonana w sposób umożliwiający prawidłową pracę instalacji, odpowietrzenie oraz regulację hydrauliczną. Rury należy prowadzić w sposób ograniczający ryzyko ich uszkodzenia przez kolejne ekipy budowlane.
         </p>
         <p class="text-[11.5px] text-slate-700">
-          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Po wykonaniu instalacji Wykonawca oznacza poszczególne obiegi zgodnie z przyjętym schematem. Położenie rur, rozdzielaczy i innych elementów instalacji może zostać udokumentowane fotografiami wykonanymi przez Wykonawcę jako dokumentacja robót zanikających.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Po wykonaniu instalacji Wykonawca oznacza poszczególne obiegi zgodnie z przyjętym schematem. Położenie rur, rozdzielaczy i innych elementów instalacji może zostać udokumentowane fotografiami wykonanymi przez Wykonawcę. Wykonawca może wykonać dokumentację fotograficzną instalacji jako dokumentację robót zanikających.
         </p>
       </div>
 
@@ -763,45 +763,51 @@ const ContractApp = {
       <!-- §12 -->
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;12.</span> Termin wykonania</h2>
-        <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-[11.5px] text-slate-700 grid grid-cols-2 gap-2 mb-1">
-          <div>Planowany termin rozpoczęcia prac: <strong>${startFmt}</strong></div>
-          <div>Planowany termin zakończenia prac: <strong>${endFmt}</strong></div>
+        <div class="flex items-start mb-1">
+          <span class="text-slate-400 font-semibold select-none mr-1 mt-0.5 text-[11.5px]">1.</span>
+          <div class="flex-1 bg-slate-50 border border-slate-200 rounded-lg p-2 text-[11.5px] text-slate-700 grid grid-cols-2 gap-2">
+            <div>Planowany termin rozpoczęcia prac: <strong>${startFmt}</strong></div>
+            <div>Planowany termin zakończenia prac: <strong>${endFmt}</strong></div>
+          </div>
         </div>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Termin może ulec zmianie, jeżeli wystąpią przeszkody niezależne od Wykonawcy, w szczególności: brak przygotowania placu budowy, brak dostępu do obiektu, opóźnienia innych wykonawców, konieczność usunięcia wad podłoża, zmiany dokumentacji, brak materiałów po stronie Zamawiającego, warunki uniemożliwiające bezpieczne wykonanie prac.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Termin może ulec zmianie, jeżeli wystąpią przeszkody niezależne od Wykonawcy, w szczególności: brak przygotowania placu budowy, brak dostępu do obiektu, opóźnienia innych wykonawców, konieczność usunięcia wad podłoża, zmiany dokumentacji, brak materiałów po stronie Zamawiającego, warunki uniemożliwiające bezpieczne wykonanie prac.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Opóźnienie spowodowane koniecznością wykonania prac przez inne ekipy lub brakiem współdziałania Zamawiającego nie stanowi opóźnienia Wykonawcy.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Opóźnienie spowodowane koniecznością wykonania prac przez inne ekipy lub brakiem współdziałania Zamawiającego nie stanowi opóźnienia Wykonawcy.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>O każdej zmianie terminu Wykonawca informuje Zamawiającego niezwłocznie, wskazując przyczynę oraz nowy planowany termin. Termin realizacji ulega przedłużeniu o czas trwania przeszkody powiększony o czas niezbędny do wznowienia prac.
+          <span class="text-slate-400 font-semibold select-none mr-1">4.</span>O każdej zmianie terminu, o której mowa w ust. 3, Wykonawca informuje Zamawiającego niezwłocznie, wskazując przyczynę oraz nowy planowany termin. Termin realizacji ulega przedłużeniu o czas trwania przeszkody, o której mowa w ust. 3, powiększony o czas niezbędny do wznowienia prac.
         </p>
       </div>
 
       <!-- §13 -->
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;13.</span> Wynagrodzenie i płatności</h2>
-        <div class="bg-orange-50 border border-orange-200 rounded-lg p-2.5 text-[11.5px] text-slate-800 space-y-1 mb-2">
-          <div>Wynagrodzenie za wykonanie przedmiotu umowy wynosi:
-            <strong>${d.priceNetto.toLocaleString('pl-PL')} zł netto</strong>,
-            VAT ${vatStr}: <strong>${(brutto - d.priceNetto).toLocaleString('pl-PL')} zł</strong>,
-            łącznie: <strong>${brutto.toLocaleString('pl-PL')} zł brutto</strong>
-            (słownie: <em>${slownie}</em>).
+        <div class="flex items-start mb-2">
+          <span class="text-slate-400 font-semibold select-none mr-1 mt-0.5 text-[11.5px]">1.</span>
+          <div class="flex-1 bg-orange-50 border border-orange-200 rounded-lg p-2.5 text-[11.5px] text-slate-800 space-y-1">
+            <div>Wynagrodzenie za wykonanie przedmiotu umowy wynosi:
+              <strong>${d.priceNetto.toLocaleString('pl-PL')} zł netto</strong>,
+              VAT ${vatStr}: <strong>${(brutto - d.priceNetto).toLocaleString('pl-PL')} zł</strong>,
+              łącznie: <strong>${brutto.toLocaleString('pl-PL')} zł brutto</strong>
+              (słownie: <em>${slownie}</em>).
+            </div>
+            <div>Wynagrodzenie ma charakter: <strong>&#9746; ryczałtowy</strong> &#9744; kosztorysowy.</div>
           </div>
-          <div>Wynagrodzenie ma charakter: <strong>&#9746; ryczałtowy</strong> &#9744; kosztorysowy.</div>
         </div>
-        <p class="text-[11.5px] text-slate-700 mb-1"><span class="text-slate-400 font-semibold select-none mr-1">1.</span><strong>Terminy płatności:</strong></p>
-        <div class="pl-2 text-[11.5px] text-slate-700 space-y-0.5 mb-1">
+        <p class="text-[11.5px] text-slate-700 mb-1"><span class="text-slate-400 font-semibold select-none mr-1">2.</span><strong>Terminy płatności:</strong></p>
+        <div class="pl-4 text-[11.5px] text-slate-700 space-y-0.5 mb-1">
           <div>Zaliczka: <strong>${depositAmtStr}</strong>, płatna do <strong>${depositDateFmt}</strong></div>
           <div>I rata: <strong>${rata1AmtStr}</strong>, płatna <strong>${rata1DateFmt}</strong></div>
           <div>II rata: <strong>${rata2AmtStr}</strong>, płatna <strong>${rata2DateFmt}</strong></div>
-          <div class="text-[11px] text-slate-600">Nr konta Wykonawcy: <span class="font-mono">${d.contractorBank}</span></div>
+          <div class="text-[11px] text-slate-600 mt-1">Nr konta Wykonawcy: <span class="font-mono">${d.contractorBank}</span></div>
         </div>
         <p class="text-[11.5px] text-slate-700 mb-1">
-          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Za dzień zapłaty uznaje się dzień uznania rachunku bankowego Wykonawcy. Materiały lub prace dodatkowe niewskazane w ofercie mogą zostać rozliczone odrębnie na podstawie uzgodnienia stron.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Za dzień zapłaty uznaje się dzień uznania rachunku bankowego Wykonawcy. Materiały lub prace dodatkowe niewskazane w ofercie mogą zostać rozliczone odrębnie na podstawie uzgodnienia stron.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>W przypadku opóźnienia Zamawiającego w zapłacie zaliczki, raty lub innej należności przekraczającego 3 dni robocze od terminu płatności, Wykonawcy przysługują odsetki ustawowe za opóźnienie oraz prawo do wstrzymania wykonywania prac do czasu zaksięgowania zaległej wpłaty na rachunku bankowym Wykonawcy. Terminy realizacji, o których mowa w §12, ulegają wówczas przedłużeniu o czas trwania wstrzymania prac.
+          <span class="text-slate-400 font-semibold select-none mr-1">4.</span>W przypadku opóźnienia Zamawiającego w zapłacie zaliczki, raty lub innej należności przekraczającego 3 dni robocze od terminu płatności, Wykonawcy przysługują odsetki ustawowe za opóźnienie oraz prawo do wstrzymania wykonywania prac do czasu zaksięgowania zaległej wpłaty na rachunku bankowym Wykonawcy. Terminy realizacji, o których mowa w §12, ulegają wówczas przedłużeniu o czas trwania wstrzymania prac.
         </p>
       </div>
 
@@ -839,17 +845,17 @@ const ContractApp = {
       <!-- §15 -->
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;15.</span> Normy, przepisy i zasady techniczne</h2>
-        <p class="text-[11.5px] text-slate-700 mb-1"><span class="text-slate-400 font-semibold select-none mr-1">1.</span>Instalacja wykonywana jest z uwzględnieniem obowiązujących przepisów prawa, zasad wiedzy technicznej oraz następujących Polskich Norm:</p>
+        <p class="text-[11.5px] text-slate-700 mb-1"><span class="text-slate-400 font-semibold select-none mr-1">1.</span>Instalacja wykonywana jest z uwzględnieniem obowiązujących przepisów prawa, zasad wiedzy technicznej oraz – w zakresie przyjętym niniejszą umową – następujących Polskich Norm:</p>
         <ul class="list-disc list-inside text-[11px] text-slate-600 pl-2 space-y-0.5 mb-1">
           <li>PN-EN 1264-1:2021-10 – Wodne wbudowane systemy ogrzewania i chłodzenia płaszczyznowego – Część 1: Definicje i symbole;</li>
-          <li>PN-EN 1264-2:2021-10 – Część 2: metody określania mocy cieplnej;</li>
-          <li>PN-EN 1264-3:2021-10 – Część 3: Wymiarowanie;</li>
-          <li>PN-EN 1264-4:2021-10 – Część 4: Instalowanie;</li>
+          <li>PN-EN 1264-2:2021-10 – Wodne wbudowane systemy ogrzewania i chłodzenia płaszczyznowego – Część 2: metody określania mocy cieplnej;</li>
+          <li>PN-EN 1264-3:2021-10 – Wodne wbudowane systemy ogrzewania i chłodzenia płaszczyznowego – Część 3: Wymiarowanie;</li>
+          <li>PN-EN 1264-4:2021-10 – Wodne wbudowane systemy ogrzewania i chłodzenia płaszczyznowego – Część 4: Instalowanie;</li>
           <li>PN-EN 14336:2025-11 – Instalacje grzewcze w budynkach – Montaż i przekazanie do eksploatacji wodnych systemów grzewczych i chłodzących;</li>
-          <li>PN-EN 12831-1:2017-08 – Charakterystyka energetyczna budynków – Metoda obliczania projektowego obciążenia cieplnego – Część 1.</li>
+          <li>PN-EN 12831-1:2017-08 – Charakterystyka energetyczna budynków – Metoda obliczania projektowego obciążenia cieplnego – Część 1, w zakresie dotyczącym określenia obciążenia cieplnego budynku.</li>
         </ul>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>W przypadku zmiany lub zastąpienia powyższych norm zastosowanie ma ich aktualne wydanie, o ile strony nie postanowią inaczej. W odniesieniu do poszczególnych materiałów i elementów instalacji stosuje się również wymagania producentów oraz dokumentację techniczną tych wyrobów.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>W przypadku zmiany lub zastąpienia powyższych norm zastosowanie ma ich aktualne wydanie, o ile strony nie postanowią inaczej i nie jest to sprzeczne z obowiązującymi przepisami. W odniesieniu do poszczególnych materiałów i elementów instalacji stosuje się również wymagania producentów oraz dokumentację techniczną tych wyrobów.
         </p>
       </div>
 
@@ -857,28 +863,33 @@ const ContractApp = {
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;16.</span> Odpowiedzialność Wykonawcy</h2>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Wykonawca odpowiada za prawidłowość wykonania prac objętych umową w zakresie wynikającym z niniejszej umowy i obowiązujących przepisów prawa. Wykonawca nie odpowiada za elementy instalacji lub budynku pozostające poza zakresem jego prac, chyba że strony wyraźnie postanowiły inaczej.
+          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Wykonawca odpowiada za prawidłowość wykonania prac objętych umową w zakresie wynikającym z niniejszej umowy i obowiązujących przepisów prawa.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>W szczególności odpowiedzialność Wykonawcy nie obejmuje wad: konstrukcji budynku, izolacji wykonanej przez inną ekipę, jastrychu, posadzki, źródła ciepła, automatyki, instalacji elektrycznych, instalacji innych wykonawców, materiałów dostarczonych przez Zamawiającego, jeżeli wada wynika z właściwości tych materiałów.
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Wykonawca nie odpowiada za elementy instalacji lub budynku pozostające poza zakresem jego prac, chyba że strony wyraźnie postanowiły inaczej.
+        </p>
+        <p class="text-[11.5px] text-slate-700 text-justify mb-1">
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>W szczególności odpowiedzialność Wykonawcy nie obejmuje wad: konstrukcji budynku, izolacji wykonanej przez inną ekipę, jastrychu, posadzki, źródła ciepła, automatyki, instalacji elektrycznych, instalacji innych wykonawców, materiałów dostarczonych przez Zamawiającego, jeżeli wada wynika z właściwości tych materiałów.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Powyższe ograniczenia nie wyłączają odpowiedzialności Wykonawcy za szkody lub wady powstałe z jego winy w zakresie, w jakim odpowiedzialność taka wynika z bezwzględnie obowiązujących przepisów prawa.
+          <span class="text-slate-400 font-semibold select-none mr-1">4.</span>Powyższe ograniczenia nie wyłączają odpowiedzialności Wykonawcy za szkody lub wady powstałe z jego winy w zakresie, w jakim odpowiedzialność taka wynika z bezwzględnie obowiązujących przepisów prawa.
         </p>
       </div>
 
       <!-- §17 -->
       <div class="mb-3">
         <h2 class="font-bold text-[12px] text-slate-900 mb-1"><span class="text-orange-600">&sect;17.</span> Gwarancja i odpowiedzialność za wady</h2>
-        <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-[11.5px] text-slate-700 grid grid-cols-2 gap-3 mb-1">
-          <div>Gwarancja na szczelność rurociągów: <strong>${d.warrantyPipes}</strong></div>
-          <div>Gwarancja na montaż i osprzęt: <strong>${d.warrantyMonths} miesięcy</strong> od dnia odbioru</div>
+        <div class="flex items-start mb-1">
+          <span class="text-slate-400 font-semibold select-none mr-1 mt-0.5 text-[11.5px]">1.</span>
+          <div class="flex-1 bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-[11.5px] text-slate-700">
+            Wykonawca udziela na wykonane przez siebie prace gwarancji na okres: <strong>${d.warrantyMonths} miesięcy</strong> od dnia odbioru.
+          </div>
         </div>
-        <p class="text-[11.5px] text-slate-700 mb-1">
-          <span class="text-slate-400 font-semibold select-none mr-1">1.</span>Gwarancja obejmuje w szczególności wady wykonawcze instalacji powstałe z przyczyn leżących po stronie Wykonawcy. Gwarancja nie obejmuje uszkodzeń powstałych wskutek: ingerencji osób trzecich, wiercenia, kotwienia, cięcia lub innych prac w podłodze, uszkodzenia rur przez inne ekipy, niewłaściwego wykonania jastrychu, nieprawidłowej eksploatacji, zamrożenia instalacji, niewłaściwych parametrów pracy źródła ciepła, zastosowania nieprawidłowych materiałów dostarczonych przez Zamawiającego, samowolnych zmian instalacji.
+        <p class="text-[11.5px] text-slate-700 mb-1 text-justify">
+          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Gwarancja obejmuje w szczególności wady wykonawcze instalacji powstałe z przyczyn leżących po stronie Wykonawcy. Gwarancja nie obejmuje uszkodzeń powstałych wskutek: ingerencji osób trzecich, wiercenia, kotwienia, cięcia lub innych prac w podłodze, uszkodzenia rur przez inne ekipy, niewłaściwego wykonania jastrychu, nieprawidłowej eksploatacji, zamrożenia instalacji, niewłaściwych parametrów pracy źródła ciepła, zastosowania nieprawidłowych materiałów dostarczonych przez Zamawiającego, samowolnych zmian instalacji.
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify">
-          <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Udzielona gwarancja nie ogranicza uprawnień Zamawiającego wynikających z przepisów prawa. Zgłoszenia wad Zamawiający dokonuje w formie pisemnej, dokumentowej lub elektronicznej (e-mail) na adres wskazany w umowie, z opisem wady i terminem weryfikacji. Wykonawca ustosunkuje się do zgłoszenia w terminie 7 dni roboczych i przystąpi do usunięcia uznanej wady w terminie uzgodnionym z Zamawiającym, nie dłuższym niż 30 dni, chyba że charakter wady wymaga terminu dłuższego.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Udzielona gwarancja nie ogranicza uprawnień Zamawiającego wynikających z przepisów prawa, w zakresie, w jakim przepisy te mają zastosowanie. Zgłoszenia wad w ramach gwarancji Zamawiający dokonuje w formie pisemnej, dokumentowej lub elektronicznej (e-mail) na adres wskazany w umowie, z opisem wady i terminem, w którym może być ona zweryfikowana na miejscu. Wykonawca ustosunkuje się do zgłoszenia w terminie 7 dni roboczych i przystąpi do usunięcia uznanej wady w terminie uzgodnionym z Zamawiającym, nie dłuższym niż 30 dni, chyba że charakter wady wymaga terminu dłuższego, o czym Wykonawca poinformuje Zamawiającego.
         </p>
       </div>
 
@@ -908,7 +919,7 @@ const ContractApp = {
           <span class="text-slate-400 font-semibold select-none mr-1">2.</span>Jeżeli umowa została zawarta poza lokalem przedsiębiorstwa Wykonawcy lub na odległość, Zamawiającemu będącemu konsumentem przysługuje prawo odstąpienia od umowy w terminie 14 dni od dnia jej zawarcia, bez podania przyczyny, zgodnie z ustawą z dnia 30 maja 2014 r. o prawach konsumenta, poprzez złożenie Wykonawcy jednoznacznego oświadczenia o odstąpieniu (np. pismem lub pocztą elektroniczną).
         </p>
         <p class="text-[11.5px] text-slate-700 text-justify mb-1">
-          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Jeżeli Zamawiający będący konsumentem chce, aby Wykonawca rozpoczął wykonywanie usługi przed upływem terminu do odstąpienia od umowy, zobowiązany jest złożyć odrębne, wyraźne oświadczenie w tym zakresie. Niezłożenie takiego oświadczenia oznacza, że Wykonawca rozpocznie prace dopiero po upływie terminu do odstąpienia od umowy.
+          <span class="text-slate-400 font-semibold select-none mr-1">3.</span>Jeżeli Zamawiający będący konsumentem chce, aby Wykonawca rozpoczął wykonywanie usługi przed upływem terminu do odstąpienia od umowy, o którym mowa w ust. 3, zobowiązany jest złożyć odrębne, wyraźne oświadczenie w tym zakresie. Niezłożenie takiego oświadczenia oznacza, że Wykonawca rozpocznie prace dopiero po upływie terminu do odstąpienia od umowy.
         </p>
         <div class="bg-amber-50 border border-amber-200 rounded-lg p-2.5 text-[11.5px] text-slate-800 mb-1">
           <p class="font-semibold mb-1">Oświadczenie Zamawiającego (dotyczy wyłącznie konsumentów):</p>
@@ -931,7 +942,8 @@ const ContractApp = {
           <div>${cb(d.docLoopList)} wykaz obiegów i długości rur,</div>
           <div>${cb(d.docPhotos)} zdjęcia instalacji przed wykonaniem jastrychu,</div>
           <div>${cb(d.docManifoldInfo)} informacje dotyczące rozdzielaczy,</div>
-          <div>${cb(d.docManual)} instrukcję użytkowania.</div>
+          <div>${cb(d.docManual)} instrukcję użytkowania,</div>
+          <div>${cb(false)} inne: ....................................................................................</div>
         </div>
       </div>
 
@@ -979,8 +991,8 @@ const ContractApp = {
         <div class="text-[11.5px] text-slate-700 space-y-1">
           <p class="text-justify"><span class="text-slate-400 font-semibold select-none mr-1">1.</span>W sprawach nieuregulowanych umową stosuje się przepisy prawa polskiego, w szczególności Kodeksu cywilnego oraz przepisy dotyczące procesu budowlanego i ochrony konsumentów, odpowiednio do statusu Zamawiającego i charakteru wykonywanych prac.</p>
           <p class="text-justify"><span class="text-slate-400 font-semibold select-none mr-1">2.</span>Jeżeli którekolwiek z postanowień umowy okaże się nieważne lub bezskuteczne, nie wpływa to na ważność pozostałych postanowień, z zastrzeżeniem bezwzględnie obowiązujących przepisów prawa.</p>
-          <p><span class="text-slate-400 font-semibold select-none mr-1">3.</span>Umowę sporządzono w dwóch jednobrzmiących egzemplarzach, po jednym dla każdej ze stron.</p>
-          <p><span class="text-slate-400 font-semibold select-none mr-1">4.</span>Integralną część umowy stanowią załączniki wymienione w umowie. Ilekroć w umowie mowa jest o „dniach roboczych", rozumie się przez to dni od poniedziałku do piątku, z wyłączeniem dni ustawowo wolnych od pracy.</p>
+          <p><span class="text-slate-400 font-semibold select-none mr-1">3.</span>Umowę sporządzono w dwóch jednobrzmiących egzemplarzach, po jednym dla każdej ze stron / zawarto w formie elektronicznej.</p>
+          <p><span class="text-slate-400 font-semibold select-none mr-1">4.</span>Integralną część umowy stanowią załączniki wymienione w umowie. Ilekroć w umowie mowa jest o „dniach roboczych”, rozumie się przez to dni od poniedziałku do piątku, z wyłączeniem dni ustawowo wolnych od pracy.</p>
           <p class="text-justify"><span class="text-slate-400 font-semibold select-none mr-1">5.</span>Strony będą dążyć do polubownego rozwiązywania sporów wynikłych z niniejszej umowy. W przypadku braku porozumienia, sądem właściwym do rozstrzygania sporów jest sąd właściwy według przepisów powszechnie obowiązujących, z zastrzeżeniem bezwzględnie obowiązujących przepisów o właściwości sądu w sprawach konsumenckich.</p>
         </div>
         <p class="text-[11px] text-slate-500 mt-2">
