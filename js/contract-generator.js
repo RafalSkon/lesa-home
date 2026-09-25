@@ -1,4 +1,4 @@
-﻿/**
+/**
  * LeSa - Home: Legal Contract & Technical Handover Protocol Generator
  * Complete Web Application Engine for HVAC / Floor Heating Contracts
  */
@@ -558,17 +558,17 @@ const ContractApp = {
         
         <!-- Header / Logo -->
         <div class="flex items-center justify-between pb-3 border-b-2 border-slate-900 mb-5">
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center p-1 text-white">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-orange-600 flex items-center justify-center p-1.5 shadow-sm print:bg-orange-600 print-exact">
               <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
                 <path d="M22,64 A36,36 0 1,1 76,77" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" />
-                <path d="M42,30 A20,20 0 0,1 70,58" fill="none" stroke="#ea580c" stroke-width="7.5" stroke-linecap="round" />
-                <circle cx="50" cy="50" r="4" fill="#ea580c" />
+                <path d="M42,30 A20,20 0 0,1 70,58" fill="none" stroke="#e0e7ff" stroke-width="7.5" stroke-linecap="round" />
+                <circle cx="50" cy="50" r="4" fill="#ffffff" />
               </svg>
             </div>
             <div>
               <span class="text-base font-extrabold tracking-tight text-slate-900 font-heading">LeSa <span class="text-orange-600">HOME</span></span>
-              <span class="text-[9px] uppercase tracking-widest text-slate-500 block -mt-1">Nowoczesne Systemy Grzewcze &bull; Ogrzewanie Podłogowe</span>
+              <span class="text-[9px] uppercase tracking-widest text-slate-500 block -mt-1">Nowoczesne Systemy Grzewcze &bull; Instalacje HVAC</span>
             </div>
           </div>
           <div class="text-right text-[11px] text-slate-600">
@@ -777,10 +777,19 @@ const ContractApp = {
       protocolHtml = `
         <div class="document-page">
           
-          <div class="flex items-center justify-between pb-3 border-b-2 border-slate-900 mb-4">
-            <div class="flex items-center gap-2">
-              <span class="text-sm font-extrabold tracking-tight text-slate-900 font-heading">LeSa <span class="text-orange-600">HOME</span></span>
-              <span class="text-[10px] text-slate-500 font-semibold">| PROTOKÓŁ TECHNICZNY</span>
+          <div class="flex items-center justify-between pb-3 border-b-2 border-slate-900 mb-5">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-orange-600 flex items-center justify-center p-1.5 shadow-sm print:bg-orange-600 print-exact">
+                <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
+                  <path d="M22,64 A36,36 0 1,1 76,77" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" />
+                  <path d="M42,30 A20,20 0 0,1 70,58" fill="none" stroke="#e0e7ff" stroke-width="7.5" stroke-linecap="round" />
+                  <circle cx="50" cy="50" r="4" fill="#ffffff" />
+                </svg>
+              </div>
+              <div>
+                <span class="text-base font-extrabold tracking-tight text-slate-900 font-heading">LeSa <span class="text-orange-600">HOME</span></span>
+                <span class="text-[9px] uppercase tracking-widest text-slate-500 block -mt-1">Nowoczesne Systemy Grzewcze &bull; Protokół Techniczny</span>
+              </div>
             </div>
             <div class="text-right text-[10px] text-slate-600">
               Załącznik nr 1 do Umowy: <strong>${d.contractNo}</strong>
