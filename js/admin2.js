@@ -477,6 +477,7 @@ const AdminApp = {
        let docsHtml = '';
        let hasDocs = false;
        
+       // --- UMOWY ---
        if (window.ApiService) {
            const contracts = await ApiService.getContracts();
            const projContracts = contracts.filter(c => {
@@ -493,7 +494,7 @@ const AdminApp = {
                            <svg class="w-4 h-4 text-orange-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
                            <div class="flex flex-col">
                               <span class="font-bold text-slate-800">Zapisana Umowa (Robocza)</span> 
-                              <span class="text-slate-400 text-[9px]">Data zapisu: ${c.savedAt}</span>
+                              <span class="text-slate-400 text-[9px]">Zapisano: ${c.savedAt}</span>
                            </div>
                        </div>
                        <button onclick="AdminApp.openProjectInTool('generator')" class="text-[9px] bg-orange-50 hover:bg-orange-100 border border-orange-100 px-1.5 py-0.5 rounded text-orange-700 font-mono transition-colors">Otwórz (${c.contractNo || 'BR-NR'})</button>
@@ -502,6 +503,68 @@ const AdminApp = {
            }
        }
 
+       // --- OFERTY ---
+       let offers = [];
+       if (window.ApiService && typeof ApiService.getOffers === 'function') {
+           offers = await ApiService.getOffers();
+       } else {
+           offers = JSON.parse(localStorage.getItem('lesa_saved_offers') || '[]');
+       }
+       const projOffers = offers.filter(o => {
+           if (o.projectId === projectId) return true;
+           if (proj.clientName && o.clientName && o.clientName.toLowerCase().includes(proj.clientName.toLowerCase().split(' ')[0])) return true;
+           return false;
+       });
+       if (projOffers.length > 0) {
+           hasDocs = true;
+           projOffers.forEach(o => {
+               const dateStr = o.date || new Date().toISOString().split('T')[0];
+               docsHtml += `<div class="p-2 bg-white border border-slate-200 rounded-lg shadow-sm flex items-center justify-between gap-2 mb-1">
+                   <div class="flex items-center gap-2">
+                       <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                       <div class="flex flex-col">
+                          <span class="font-bold text-slate-800">Zapisana Oferta</span> 
+                          <span class="text-slate-400 text-[9px]">Data: ${dateStr}</span>
+                       </div>
+                   </div>
+                   <button onclick="AdminApp.openProjectInTool('oferta')" class="text-[9px] bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 px-1.5 py-0.5 rounded text-emerald-700 font-mono transition-colors">Otwórz (${o.number || 'NR'})</button>
+               </div>`;
+           });
+       }
+
+       // --- PROTOKÓŁ SZCZELNOŚCI ---
+       if (proj.protocols && proj.protocols.szczelnosc) {
+           hasDocs = true;
+           const d = proj.protocols.szczelnoscDate ? new Date(proj.protocols.szczelnoscDate).toLocaleDateString('pl-PL') : 'Zapisano';
+           docsHtml += `<div class="p-2 bg-white border border-slate-200 rounded-lg shadow-sm flex items-center justify-between gap-2 mb-1">
+               <div class="flex items-center gap-2">
+                   <svg class="w-4 h-4 text-sky-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                   <div class="flex flex-col">
+                      <span class="font-bold text-slate-800">Protokół Szczelności</span> 
+                      <span class="text-slate-400 text-[9px]">Data: ${d}</span>
+                   </div>
+               </div>
+               <button onclick="AdminApp.openProjectInTool('protokol1')" class="text-[9px] bg-sky-50 hover:bg-sky-100 border border-sky-100 px-1.5 py-0.5 rounded text-sky-700 font-mono transition-colors">Otwórz</button>
+           </div>`;
+       }
+
+       // --- PROTOKÓŁ ODBIORU ---
+       if (proj.protocols && proj.protocols.odbior) {
+           hasDocs = true;
+           const d = proj.protocols.odbiorDate ? new Date(proj.protocols.odbiorDate).toLocaleDateString('pl-PL') : 'Zapisano';
+           docsHtml += `<div class="p-2 bg-white border border-slate-200 rounded-lg shadow-sm flex items-center justify-between gap-2 mb-1">
+               <div class="flex items-center gap-2">
+                   <svg class="w-4 h-4 text-purple-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                   <div class="flex flex-col">
+                      <span class="font-bold text-slate-800">Protokół Odbioru (Końcowy)</span> 
+                      <span class="text-slate-400 text-[9px]">Data: ${d}</span>
+                   </div>
+               </div>
+               <button onclick="AdminApp.openProjectInTool('protokol2')" class="text-[9px] bg-purple-50 hover:bg-purple-100 border border-purple-100 px-1.5 py-0.5 rounded text-purple-700 font-mono transition-colors">Otwórz</button>
+           </div>`;
+       }
+
+       // --- POZOSTAŁE PLIKI (np. ręcznie wrzucone PDF) ---
        if (window.ApiService) {
            const files = await ApiService.getProjectFiles(projectId);
            const otherDocs = files.filter(f => {
@@ -531,7 +594,7 @@ const AdminApp = {
        if (hasDocs) {
            listEl.innerHTML = docsHtml;
        } else {
-           listEl.innerHTML = 'Brak wgranych / zapisanych dokumentów. Użyj generatora, aby sporządzić umowę.';
+           listEl.innerHTML = 'Brak wgranych / zapisanych dokumentów. Użyj generatorów, aby sporządzić ofertę, umowę lub protokół.';
        }
     } catch(e) {
        console.error(e);
