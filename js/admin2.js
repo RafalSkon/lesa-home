@@ -369,12 +369,88 @@ const AdminApp = {
     const nipEl = document.getElementById('cd-nip');
     if (nipEl) nipEl.textContent = 'NIP: ' + (client.nip || 'Brak');
     
+    let street = (client.address || '').trim();
+    let city = (client.city || '').trim();
+
+    // Jeśli w polu address znajduje się kod pocztowy i miasto (np. "JURIJA GAGARINA 46/9, 87-100 TORUŃ")
+    if (street) {
+      const match = street.match(/^(.*?)[,\s]+(\d{2}-\d{3}\s+.*)$/i);
+      if (match) {
+        street = match[1].trim();
+        if (!city) {
+          city = match[2].trim();
+        }
+      }
+    }
+
     const cdAddress = document.getElementById('cd-address');
-    if (cdAddress) cdAddress.textContent = (client.address || '') + (client.city ? ', ' + client.city : '');
+    if (cdAddress) {
+      cdAddress.textContent = street || 'Brak adresu ulicy';
+    }
+
+    const cdCity = document.getElementById('cd-city');
+    if (cdCity) {
+      if (city) {
+        cdCity.textContent = city;
+        cdCity.classList.remove('hidden');
+      } else {
+        cdCity.textContent = '';
+        cdCity.classList.add('hidden');
+      }
+    }
     
-    const cdContact = document.getElementById('cd-contact');
-    if (cdContact) cdContact.textContent = (client.phone || '') + (client.email ? ' | ' + client.email : '');
+    const phoneEl = document.getElementById('cd-phone');
+    if (phoneEl) {
+      const phone = (client.phone || '').trim();
+      if (phone) {
+        phoneEl.innerHTML = `<a href="tel:${phone}" class="text-slate-900 font-semibold hover:text-emerald-600 hover:underline transition-colors">${phone}</a>`;
+      } else {
+        phoneEl.innerHTML = `<span class="text-slate-400">Brak telefonu <button onclick="AdminApp.editClient()" class="text-xs text-blue-500 hover:text-blue-700 font-bold ml-1 hover:underline">(+ dodaj)</button></span>`;
+      }
+    }
+
+    const emailEl = document.getElementById('cd-email');
+    if (emailEl) {
+      const email = (client.email || '').trim();
+      if (email) {
+        emailEl.innerHTML = `<a href="mailto:${email}" class="text-slate-900 font-semibold hover:text-emerald-600 hover:underline transition-colors">${email}</a>`;
+      } else {
+        emailEl.innerHTML = `<span class="text-slate-400">Brak e-mail <button onclick="AdminApp.editClient()" class="text-xs text-blue-500 hover:text-blue-700 font-bold ml-1 hover:underline">(+ dodaj)</button></span>`;
+      }
+    }
     
+    // Statystyki i projekty powiązane z tym kontrahentem
+    const clientProjects = this.projects.filter(p => (p.client_id === id || p.clientId === id));
+    
+    const statProjects = document.getElementById('cd-stat-projects');
+    if (statProjects) statProjects.textContent = clientProjects.length;
+
+    let totalArea = 0;
+    clientProjects.forEach(p => {
+      if (p.cadData && p.cadData.area) {
+        totalArea += parseFloat(p.cadData.area) || 0;
+      }
+    });
+    const statArea = document.getElementById('cd-stat-area');
+    if (statArea) statArea.textContent = Math.round(totalArea) + ' m²';
+
+    const projListEl = document.getElementById('cd-projects-list');
+    if (projListEl) {
+      if (clientProjects.length === 0) {
+        projListEl.innerHTML = '<div class="text-xs text-slate-400 py-4 bg-slate-50 rounded-xl text-center border border-slate-200">Ten kontrahent nie ma jeszcze żadnych projektów.</div>';
+      } else {
+        projListEl.innerHTML = clientProjects.map(p => `
+          <div onclick="AdminApp.switchTab('projects'); AdminApp.viewProject('${p.id}');" class="p-3 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer flex items-center justify-between transition-colors">
+            <div>
+              <div class="font-bold text-slate-800 text-xs">${p.title || p.projectTitle || 'Projekt'}</div>
+              <div class="text-[10px] text-slate-500">${p.address || p.investmentAddress || 'Brak adresu'} ${p.city ? ', ' + p.city : ''}</div>
+            </div>
+            <span class="text-[10px] px-2 py-0.5 rounded font-bold ${p.status === 'Zakończony' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'}">${p.status || 'Nowy'}</span>
+          </div>
+        `).join('');
+      }
+    }
+
     this.currentViewedClientId = id;
   },
 
@@ -1068,10 +1144,13 @@ const AdminApp = {
       this.showToast('Zapisano kontrahenta.');
       this.loadClientsData();
       if (typeof this.renderClientsList === 'function') this.renderClientsList();
+      if (this.currentViewedClientId === data.id) {
+        this.viewClient(data.id);
+      }
     }
   },
 
-  openProjectModal(id = null) {
+  openProjectModal(id = null, preselectedClientId = null) {
     document.getElementById('project-modal').classList.remove('hidden');
     this.populateClientDropdown();
     
@@ -1090,17 +1169,18 @@ const AdminApp = {
     } else {
       document.getElementById('project-modal-title').textContent = 'Nowy Projekt';
       document.getElementById('modal-project-id').value = '';
-      document.getElementById('modal-project-client-id').value = '';
+      const cId = preselectedClientId || '';
+      document.getElementById('modal-project-client-id').value = cId;
       document.getElementById('modal-project-title').value = '';
       document.getElementById('modal-project-address').value = '';
       document.getElementById('modal-project-city').value = '';
       if (document.getElementById('modal-project-status')) document.getElementById('modal-project-status').value = 'Nowy';
-      this.updateClientDropdownText('');
+      this.updateClientDropdownText(cId);
     }
   },
   
   openProjectModalForClient() {
-    this.openProjectModal();
+    this.openProjectModal(null, this.currentViewedClientId);
   },
 
 
