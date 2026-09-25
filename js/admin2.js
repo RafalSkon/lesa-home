@@ -463,7 +463,82 @@ const AdminApp = {
     this.currentViewedProjectId = id;
     this.loadProjectPhotos(id);
     this.loadProjectCadData(id);
+    this.loadProjectDocs(id);
   },
+
+  async loadProjectDocs(projectId) {
+    const listEl = document.getElementById('pd-docs-list');
+    if (!listEl) return;
+    const proj = this.projects.find(p => p.id === projectId);
+    if (!proj) return;
+    
+    listEl.innerHTML = '<div class="text-slate-400">Sprawdzanie bazy...</div>';
+    try {
+       let docsHtml = '';
+       let hasDocs = false;
+       
+       if (window.ApiService) {
+           const contracts = await ApiService.getContracts();
+           const projContracts = contracts.filter(c => {
+               if (c.data && c.data.projectId === projectId) return true;
+               if (proj.clientName && c.clientName && c.clientName.toLowerCase().includes(proj.clientName.toLowerCase().split(' ')[0])) return true;
+               return false;
+           });
+           
+           if (projContracts.length > 0) {
+               hasDocs = true;
+               projContracts.forEach(c => {
+                   docsHtml += `<div class="p-2 bg-white border border-slate-200 rounded-lg shadow-sm flex items-center justify-between gap-2 mb-1">
+                       <div class="flex items-center gap-2">
+                           <svg class="w-4 h-4 text-orange-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                           <div class="flex flex-col">
+                              <span class="font-bold text-slate-800">Zapisana Umowa (Robocza)</span> 
+                              <span class="text-slate-400 text-[9px]">Data zapisu: ${c.savedAt}</span>
+                           </div>
+                       </div>
+                       <button onclick="AdminApp.openProjectInTool('generator')" class="text-[9px] bg-orange-50 hover:bg-orange-100 border border-orange-100 px-1.5 py-0.5 rounded text-orange-700 font-mono transition-colors">Otwórz (${c.contractNo || 'BR-NR'})</button>
+                   </div>`;
+               });
+           }
+       }
+
+       if (window.ApiService) {
+           const files = await ApiService.getProjectFiles(projectId);
+           const otherDocs = files.filter(f => {
+               const ft = f.fileType || f.file_type || '';
+               const fn = f.fileName || f.file_name || '';
+               return !ft.startsWith('photo') && ft !== 'cad' && (fn.endsWith('.pdf') || fn.endsWith('.doc') || fn.endsWith('.docx'));
+           });
+           if (otherDocs.length > 0) {
+               hasDocs = true;
+               otherDocs.forEach(f => {
+                   const url = f.fileUrl || f.file_url;
+                   const fn = f.fileName || f.file_name || 'Dokument';
+                   docsHtml += `<div class="p-2 bg-white border border-slate-200 rounded-lg shadow-sm flex items-center justify-between gap-2 mb-1">
+                       <div class="flex items-center gap-2">
+                           <svg class="w-4 h-4 text-blue-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                           <div class="flex flex-col truncate max-w-[150px]">
+                              <span class="font-bold text-slate-800 truncate" title="${fn}">${fn}</span> 
+                              <span class="text-slate-400 text-[9px]">Plik na serwerze</span>
+                           </div>
+                       </div>
+                       <a href="${url}" target="_blank" class="text-[9px] bg-blue-50 hover:bg-blue-100 border border-blue-100 px-1.5 py-0.5 rounded text-blue-700 transition-colors shrink-0">Pobierz</a>
+                   </div>`;
+               });
+           }
+       }
+       
+       if (hasDocs) {
+           listEl.innerHTML = docsHtml;
+       } else {
+           listEl.innerHTML = 'Brak wgranych / zapisanych dokumentów. Użyj generatora, aby sporządzić umowę.';
+       }
+    } catch(e) {
+       console.error(e);
+       listEl.innerHTML = 'Błąd podczas ładowania dokumentów.';
+    }
+  },
+
 
   loadProjectCadData(projectId) {
     const proj = this.projects.find(p => p.id === projectId);
