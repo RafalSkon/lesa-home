@@ -472,38 +472,55 @@ const AdminApp = {
     const proj = this.projects.find(p => p.id === projectId);
     if (!proj) return;
     
+    // Dane klienta i projektu do inteligentnego powiązania
+    const client = this.clients.find(x => x.id === (proj.client_id || proj.clientId));
+    const clientName = (proj.clientName || (client ? (client.name || client.client_name) : '') || '').trim();
+    const clientParts = clientName ? clientName.toLowerCase().split(/\s+/).filter(p => p.length >= 3) : [];
+    const projTitle = (proj.title || proj.projectTitle || '').trim().toLowerCase();
+    const projAddress = (proj.address || proj.investmentAddress || '').trim().toLowerCase();
+
+    // Sprawdzenie lokalnej pamięci podręcznej projektów
+    const localProjects = JSON.parse(localStorage.getItem('lesa_projects') || '[]');
+    const localProj = localProjects.find(p => p.id === projectId) || {};
+    
     listEl.innerHTML = '<div class="text-slate-400">Sprawdzanie bazy...</div>';
     try {
        let docsHtml = '';
        let hasDocs = false;
        
-       // --- UMOWY ---
+       // --- 1. UMOWY ---
        if (window.ApiService) {
            const contracts = await ApiService.getContracts();
            const projContracts = contracts.filter(c => {
-               if (c.data && c.data.projectId === projectId) return true;
-               if (proj.clientName && c.clientName && c.clientName.toLowerCase().includes(proj.clientName.toLowerCase().split(' ')[0])) return true;
+               if (c.projectId && (c.projectId === projectId || c.projectId === proj.id)) return true;
+               if (c.data && (c.data.projectId === projectId || c.data.projectId === proj.id)) return true;
+               if (clientParts.length > 0 && c.clientName) {
+                   const cName = c.clientName.toLowerCase();
+                   if (clientParts.some(p => cName.includes(p))) return true;
+               }
                return false;
            });
            
            if (projContracts.length > 0) {
                hasDocs = true;
                projContracts.forEach(c => {
-                   docsHtml += `<div class="p-2 bg-white border border-slate-200 rounded-lg shadow-sm flex items-center justify-between gap-2 mb-1">
-                       <div class="flex items-center gap-2">
-                           <svg class="w-4 h-4 text-orange-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                   docsHtml += `<div class="p-2.5 bg-white border border-slate-200 rounded-xl shadow-sm flex items-center justify-between gap-2 mb-1.5 hover:border-orange-300 transition-colors">
+                       <div class="flex items-center gap-2.5">
+                           <div class="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
+                               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                           </div>
                            <div class="flex flex-col">
-                              <span class="font-bold text-slate-800">Zapisana Umowa (Robocza)</span> 
-                              <span class="text-slate-400 text-[9px]">Zapisano: ${c.savedAt}</span>
+                              <span class="font-bold text-slate-800 text-xs">Umowa Montażowa</span> 
+                              <span class="text-slate-400 text-[10px]">Data zapisu: ${c.savedAt || 'Zapisano w bazie'}</span>
                            </div>
                        </div>
-                       <button onclick="AdminApp.openProjectInTool('generator')" class="text-[9px] bg-orange-50 hover:bg-orange-100 border border-orange-100 px-1.5 py-0.5 rounded text-orange-700 font-mono transition-colors">Otwórz (${c.contractNo || 'BR-NR'})</button>
+                       <button onclick="AdminApp.openProjectInTool('umowa')" class="text-[10px] px-2.5 py-1 bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-lg text-orange-700 font-bold font-mono transition-colors">Otwórz (${c.contractNo || 'UM'})</button>
                    </div>`;
                });
            }
        }
 
-       // --- OFERTY ---
+       // --- 2. OFERTY ---
        let offers = [];
        if (window.ApiService && typeof ApiService.getOffers === 'function') {
            offers = await ApiService.getOffers();
@@ -511,81 +528,125 @@ const AdminApp = {
            offers = JSON.parse(localStorage.getItem('lesa_saved_offers') || '[]');
        }
        const projOffers = offers.filter(o => {
-           if (o.projectId === projectId) return true;
-           if (proj.clientName && o.clientName && o.clientName.toLowerCase().includes(proj.clientName.toLowerCase().split(' ')[0])) return true;
+           if (o.projectId && (o.projectId === projectId || o.projectId === proj.id)) return true;
+           const offClient = (o.clientName || o.clientInfo || '').toLowerCase();
+           const offProject = (o.projectName || '').toLowerCase();
+           const offLoc = (o.projectLocation || o.clientContact || '').toLowerCase();
+           if (clientParts.length > 0) {
+               if (clientParts.some(part => offClient.includes(part) || offProject.includes(part))) return true;
+           }
+           if (projTitle && projTitle.length >= 4 && (offProject.includes(projTitle) || projTitle.includes(offProject))) return true;
+           if (projAddress && projAddress.length >= 5 && (offLoc.includes(projAddress) || projAddress.includes(offLoc))) return true;
            return false;
        });
        if (projOffers.length > 0) {
            hasDocs = true;
            projOffers.forEach(o => {
                const dateStr = o.date || new Date().toISOString().split('T')[0];
-               docsHtml += `<div class="p-2 bg-white border border-slate-200 rounded-lg shadow-sm flex items-center justify-between gap-2 mb-1">
-                   <div class="flex items-center gap-2">
-                       <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+               docsHtml += `<div class="p-2.5 bg-white border border-slate-200 rounded-xl shadow-sm flex items-center justify-between gap-2 mb-1.5 hover:border-emerald-300 transition-colors">
+                   <div class="flex items-center gap-2.5">
+                       <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                       </div>
                        <div class="flex flex-col">
-                          <span class="font-bold text-slate-800">Zapisana Oferta</span> 
-                          <span class="text-slate-400 text-[9px]">Data: ${dateStr}</span>
+                          <span class="font-bold text-slate-800 text-xs">Oferta Handlowa</span> 
+                          <span class="text-slate-400 text-[10px]">Data: ${dateStr} &bull; ${o.projectName || 'Oferta'}</span>
                        </div>
                    </div>
-                   <button onclick="AdminApp.openProjectInTool('oferta')" class="text-[9px] bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 px-1.5 py-0.5 rounded text-emerald-700 font-mono transition-colors">Otwórz (${o.number || 'NR'})</button>
+                   <button onclick="AdminApp.openProjectInTool('oferta')" class="text-[10px] px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg text-emerald-700 font-bold font-mono transition-colors">Otwórz (${o.number || 'OFE'})</button>
                </div>`;
            });
        }
 
-       // --- PROTOKÓŁ SZCZELNOŚCI ---
-       if (proj.protocols && proj.protocols.szczelnosc) {
+       // --- 3. PROTOKÓŁ SZCZELNOŚCI ---
+       const pSzczelnoscSaved = (proj.protocols && proj.protocols.szczelnosc) ||
+                               (localProj.protocols && localProj.protocols.szczelnosc) ||
+                               localStorage.getItem('lesa_protocol_szczelnosc_' + projectId);
+       if (pSzczelnoscSaved) {
            hasDocs = true;
-           const d = proj.protocols.szczelnoscDate ? new Date(proj.protocols.szczelnoscDate).toLocaleDateString('pl-PL') : 'Zapisano';
-           docsHtml += `<div class="p-2 bg-white border border-slate-200 rounded-lg shadow-sm flex items-center justify-between gap-2 mb-1">
-               <div class="flex items-center gap-2">
-                   <svg class="w-4 h-4 text-sky-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+           let d = 'Zapisano w systemie';
+           if (proj.protocols && proj.protocols.szczelnoscDate) {
+               d = new Date(proj.protocols.szczelnoscDate).toLocaleDateString('pl-PL');
+           } else if (localProj.protocols && localProj.protocols.szczelnoscDate) {
+               d = new Date(localProj.protocols.szczelnoscDate).toLocaleDateString('pl-PL');
+           } else if (typeof pSzczelnoscSaved === 'string') {
+               try {
+                   const parsed = JSON.parse(pSzczelnoscSaved);
+                   if (parsed.savedAt) d = new Date(parsed.savedAt).toLocaleDateString('pl-PL');
+                   else if (parsed.data && parsed.data.date) d = parsed.data.date;
+               } catch(e) {}
+           }
+           docsHtml += `<div class="p-2.5 bg-white border border-slate-200 rounded-xl shadow-sm flex items-center justify-between gap-2 mb-1.5 hover:border-sky-300 transition-colors">
+               <div class="flex items-center gap-2.5">
+                   <div class="w-8 h-8 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center shrink-0">
+                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                   </div>
                    <div class="flex flex-col">
-                      <span class="font-bold text-slate-800">Protokół Szczelności</span> 
-                      <span class="text-slate-400 text-[9px]">Data: ${d}</span>
+                      <span class="font-bold text-slate-800 text-xs">Protokół Próby Szczelności</span> 
+                      <span class="text-slate-400 text-[10px]">Data: ${d} &bull; Gotowy do druku</span>
                    </div>
                </div>
-               <button onclick="AdminApp.openProjectInTool('protokol1')" class="text-[9px] bg-sky-50 hover:bg-sky-100 border border-sky-100 px-1.5 py-0.5 rounded text-sky-700 font-mono transition-colors">Otwórz</button>
+               <button onclick="AdminApp.openProjectInTool('szczelnosc')" class="text-[10px] px-2.5 py-1 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-lg text-sky-700 font-bold transition-colors">Otwórz &rarr;</button>
            </div>`;
        }
 
-       // --- PROTOKÓŁ ODBIORU ---
-       if (proj.protocols && proj.protocols.odbior) {
+       // --- 4. PROTOKÓŁ ODBIORU / KARTA GWARANCYJNA ---
+       const pOdbiorSaved = (proj.protocols && proj.protocols.odbior) ||
+                            (localProj.protocols && localProj.protocols.odbior) ||
+                            localStorage.getItem('lesa_protocol_odbior_' + projectId) ||
+                            localStorage.getItem('lesa_protokol_loops_' + projectId);
+       if (pOdbiorSaved) {
            hasDocs = true;
-           const d = proj.protocols.odbiorDate ? new Date(proj.protocols.odbiorDate).toLocaleDateString('pl-PL') : 'Zapisano';
-           docsHtml += `<div class="p-2 bg-white border border-slate-200 rounded-lg shadow-sm flex items-center justify-between gap-2 mb-1">
-               <div class="flex items-center gap-2">
-                   <svg class="w-4 h-4 text-purple-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+           let d = 'Zapisano w systemie';
+           if (proj.protocols && proj.protocols.odbiorDate) {
+               d = new Date(proj.protocols.odbiorDate).toLocaleDateString('pl-PL');
+           } else if (localProj.protocols && localProj.protocols.odbiorDate) {
+               d = new Date(localProj.protocols.odbiorDate).toLocaleDateString('pl-PL');
+           } else if (typeof pOdbiorSaved === 'string') {
+               try {
+                   const parsed = JSON.parse(pOdbiorSaved);
+                   if (parsed.savedAt) d = new Date(parsed.savedAt).toLocaleDateString('pl-PL');
+                   else if (parsed.data && parsed.data.date) d = parsed.data.date;
+               } catch(e) {}
+           }
+           docsHtml += `<div class="p-2.5 bg-white border border-slate-200 rounded-xl shadow-sm flex items-center justify-between gap-2 mb-1.5 hover:border-purple-300 transition-colors">
+               <div class="flex items-center gap-2.5">
+                   <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
+                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                   </div>
                    <div class="flex flex-col">
-                      <span class="font-bold text-slate-800">Protokół Odbioru (Końcowy)</span> 
-                      <span class="text-slate-400 text-[9px]">Data: ${d}</span>
+                      <span class="font-bold text-slate-800 text-xs">Karta Gwarancyjna / Protokół Odbioru</span> 
+                      <span class="text-slate-400 text-[10px]">Data: ${d} &bull; Pętle i rozdzielacze</span>
                    </div>
                </div>
-               <button onclick="AdminApp.openProjectInTool('protokol2')" class="text-[9px] bg-purple-50 hover:bg-purple-100 border border-purple-100 px-1.5 py-0.5 rounded text-purple-700 font-mono transition-colors">Otwórz</button>
+               <button onclick="AdminApp.openProjectInTool('odbior')" class="text-[10px] px-2.5 py-1 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg text-purple-700 font-bold transition-colors">Otwórz &rarr;</button>
            </div>`;
        }
 
-       // --- POZOSTAŁE PLIKI (np. ręcznie wrzucone PDF) ---
+       // --- 5. POZOSTAŁE PLIKI (np. wgrane PDF / DOC) ---
        if (window.ApiService) {
            const files = await ApiService.getProjectFiles(projectId);
            const otherDocs = files.filter(f => {
-               const ft = f.fileType || f.file_type || '';
-               const fn = f.fileName || f.file_name || '';
-               return !ft.startsWith('photo') && ft !== 'cad' && (fn.endsWith('.pdf') || fn.endsWith('.doc') || fn.endsWith('.docx'));
+               const ft = (f.fileType || f.file_type || '').toLowerCase();
+               const fn = (f.fileName || f.file_name || '').toLowerCase();
+               return !ft.startsWith('photo') && ft !== 'cad' && (fn.endsWith('.pdf') || fn.endsWith('.doc') || fn.endsWith('.docx') || ft === 'protocol' || ft === 'document');
            });
            if (otherDocs.length > 0) {
                hasDocs = true;
                otherDocs.forEach(f => {
                    const url = f.fileUrl || f.file_url;
                    const fn = f.fileName || f.file_name || 'Dokument';
-                   docsHtml += `<div class="p-2 bg-white border border-slate-200 rounded-lg shadow-sm flex items-center justify-between gap-2 mb-1">
-                       <div class="flex items-center gap-2">
-                           <svg class="w-4 h-4 text-blue-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
-                           <div class="flex flex-col truncate max-w-[150px]">
-                              <span class="font-bold text-slate-800 truncate" title="${fn}">${fn}</span> 
-                              <span class="text-slate-400 text-[9px]">Plik na serwerze</span>
+                   docsHtml += `<div class="p-2.5 bg-white border border-slate-200 rounded-xl shadow-sm flex items-center justify-between gap-2 mb-1.5 hover:border-blue-300 transition-colors">
+                       <div class="flex items-center gap-2.5">
+                           <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                           </div>
+                           <div class="flex flex-col truncate max-w-[200px]">
+                              <span class="font-bold text-slate-800 text-xs truncate" title="${fn}">${fn}</span> 
+                              <span class="text-slate-400 text-[10px]">Plik na serwerze</span>
                            </div>
                        </div>
-                       <a href="${url}" target="_blank" class="text-[9px] bg-blue-50 hover:bg-blue-100 border border-blue-100 px-1.5 py-0.5 rounded text-blue-700 transition-colors shrink-0">Pobierz</a>
+                       <a href="${url}" target="_blank" class="text-[10px] px-2.5 py-1 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg text-blue-700 font-bold transition-colors shrink-0">Pobierz</a>
                    </div>`;
                });
            }
@@ -594,11 +655,11 @@ const AdminApp = {
        if (hasDocs) {
            listEl.innerHTML = docsHtml;
        } else {
-           listEl.innerHTML = 'Brak wgranych / zapisanych dokumentów. Użyj generatorów, aby sporządzić ofertę, umowę lub protokół.';
+           listEl.innerHTML = '<div class="text-slate-400 py-2">Brak zapisanych dokumentów dla tego projektu. Użyj przycisków powyżej (Oferta, Umowa, Protokoły), aby wygenerować dokumentację.</div>';
        }
     } catch(e) {
        console.error(e);
-       listEl.innerHTML = 'Błąd podczas ładowania dokumentów.';
+       listEl.innerHTML = '<div class="text-red-400 py-2">Błąd podczas ładowania dokumentów.</div>';
     }
   },
 
@@ -744,9 +805,9 @@ const AdminApp = {
     let url = '';
     if (tool === 'cad') url = 'lesa-cad-v2/index.html?projectId=' + proj.id;
     if (tool === 'oferta') url = 'oferta.html?projectId=' + proj.id;
-    if (tool === 'umowa') url = 'generator-umow.html?projectId=' + proj.id;
-    if (tool === 'szczelnosc') url = 'protokol-szczelnosci.html?projectId=' + proj.id;
-    if (tool === 'odbior') url = 'protokol-odbioru.html?projectId=' + proj.id;
+    if (tool === 'umowa' || tool === 'generator') url = 'generator-umow.html?projectId=' + proj.id;
+    if (tool === 'szczelnosc' || tool === 'protokol1') url = 'protokol-szczelnosci.html?projectId=' + proj.id;
+    if (tool === 'odbior' || tool === 'protokol2') url = 'protokol-odbioru.html?projectId=' + proj.id;
     
     if (url) { localStorage.setItem('lesa_active_project_id', proj.id); window.open(url, '_blank'); }
   },

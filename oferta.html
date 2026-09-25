@@ -277,6 +277,7 @@
       const activeProjectId = urlParams.get('projectId') || localStorage.getItem('lesa_active_project_id');
       
       if (activeProjectId) {
+          window.currentOfferProjectId = activeProjectId;
           let project = null;
           if (window.ApiService) {
              const projects = await ApiService.getProjects();
@@ -460,10 +461,14 @@
     
     async function saveCurrentOffer() {
       const offerId = 'OFE-' + Date.now();
+      const activePid = window.currentOfferProjectId || new URLSearchParams(window.location.search).get('projectId') || localStorage.getItem('lesa_active_project_id') || '';
+      const clientRaw = document.getElementById('client-info').innerText ? document.getElementById('client-info').innerText.trim().split('\n')[0] : '';
       const offerData = {
         id: offerId,
+        projectId: activePid,
         number: document.getElementById('offer-number').innerText,
         date: document.getElementById('offer-date').innerText,
+        clientName: clientRaw,
         clientInfo: document.getElementById('client-info').innerText,
         clientContact: document.getElementById('client-contact').innerText,
         projectName: document.getElementById('project-name').innerText,

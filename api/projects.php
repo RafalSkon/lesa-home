@@ -21,6 +21,7 @@ switch ($method) {
                 $project['files'] = $filesStmt->fetchAll();
                 
                 $project['cadData'] = !empty($project['cad_data']) ? json_decode($project['cad_data'], true) : null;
+                $project['protocols'] = !empty($project['protocols']) ? (is_array($project['protocols']) ? $project['protocols'] : json_decode($project['protocols'], true)) : null;
 
                 jsonResponse(['success' => true, 'project' => $project]);
             } else {
@@ -61,6 +62,7 @@ switch ($method) {
             $p['investmentCity'] = $p['city'];
             $p['createdAt'] = intval($p['created_at']);
             $p['cadData'] = !empty($p['cad_data']) ? json_decode($p['cad_data'], true) : null;
+            $p['protocols'] = !empty($p['protocols']) ? (is_array($p['protocols']) ? $p['protocols'] : json_decode($p['protocols'], true)) : null;
             
             // Map client data
             if (isset($clientsById[$p['client_id']])) {
@@ -98,22 +100,25 @@ switch ($method) {
         
         $cadDataInput = !empty($body['cadData']) ? json_encode($body['cadData'], JSON_UNESCAPED_UNICODE) : (!empty($body['cad_data']) ? $body['cad_data'] : '');
         $cadData = !empty($cadDataInput) ? $cadDataInput : ($exists ? $exists['cad_data'] : '');
+
+        $protocolsInput = !empty($body['protocols']) ? (is_string($body['protocols']) ? $body['protocols'] : json_encode($body['protocols'], JSON_UNESCAPED_UNICODE)) : (!empty($body['protocols_data']) ? $body['protocols_data'] : '');
+        $protocols = !empty($protocolsInput) ? $protocolsInput : ($exists ? ($exists['protocols'] ?? '') : '');
         
         $createdAt = !empty($body['createdAt']) ? intval($body['createdAt']) : (!empty($body['created_at']) ? intval($body['created_at']) : time() * 1000);
 
         if ($exists) {
             $stmt = $db->prepare("
                 UPDATE projects SET 
-                    client_id = ?, title = ?, address = ?, city = ?, status = ?, cad_file = ?, cad_data = ?
+                    client_id = ?, title = ?, address = ?, city = ?, status = ?, cad_file = ?, cad_data = ?, protocols = ?
                 WHERE id = ?
             ");
-            $stmt->execute([$clientId, $title, $address, $city, $status, $cadFile, $cadData, $id]);
+            $stmt->execute([$clientId, $title, $address, $city, $status, $cadFile, $cadData, $protocols, $id]);
         } else {
             $stmt = $db->prepare("
-                INSERT INTO projects (id, client_id, title, address, city, status, cad_file, cad_data, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO projects (id, client_id, title, address, city, status, cad_file, cad_data, protocols, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
-            $stmt->execute([$id, $clientId, $title, $address, $city, $status, $cadFile, $cadData, $createdAt]);
+            $stmt->execute([$id, $clientId, $title, $address, $city, $status, $cadFile, $cadData, $protocols, $createdAt]);
         }
 
         jsonResponse([
@@ -131,6 +136,7 @@ switch ($method) {
                 'status' => $status,
                 'cad_file' => $cadFile,
                 'cadData' => !empty($cadData) ? json_decode($cadData, true) : null,
+                'protocols' => !empty($protocols) ? (is_array($protocols) ? $protocols : json_decode($protocols, true)) : null,
                 'createdAt' => $createdAt,
             ]
         ]);

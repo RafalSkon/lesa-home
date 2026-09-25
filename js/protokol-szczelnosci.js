@@ -420,6 +420,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           projects[idx].protocols.szczelnoscDate = new Date().toISOString();
           projects[idx].protocols.szczelnoscData = formData;
           
+          localStorage.setItem('lesa_protocol_szczelnosc_' + activeProjectId, JSON.stringify({
+              savedAt: new Date().toISOString(),
+              data: formData
+          }));
+          
           try {
              if (window.ApiService) {
                  await ApiService.saveProject(projects[idx]);

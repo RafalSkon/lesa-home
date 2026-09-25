@@ -586,6 +586,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           projects[idx].protocols.odbior = true;
           projects[idx].protocols.odbiorDate = new Date().toISOString();
           projects[idx].protocols.odbiorData = formData;
+          localStorage.setItem('lesa_protocol_odbior_' + activeProjectId, JSON.stringify({ savedAt: new Date().toISOString(), data: formData }));
           
           try {
              if (window.ApiService) {

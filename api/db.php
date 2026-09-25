@@ -179,6 +179,19 @@ try {
         $db->exec("ALTER TABLE clients ADD COLUMN address_company TEXT DEFAULT ''");
     }
 
+    // Migration: Add protocols to projects table if missing
+    $projCols = $db->query("PRAGMA table_info(projects)")->fetchAll(PDO::FETCH_ASSOC);
+    $hasProtocolsCol = false;
+    foreach ($projCols as $col) {
+        if ($col['name'] === 'protocols') {
+            $hasProtocolsCol = true;
+            break;
+        }
+    }
+    if (!$hasProtocolsCol) {
+        $db->exec("ALTER TABLE projects ADD COLUMN protocols TEXT DEFAULT ''");
+    }
+
     // Migration: Add cad_data to projects table if missing
     $columns = $db->query("PRAGMA table_info(projects)")->fetchAll(PDO::FETCH_ASSOC);
     $hasCadData = false;
