@@ -154,6 +154,7 @@ const ContractApp = {
       else { projects = JSON.parse(localStorage.getItem('lesa_projects')) || []; }
       const project = projects.find(p => p.id === activeProjectId);
       if (project) {
+        this.data.projectId = project.id;
         this.data.clientName    = project.clientName    || '';
         this.data.clientAddress = project.clientAddress || '';
         this.data.investmentAddress = project.investmentAddress || project.clientAddress || '';
