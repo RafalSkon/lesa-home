@@ -6,8 +6,15 @@ const MonterApp = {
 
   async init() {
     this.checkAuth();
-    await this.loadData();
-    this.renderTerminarz();
+    try {
+      await this.loadData();
+      if (!this.projects) this.projects = [];
+      if (!this.clients) this.clients = [];
+      this.renderTerminarz();
+    } catch (e) {
+      console.error(e);
+      document.getElementById('monter-calendar-container').innerHTML = '<p class="p-4 text-red-500">Wystąpił błąd ładowania danych: ' + e.message + '</p>';
+    }
   },
 
   async checkAuth() {
@@ -93,6 +100,7 @@ const MonterApp = {
     const tasksMap = {};
     tasks.forEach(task => {
        const start = new Date(task.installationDate);
+       if (isNaN(start.getTime())) return; // skip invalid dates
        const days = task.installationDays || 1;
        for (let i = 0; i < days; i++) {
           const current = new Date(start);

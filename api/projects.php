@@ -45,7 +45,7 @@ switch ($method) {
         }
 
         // Get all clients to map their names and addresses
-        $clientsStmt = $db->query("SELECT id, name, address, nip, pesel, id_card, phone, email FROM clients");
+        $clientsStmt = $db->query("SELECT id, name, address, phone, email FROM clients");
         $allClients = $clientsStmt->fetchAll();
         $clientsById = [];
         foreach ($allClients as $client) {
@@ -67,9 +67,9 @@ switch ($method) {
                 $c = $clientsById[$p['client_id']];
                 $p['clientName'] = $c['name'];
                 $p['clientAddress'] = $c['address'];
-                $p['clientNip'] = $c['nip'];
-                $p['clientPesel'] = $c['pesel'];
-                $p['clientIdCard'] = $c['id_card'];
+                $p['clientNip'] = $c['nip'] ?? '';
+                $p['clientPesel'] = $c['pesel'] ?? '';
+                $p['clientIdCard'] = $c['id_card'] ?? '';
                 $p['clientPhone'] = $c['phone'];
                 $p['clientEmail'] = $c['email'];
             }

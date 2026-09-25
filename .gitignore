@@ -1,4 +1,4 @@
-﻿# Local IDE / Agents
+# Local IDE / Agents
 .agents/
 .gemini/
 .vscode/
@@ -13,3 +13,9 @@ Desktop.ini
 *.log
 scratch/
 tmp/
+
+# LeSa Sync
+.lesa-sync.config.json
+.lesa-sync.cache.json
+tools/lesa-sync/*.exe
+tools/lesa-sync/*.pdb

@@ -1,0 +1,11 @@
+Baza danych utworzona
+
+Tutaj znajdziesz szczegóły dotyczące nowej bazy danych. Pamiętaj, aby przechowywać je w bezpiecznym miejscu lub w pliku konfiguracyjnym strony, ponieważ są wyświetlane tylko raz.
+Nazwa hosta:
+localhost
+Baza danych:
+srv124277_lesa_home_db
+Nazwa użytkownika:
+srv124277_lesa_home_db
+Hasło:
+PZvMb6DhxQAut82tFPcw
