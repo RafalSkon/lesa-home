@@ -102,6 +102,8 @@ try {
             status TEXT DEFAULT 'Nowy',
             cad_file TEXT DEFAULT '',
             cad_data TEXT DEFAULT '',
+            installation_date TEXT DEFAULT '',
+            installation_days INTEGER DEFAULT 1,
             created_at INTEGER NOT NULL
         );
 
@@ -209,6 +211,20 @@ try {
     }
     if (!$hasCadFile) {
         $db->exec("ALTER TABLE projects ADD COLUMN cad_file TEXT DEFAULT ''");
+    }
+
+    // Migration: Add installation_date and installation_days to projects table if missing
+    $hasInstDate = false;
+    $hasInstDays = false;
+    foreach ($columns as $col) {
+        if ($col['name'] === 'installation_date') $hasInstDate = true;
+        if ($col['name'] === 'installation_days') $hasInstDays = true;
+    }
+    if (!$hasInstDate) {
+        $db->exec("ALTER TABLE projects ADD COLUMN installation_date TEXT DEFAULT ''");
+    }
+    if (!$hasInstDays) {
+        $db->exec("ALTER TABLE projects ADD COLUMN installation_days INTEGER DEFAULT 1");
     }
 
     // Seed default admin user "Rafal" if not exists

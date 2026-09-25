@@ -556,6 +556,10 @@
                   <h2 id="pd-project-title" class="text-xl font-bold text-slate-900">Nazwa Projektu</h2>
                   <p id="pd-client-info" class="text-sm text-slate-500 mt-1">Powiązany Klient: <a href="#" onclick="AdminApp.switchTab('clients')" class="text-emerald-600 hover:underline" id="pd-client-link">...</a></p>
                   <p id="pd-project-address" class="text-xs text-slate-500 mt-0.5">Adres inwestycji: Brak</p>
+                  <div class="flex flex-wrap items-center gap-2 mt-2">
+                    <span id="pd-project-status-badge" class="px-2.5 py-0.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-700">Status: Nowy</span>
+                    <span id="pd-project-installation-badge" class="hidden px-2.5 py-0.5 text-xs font-bold rounded-lg bg-blue-100 text-blue-700"></span>
+                  </div>
                 </div>
                 <div>
                   <button onclick="AdminApp.editProject()" class="text-xs text-blue-500 hover:text-blue-700 font-bold px-3 py-1 rounded bg-blue-50 hover:bg-blue-100 transition-colors mr-2">Edytuj</button>
@@ -919,7 +923,7 @@
 
   <!-- Scripts -->
   <script src="js/api-service.js?v=1"></script>
-  <script src="js/admin2.js?v=14"></script>
+  <script src="js/admin2.js?v=15"></script>
 </body>
 </html>
 

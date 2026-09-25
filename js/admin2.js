@@ -536,6 +536,29 @@ const AdminApp = {
     const addressEl = document.getElementById('pd-project-address');
     if (addressEl) addressEl.textContent = 'Adres inwestycji: ' + (proj.address || 'Brak') + (proj.city ? ', ' + proj.city : '');
     
+    const statusBadge = document.getElementById('pd-project-status-badge');
+    if (statusBadge) {
+      statusBadge.textContent = 'Status: ' + (proj.status || 'Nowy');
+      if (proj.status === 'Do Montażu') {
+        statusBadge.className = 'px-2.5 py-0.5 text-xs font-bold rounded-lg bg-blue-100 text-blue-700';
+      } else if (proj.status === 'Zakończone') {
+        statusBadge.className = 'px-2.5 py-0.5 text-xs font-bold rounded-lg bg-emerald-100 text-emerald-700';
+      } else {
+        statusBadge.className = 'px-2.5 py-0.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-700';
+      }
+    }
+    const instBadge = document.getElementById('pd-project-installation-badge');
+    const instDate = proj.installationDate || proj.installation_date;
+    const instDays = proj.installationDays || proj.installation_days || 1;
+    if (instBadge) {
+      if (instDate) {
+        instBadge.textContent = `📅 Montaż: ${instDate} (${instDays} ${instDays === 1 ? 'dzień' : 'dni'})`;
+        instBadge.classList.remove('hidden');
+      } else {
+        instBadge.classList.add('hidden');
+      }
+    }
+    
     this.currentViewedProjectId = id;
     this.loadProjectPhotos(id);
     this.loadProjectCadData(id);
@@ -1159,12 +1182,21 @@ const AdminApp = {
       if (proj) {
         document.getElementById('project-modal-title').textContent = 'Edytuj Projekt';
         document.getElementById('modal-project-id').value = proj.id;
-        document.getElementById('modal-project-client-id').value = proj.client_id || '';
-        document.getElementById('modal-project-title').value = proj.title || '';
-        document.getElementById('modal-project-address').value = proj.address || '';
-        document.getElementById('modal-project-city').value = proj.city || '';
-        if (document.getElementById('modal-project-status')) document.getElementById('modal-project-status').value = proj.status || 'Nowy';
-        this.updateClientDropdownText(proj.client_id);
+        document.getElementById('modal-project-client-id').value = proj.client_id || proj.clientId || '';
+        document.getElementById('modal-project-title').value = proj.title || proj.projectTitle || '';
+        document.getElementById('modal-project-address').value = proj.address || proj.investmentAddress || '';
+        document.getElementById('modal-project-city').value = proj.city || proj.investmentCity || '';
+        
+        const dateInput = document.getElementById('modal-project-installation-date');
+        if (dateInput) dateInput.value = proj.installationDate || proj.installation_date || '';
+        
+        const daysInput = document.getElementById('modal-project-installation-days');
+        if (daysInput) daysInput.value = proj.installationDays || proj.installation_days || 1;
+
+        if (document.getElementById('modal-project-status')) {
+          document.getElementById('modal-project-status').value = proj.status || 'Nowy';
+        }
+        this.updateClientDropdownText(proj.client_id || proj.clientId);
       }
     } else {
       document.getElementById('project-modal-title').textContent = 'Nowy Projekt';
@@ -1174,7 +1206,16 @@ const AdminApp = {
       document.getElementById('modal-project-title').value = '';
       document.getElementById('modal-project-address').value = '';
       document.getElementById('modal-project-city').value = '';
-      if (document.getElementById('modal-project-status')) document.getElementById('modal-project-status').value = 'Nowy';
+      
+      const dateInput = document.getElementById('modal-project-installation-date');
+      if (dateInput) dateInput.value = '';
+      
+      const daysInput = document.getElementById('modal-project-installation-days');
+      if (daysInput) daysInput.value = 1;
+
+      if (document.getElementById('modal-project-status')) {
+        document.getElementById('modal-project-status').value = 'Nowy';
+      }
       this.updateClientDropdownText(cId);
     }
   },
@@ -1182,8 +1223,6 @@ const AdminApp = {
   openProjectModalForClient() {
     this.openProjectModal(null, this.currentViewedClientId);
   },
-
-
 
   closeProjectModal() {
     document.getElementById('project-modal').classList.add('hidden');
@@ -1225,24 +1264,33 @@ const AdminApp = {
   },
 
   async saveProjectModal() {
+    const instDate = document.getElementById('modal-project-installation-date')?.value || '';
+    const instDays = parseInt(document.getElementById('modal-project-installation-days')?.value || '1', 10) || 1;
     const data = {
       id: document.getElementById('modal-project-id').value || 'p_' + Date.now(),
       client_id: document.getElementById('modal-project-client-id').value,
       title: document.getElementById('modal-project-title').value,
       address: document.getElementById('modal-project-address').value,
       city: document.getElementById('modal-project-city').value,
+      installation_date: instDate,
+      installationDate: instDate,
+      installation_days: instDays,
+      installationDays: instDays,
       status: document.getElementById('modal-project-status') ? document.getElementById('modal-project-status').value : 'Nowy'
     };
     if (!data.title || !data.client_id) {
-      this.showToast('Wybierz klienta i podaj nazwÄ™ projektu.');
+      this.showToast('Wybierz klienta i podaj nazwę projektu.');
       return;
     }
     if (window.ApiService) {
       await ApiService.saveProject(data);
       this.closeProjectModal();
       this.showToast('Zapisano projekt.');
-      this.loadProjectsData();
+      await this.loadProjectsData();
       if (typeof this.renderProjectsList === 'function') this.renderProjectsList();
+      if (this.currentViewedProjectId === data.id) {
+        this.viewProject(data.id);
+      }
     }
   },
 

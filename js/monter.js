@@ -93,27 +93,49 @@ const MonterApp = {
     const container = document.getElementById('monter-calendar-container');
     if (!container) return;
 
-    // Pobierz zlecenia "Do Montażu" z datą
-    let tasks = this.projects.filter(p => p.status === 'Do Montażu' && p.installationDate);
-    
-    // Budowanie mapy dni -> lista zadań
+    // Pobierz zlecenia przekazane do montażu
+    let tasks = (this.projects || []).filter(p => {
+      const st = (p.status || '').toLowerCase().trim();
+      const isMonterStatus = st.includes('monta') || st.includes('realizac') || st === 'do montażu';
+      const hasDate = !!(p.installationDate || p.installation_date);
+      return isMonterStatus && hasDate;
+    });
+
+    tasks.forEach(task => {
+      task.installationDate = task.installationDate || task.installation_date;
+      task.installationDays = parseInt(task.installationDays || task.installation_days || 1, 10) || 1;
+      task.clientId = task.clientId || task.client_id;
+      task.investmentAddress = task.investmentAddress || task.address;
+      task.investmentCity = task.investmentCity || task.city;
+      task.projectTitle = task.projectTitle || task.title;
+    });
+
+    // Budowanie mapy dni -> lista zadań (odporne na strefy czasowe)
     const tasksMap = {};
     tasks.forEach(task => {
-       const start = new Date(task.installationDate);
-       if (isNaN(start.getTime())) return; // skip invalid dates
-       const days = task.installationDays || 1;
-       for (let i = 0; i < days; i++) {
-          const current = new Date(start);
-          current.setDate(start.getDate() + i);
-          const dateStr = current.toISOString().split('T')[0];
-          if (!tasksMap[dateStr]) tasksMap[dateStr] = [];
-          tasksMap[dateStr].push(task);
-       }
+      const dateVal = task.installationDate;
+      if (!dateVal) return;
+      const parts = dateVal.split('-').map(Number);
+      if (parts.length !== 3 || isNaN(parts[0])) return;
+
+      const start = new Date(parts[0], parts[1] - 1, parts[2], 12, 0, 0);
+      const days = task.installationDays || 1;
+      for (let i = 0; i < days; i++) {
+        const cur = new Date(start);
+        cur.setDate(start.getDate() + i);
+        const y = cur.getFullYear();
+        const m = String(cur.getMonth() + 1).padStart(2, '0');
+        const d = String(cur.getDate()).padStart(2, '0');
+        const dateStr = `${y}-${m}-${d}`;
+        if (!tasksMap[dateStr]) tasksMap[dateStr] = [];
+        tasksMap[dateStr].push(task);
+      }
     });
-    this.tasksMap = tasksMap; // zapisz globalnie dla kliknięć
+    this.tasksMap = tasksMap;
+    this.monterTasks = tasks;
 
     const dzisiaj = new Date();
-    let html = '';
+    const todayStr = `${dzisiaj.getFullYear()}-${String(dzisiaj.getMonth() + 1).padStart(2, '0')}-${String(dzisiaj.getDate()).padStart(2, '0')}`;
 
     const nazwyMiesiecy = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
     const nazwyDni = ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'Sb', 'Nd'];
@@ -121,102 +143,155 @@ const MonterApp = {
     const monthDate = new Date(dzisiaj.getFullYear(), dzisiaj.getMonth() + this.currentMonthOffset, 1);
     const month = monthDate.getMonth();
     const year = monthDate.getFullYear();
-    
-    html += `
+
+    let html = `
       <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-        <h4 class="font-bold text-slate-700 mb-3 text-center">${nazwyMiesiecy[month]} ${year}</h4>
-        <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold text-slate-400 mb-1">
+        <h4 class="font-bold text-slate-800 mb-3 text-center text-sm">${nazwyMiesiecy[month]} ${year}</h4>
+        <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-wider">
           ${nazwyDni.map(d => `<div>${d}</div>`).join('')}
         </div>
         <div class="grid grid-cols-7 gap-1 text-sm">
     `;
-    
+
     // przesunięcie, bo niedziela to 0, my chcemy Pn=0
     let startDay = monthDate.getDay() - 1;
     if (startDay === -1) startDay = 6;
-    
+
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    
+
     // Puste komórki przed pierwszym dniem
     for (let i = 0; i < startDay; i++) {
-        html += `<div class="p-2"></div>`;
+      html += `<div class="p-2"></div>`;
     }
-    
+
     // Dni miesiąca
     for (let d = 1; d <= daysInMonth; d++) {
-        const currentCellDate = new Date(year, month, d+1);
-        const dateStr = `${year}-${String(month+1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-        
-        const dayTasks = tasksMap[dateStr];
-        const hasTasks = dayTasks && dayTasks.length > 0;
-        
-        const isToday = (dateStr === dzisiaj.toISOString().split('T')[0]);
-        
-        let btnClass = "w-full py-3 flex items-center justify-center rounded-lg font-medium transition-all ";
-        if (hasTasks) {
-            btnClass += "bg-blue-600 text-white shadow-md shadow-blue-200 cursor-pointer hover:bg-blue-700 hover:scale-105";
-        } else if (isToday) {
-            btnClass += "bg-slate-100 text-blue-600 border border-blue-200 font-bold";
-        } else {
-            btnClass += "text-slate-600 hover:bg-slate-50";
-        }
-        
-        const onclickAttr = hasTasks ? `onclick="MonterApp.showDailyTasks('${dateStr}')"` : ``;
-        
-        html += `<div><button class="${btnClass}" ${onclickAttr}>${d}</button></div>`;
-    }
-    
-    html += `</div></div>`;
-    
-    container.innerHTML = html;
-  },
+      const dateStr = `${year}-${String(month+1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const dayTasks = tasksMap[dateStr];
+      const hasTasks = dayTasks && dayTasks.length > 0;
+      const isToday = (dateStr === todayStr);
+      const isSelected = (this.selectedDateStr === dateStr);
 
-  changeMonth(dir) {
-    this.currentMonthOffset += dir;
-    
-    // Resetuj też dolny widok z wybranym dniem by było czyściej (opcjonalne)
-    const dailySection = document.getElementById('monter-daily-tasks');
-    if (dailySection) dailySection.classList.add('hidden');
-    
-    this.renderTerminarz();
+      let btnClass = "w-full py-2.5 sm:py-3 flex flex-col items-center justify-center rounded-xl font-bold transition-all relative ";
+      if (isSelected) {
+        btnClass += "bg-blue-700 text-white ring-4 ring-blue-300 shadow-md scale-105 z-10";
+      } else if (hasTasks) {
+        btnClass += "bg-blue-600 text-white shadow-md shadow-blue-200 cursor-pointer hover:bg-blue-700 hover:scale-105";
+      } else if (isToday) {
+        btnClass += "bg-blue-50 text-blue-700 border-2 border-blue-400 font-extrabold hover:bg-blue-100";
+      } else {
+        btnClass += "text-slate-700 hover:bg-slate-100";
+      }
+
+      const taskBadge = hasTasks ? `<span class="w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-amber-300' : 'bg-white'} mt-0.5"></span>` : ``;
+      const onclickAttr = `onclick="MonterApp.showDailyTasks('${dateStr}')"`;
+
+      html += `<div><button class="${btnClass}" ${onclickAttr} title="${hasTasks ? 'Zaplanowane zlecenia (' + dayTasks.length + ')' : ''}">${d}${taskBadge}</button></div>`;
+    }
+
+    html += `</div></div>`;
+    container.innerHTML = html;
+
+    // Render list of tasks (either for selected day or all)
+    if (this.selectedDateStr) {
+      const dayTasks = this.tasksMap[this.selectedDateStr] || [];
+      this.renderTasksList(dayTasks, `Prace w dniu: ${this.selectedDateStr}`, true);
+    } else {
+      this.renderTasksList(tasks, 'Wszystkie zaplanowane zlecenia', false);
+    }
   },
 
   showDailyTasks(dateStr) {
     this.selectedDateStr = dateStr;
-    const dailySection = document.getElementById('monter-daily-tasks');
+    this.renderTerminarz();
+  },
+
+  showAllTasks() {
+    this.selectedDateStr = null;
+    this.renderTerminarz();
+  },
+
+  changeMonth(dir) {
+    this.currentMonthOffset += dir;
+    this.renderTerminarz();
+  },
+
+  resetMonth() {
+    this.currentMonthOffset = 0;
+    this.selectedDateStr = null;
+    this.renderTerminarz();
+  },
+
+  renderTasksList(tasks, headerText, isFiltered = false) {
     const header = document.getElementById('daily-tasks-header');
     const listContainer = document.getElementById('monter-projects-list');
-    
-    if (!this.tasksMap[dateStr]) return;
-    
-    const tasks = this.tasksMap[dateStr];
-    header.textContent = `Prace w dniu: ${dateStr}`;
-    
-    listContainer.innerHTML = tasks.map(task => {
-      const clientName = this.getClientName(task.clientId);
+    const btnAll = document.getElementById('btn-show-all-tasks');
+
+    if (header) header.innerHTML = `<span class="truncate">${headerText}</span>`;
+    if (btnAll) {
+      if (isFiltered) btnAll.classList.remove('hidden');
+      else btnAll.classList.add('hidden');
+    }
+
+    if (!listContainer) return;
+
+    if (!tasks || tasks.length === 0) {
+      listContainer.innerHTML = `
+        <div class="bg-white rounded-2xl p-8 border border-slate-200 text-center shadow-sm">
+          <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-500 mx-auto flex items-center justify-center mb-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </div>
+          <p class="text-sm font-bold text-slate-700 mb-1">Brak zleceń w tym terminie</p>
+          <p class="text-xs text-slate-400 mb-4">${isFiltered ? 'Nie zaplanowano żadnego montażu na ten dzień.' : 'W bazie nie ma jeszcze zleceń ze statusem "Do Montażu" i wyznaczoną datą.'}</p>
+          ${isFiltered ? `<button onclick="MonterApp.showAllTasks()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all shadow-sm">Pokaż wszystkie zlecenia</button>` : ''}
+        </div>
+      `;
+      return;
+    }
+
+    // Usunięcie duplikatów (jeśli jedno zlecenie trwa kilka dni i wyświetlamy 'wszystkie')
+    const uniqueTasks = [];
+    const seenIds = new Set();
+    tasks.forEach(t => {
+      if (!seenIds.has(t.id)) {
+        seenIds.add(t.id);
+        uniqueTasks.push(t);
+      }
+    });
+
+    listContainer.innerHTML = uniqueTasks.map(task => {
+      const clientName = this.getClientName(task.clientId || task.client_id);
       const loops = task.cadData?.loopsCount || 0;
-      
+      const duration = task.installationDays || 1;
+      const durationText = duration > 1 ? `${duration} dni` : `1 dzień`;
+      const dateDisplay = task.installationDate ? `📅 ${task.installationDate} (${durationText})` : `Termin do ustalenia`;
+
       let badges = '';
       if (task.protocols && task.protocols.szczelnosc) {
-          badges += `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700 ml-2">Szczelność ✅</span>`;
+        badges += `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Szczelność ✅</span>`;
       }
-      
+      if (task.protocols && task.protocols.odbior) {
+        badges += `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-700">Odbiór ✅</span>`;
+      }
+
       return `
-        <div onclick="MonterApp.openProjectModal('${task.id}')" class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all cursor-pointer border-l-4 border-l-blue-500">
-          <div class="flex justify-between items-start mb-2">
-            <span class="inline-block px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-lg">${task.installationDate} (Trwa: ${task.installationDays || 1} dni)</span>
-            <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 rounded-md py-0.5">Pętli: ${loops}</span>
+        <div onclick="MonterApp.openProjectModal('${task.id}')" class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-400 transition-all cursor-pointer border-l-4 border-l-blue-600 group">
+          <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+            <span class="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-xs font-extrabold rounded-lg">${dateDisplay}</span>
+            <div class="flex items-center gap-1.5">
+              ${badges}
+              <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">Pętli: ${loops}</span>
+            </div>
           </div>
-          <h3 class="font-bold text-slate-800 text-lg leading-tight mb-1">${clientName}${badges}</h3>
-          <p class="text-sm text-slate-500 font-medium flex items-center gap-1.5">
-            <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-            <span class="truncate">${task.investmentAddress || 'Brak adresu'}</span>
+          <h3 class="font-bold text-slate-900 text-lg leading-snug group-hover:text-blue-600 transition-colors">${task.projectTitle || task.title || clientName}</h3>
+          <p class="text-xs text-slate-500 mt-0.5 font-medium">Inwestor: <strong class="text-slate-700">${clientName}</strong></p>
+          <p class="text-xs text-slate-600 font-medium flex items-center gap-1.5 mt-2.5 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+            <svg class="w-4 h-4 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <span class="truncate font-semibold">${task.investmentAddress || task.address ? (task.investmentAddress || task.address) + (task.investmentCity || task.city ? ', ' + (task.investmentCity || task.city) : '') : 'Brak podanego adresu'}</span>
           </p>
         </div>
       `;
     }).join('');
-    
-    dailySection.classList.remove('hidden');
   },
 
   openProjectModal(projectId) {
@@ -224,12 +299,14 @@ const MonterApp = {
     const task = this.projects.find(p => p.id === projectId);
     if (!task) return;
     
-    const clientName = this.getClientName(task.clientId);
-    const dateStr = task.installationDate ? task.installationDate : 'Termin do ustalenia';
+    const clientName = this.getClientName(task.clientId || task.client_id);
+    const duration = task.installationDays || task.installation_days || 1;
+    const durationText = duration > 1 ? `${duration} dni` : `1 dzień`;
+    const dateStr = (task.installationDate || task.installation_date) ? `📅 ${task.installationDate || task.installation_date} (Czas: ${durationText})` : 'Termin do ustalenia';
     
     document.getElementById('modal-date-badge').textContent = dateStr;
-    document.getElementById('modal-project-title').textContent = clientName;
-    document.getElementById('modal-project-address').textContent = task.investmentAddress || 'Brak wpisanego adresu inwestycji';
+    document.getElementById('modal-project-title').textContent = (task.projectTitle || task.title) ? `${task.projectTitle || task.title} - ${clientName}` : clientName;
+    document.getElementById('modal-project-address').textContent = (task.investmentAddress || task.address) ? (task.investmentAddress || task.address) + (task.investmentCity || task.city ? ', ' + (task.investmentCity || task.city) : '') : 'Brak wpisanego adresu inwestycji';
     
     document.getElementById('modal-loops').textContent = task.cadData?.loopsCount || 0;
     document.getElementById('modal-pipe').textContent = task.cadData?.pipeLength || 0;
@@ -246,6 +323,17 @@ const MonterApp = {
       } else {
          badgeSzczelnosc.classList.add('hidden');
          badgeSzczelnosc.classList.remove('inline-block');
+      }
+    }
+
+    const badgeOdbior = document.getElementById('monter-badge-odbior');
+    if (badgeOdbior) {
+      if (task.protocols && task.protocols.odbior) {
+         badgeOdbior.classList.remove('hidden');
+         badgeOdbior.classList.add('inline-block');
+      } else {
+         badgeOdbior.classList.add('hidden');
+         badgeOdbior.classList.remove('inline-block');
       }
     }
     
