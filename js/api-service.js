@@ -422,6 +422,24 @@ const ApiService = {
     return contractData;
   },
 
+  async deleteContract(id) {
+    let contracts = JSON.parse(localStorage.getItem('lesa_contracts_history') || '[]');
+    contracts = contracts.filter(c => c.id !== id);
+    localStorage.setItem('lesa_contracts_history', JSON.stringify(contracts));
+
+    const isOnline = await this.checkServer();
+    if (isOnline) {
+      try {
+        await fetch(this.getBaseUrl() + 'contracts.php?id=' + encodeURIComponent(id), {
+          method: 'DELETE'
+        });
+      } catch (e) {
+        console.error('Błąd usuwania umowy na serwerze:', e);
+      }
+    }
+    return true;
+  },
+
   async getContractorProfile() {
     const isOnline = await this.checkServer();
     if (isOnline) {
@@ -465,6 +483,20 @@ const ApiService = {
     }
     // Return empty if offline or file://
     return [];
+  },
+
+  async deleteProjectFile(fileId) {
+    const isOnline = await this.checkServer();
+    if (isOnline) {
+      try {
+        await fetch(this.getBaseUrl() + 'upload.php?id=' + encodeURIComponent(fileId), {
+          method: 'DELETE'
+        });
+      } catch (e) {
+        console.error('Błąd usuwania pliku:', e);
+      }
+    }
+    return true;
   },
 
   /**

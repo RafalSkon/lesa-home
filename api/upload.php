@@ -23,6 +23,30 @@ if ($method === 'GET') {
     }
 }
 
+if ($method === 'DELETE') {
+    $id = isset($_GET['id']) ? $_GET['id'] : null;
+    if (!$id) {
+        $body = getJsonBody();
+        $id = isset($body['id']) ? $body['id'] : null;
+    }
+    if ($id) {
+        $stmt = $db->prepare("SELECT * FROM project_files WHERE id = ?");
+        $stmt->execute([$id]);
+        $file = $stmt->fetch();
+        if ($file && !empty($file['file_url'])) {
+            $filePath = dirname(__DIR__) . '/' . $file['file_url'];
+            if (file_exists($filePath)) {
+                @unlink($filePath);
+            }
+        }
+        $delStmt = $db->prepare("DELETE FROM project_files WHERE id = ?");
+        $delStmt->execute([$id]);
+        jsonResponse(['success' => true, 'deleted' => $id]);
+    } else {
+        jsonResponse(['success' => false, 'error' => 'Brak parametru id'], 400);
+    }
+}
+
 if ($method !== 'POST') {
     jsonResponse(['success' => false, 'error' => 'Metoda niedozwolona'], 405);
 }

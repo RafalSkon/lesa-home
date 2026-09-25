@@ -514,7 +514,12 @@ const AdminApp = {
                               <span class="text-slate-400 text-[10px]">Data zapisu: ${c.savedAt || 'Zapisano w bazie'}</span>
                            </div>
                        </div>
-                       <button onclick="AdminApp.openProjectInTool('umowa')" class="text-[10px] px-2.5 py-1 bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-lg text-orange-700 font-bold font-mono transition-colors">Otwórz (${c.contractNo || 'UM'})</button>
+                       <div class="flex items-center gap-1.5 shrink-0">
+                           <button onclick="AdminApp.openProjectInTool('umowa')" class="text-[10px] px-2.5 py-1 bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-lg text-orange-700 font-bold font-mono transition-colors">Otwórz (${c.contractNo || 'UM'})</button>
+                           <button onclick="AdminApp.deleteProjectDoc('contract', '${c.id}', '${projectId}')" title="Usuń umowę z bazy" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                           </button>
+                       </div>
                    </div>`;
                });
            }
@@ -553,7 +558,12 @@ const AdminApp = {
                           <span class="text-slate-400 text-[10px]">Data: ${dateStr} &bull; ${o.projectName || 'Oferta'}</span>
                        </div>
                    </div>
-                   <button onclick="AdminApp.openProjectInTool('oferta')" class="text-[10px] px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg text-emerald-700 font-bold font-mono transition-colors">Otwórz (${o.number || 'OFE'})</button>
+                   <div class="flex items-center gap-1.5 shrink-0">
+                       <button onclick="AdminApp.openProjectInTool('oferta')" class="text-[10px] px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg text-emerald-700 font-bold font-mono transition-colors">Otwórz (${o.number || 'OFE'})</button>
+                       <button onclick="AdminApp.deleteProjectDoc('offer', '${o.id}', '${projectId}')" title="Usuń ofertę z bazy" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                       </button>
+                   </div>
                </div>`;
            });
        }
@@ -586,7 +596,12 @@ const AdminApp = {
                       <span class="text-slate-400 text-[10px]">Data: ${d} &bull; Gotowy do druku</span>
                    </div>
                </div>
-               <button onclick="AdminApp.openProjectInTool('szczelnosc')" class="text-[10px] px-2.5 py-1 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-lg text-sky-700 font-bold transition-colors">Otwórz &rarr;</button>
+               <div class="flex items-center gap-1.5 shrink-0">
+                   <button onclick="AdminApp.openProjectInTool('szczelnosc')" class="text-[10px] px-2.5 py-1 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-lg text-sky-700 font-bold transition-colors">Otwórz &rarr;</button>
+                   <button onclick="AdminApp.deleteProjectDoc('szczelnosc', '', '${projectId}')" title="Usuń protokół szczelności" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                   </button>
+               </div>
            </div>`;
        }
 
@@ -619,7 +634,12 @@ const AdminApp = {
                       <span class="text-slate-400 text-[10px]">Data: ${d} &bull; Pętle i rozdzielacze</span>
                    </div>
                </div>
-               <button onclick="AdminApp.openProjectInTool('odbior')" class="text-[10px] px-2.5 py-1 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg text-purple-700 font-bold transition-colors">Otwórz &rarr;</button>
+               <div class="flex items-center gap-1.5 shrink-0">
+                   <button onclick="AdminApp.openProjectInTool('odbior')" class="text-[10px] px-2.5 py-1 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg text-purple-700 font-bold transition-colors">Otwórz &rarr;</button>
+                   <button onclick="AdminApp.deleteProjectDoc('odbior', '', '${projectId}')" title="Usuń protokół odbioru" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                   </button>
+               </div>
            </div>`;
        }
 
@@ -646,7 +666,12 @@ const AdminApp = {
                               <span class="text-slate-400 text-[10px]">Plik na serwerze</span>
                            </div>
                        </div>
-                       <a href="${url}" target="_blank" class="text-[10px] px-2.5 py-1 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg text-blue-700 font-bold transition-colors shrink-0">Pobierz</a>
+                       <div class="flex items-center gap-1.5 shrink-0">
+                           <a href="${url}" target="_blank" class="text-[10px] px-2.5 py-1 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg text-blue-700 font-bold transition-colors">Pobierz</a>
+                           <button onclick="AdminApp.deleteProjectDoc('file', '${f.id}', '${projectId}')" title="Usuń plik z serwera" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                           </button>
+                       </div>
                    </div>`;
                });
            }
@@ -663,6 +688,90 @@ const AdminApp = {
     }
   },
 
+  async deleteProjectDoc(type, docId, projectId) {
+    let confirmMsg = 'Czy na pewno chcesz usunąć ten dokument?';
+    if (type === 'contract') confirmMsg = 'Czy na pewno chcesz trwale usunąć tę umowę z bazy danych?';
+    if (type === 'offer') confirmMsg = 'Czy na pewno chcesz trwale usunąć tę ofertę z bazy danych?';
+    if (type === 'szczelnosc') confirmMsg = 'Czy na pewno chcesz usunąć zapisany protokół szczelności dla tego projektu?';
+    if (type === 'odbior') confirmMsg = 'Czy na pewno chcesz usunąć zapisany protokół odbioru dla tego projektu?';
+    if (type === 'file') confirmMsg = 'Czy na pewno chcesz trwale usunąć ten plik z serwera?';
+
+    if (!confirm(confirmMsg)) return;
+
+    try {
+      if (type === 'contract') {
+        if (window.ApiService && typeof ApiService.deleteContract === 'function') {
+          await ApiService.deleteContract(docId);
+        } else {
+          let contracts = JSON.parse(localStorage.getItem('lesa_contracts_history') || '[]');
+          contracts = contracts.filter(c => c.id !== docId);
+          localStorage.setItem('lesa_contracts_history', JSON.stringify(contracts));
+        }
+        if (typeof this.loadContractsData === 'function') this.loadContractsData();
+        this.showToast('Pomyślnie usunięto umowę.');
+      } else if (type === 'offer') {
+        if (window.ApiService && typeof ApiService.deleteOffer === 'function') {
+          await ApiService.deleteOffer(docId);
+        } else {
+          let offers = JSON.parse(localStorage.getItem('lesa_saved_offers') || '[]');
+          offers = offers.filter(o => o.id !== docId);
+          localStorage.setItem('lesa_saved_offers', JSON.stringify(offers));
+        }
+        this.showToast('Pomyślnie usunięto ofertę.');
+      } else if (type === 'szczelnosc') {
+        const proj = this.projects.find(p => p.id === projectId);
+        if (proj && proj.protocols) {
+          delete proj.protocols.szczelnosc;
+          delete proj.protocols.szczelnoscDate;
+          delete proj.protocols.szczelnoscData;
+          if (window.ApiService) {
+            await ApiService.saveProject(proj);
+          }
+        }
+        let localProjects = JSON.parse(localStorage.getItem('lesa_projects') || '[]');
+        const idx = localProjects.findIndex(p => p.id === projectId);
+        if (idx >= 0 && localProjects[idx].protocols) {
+          delete localProjects[idx].protocols.szczelnosc;
+          delete localProjects[idx].protocols.szczelnoscDate;
+          delete localProjects[idx].protocols.szczelnoscData;
+          localStorage.setItem('lesa_projects', JSON.stringify(localProjects));
+        }
+        localStorage.removeItem('lesa_protocol_szczelnosc_' + projectId);
+        this.showToast('Pomyślnie usunięto protokół szczelności.');
+      } else if (type === 'odbior') {
+        const proj = this.projects.find(p => p.id === projectId);
+        if (proj && proj.protocols) {
+          delete proj.protocols.odbior;
+          delete proj.protocols.odbiorDate;
+          delete proj.protocols.odbiorData;
+          if (window.ApiService) {
+            await ApiService.saveProject(proj);
+          }
+        }
+        let localProjects = JSON.parse(localStorage.getItem('lesa_projects') || '[]');
+        const idx = localProjects.findIndex(p => p.id === projectId);
+        if (idx >= 0 && localProjects[idx].protocols) {
+          delete localProjects[idx].protocols.odbior;
+          delete localProjects[idx].protocols.odbiorDate;
+          delete localProjects[idx].protocols.odbiorData;
+          localStorage.setItem('lesa_projects', JSON.stringify(localProjects));
+        }
+        localStorage.removeItem('lesa_protocol_odbior_' + projectId);
+        localStorage.removeItem('lesa_protokol_loops_' + projectId);
+        this.showToast('Pomyślnie usunięto protokół odbioru.');
+      } else if (type === 'file') {
+        if (window.ApiService && typeof ApiService.deleteProjectFile === 'function') {
+          await ApiService.deleteProjectFile(docId);
+        }
+        this.showToast('Pomyślnie usunięto plik z serwera.');
+      }
+
+      this.loadProjectDocs(projectId);
+    } catch (e) {
+      console.error(e);
+      this.showToast('Błąd podczas usuwania: ' + e.message);
+    }
+  },
 
   loadProjectCadData(projectId) {
     const proj = this.projects.find(p => p.id === projectId);
