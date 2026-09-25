@@ -390,7 +390,7 @@ const MonterApp = {
     `;
 
     rooms.forEach((r, idx) => {
-       html += generateRoomItem(r.name || \`Pomieszczenie \${idx+1}\`, \`room-\${idx}\`, \`photo_room-\${idx}\`);
+       html += generateRoomItem(r.name || `Pomieszczenie ${idx+1}`, `room-${idx}`, `photo_room-${idx}`);
     });
 
     html += generateRoomItem('Inne / Ogólne', 'inne', 'photo_inne');
@@ -404,8 +404,8 @@ const MonterApp = {
     const files = event.target.files;
     if (!files || files.length === 0) return;
     
-    const countEl = document.getElementById(\`photo-count-\${uiId}\`);
-    if (countEl) countEl.innerHTML = \`<span class="text-blue-500 font-bold">Wysyłanie \${files.length} zdjęć...</span>\`;
+    const countEl = document.getElementById(`photo-count-${uiId}`);
+    if (countEl) countEl.innerHTML = `<span class="text-blue-500 font-bold">Wysyłanie ${files.length} zdjęć...</span>`;
     
     try {
       for (let i = 0; i < files.length; i++) {
@@ -438,10 +438,10 @@ const MonterApp = {
       const countEls = document.querySelectorAll('[id^="photo-count-"]');
       countEls.forEach(el => {
         const id = el.id.replace('photo-count-', '');
-        const fileTypeLabel = id === 'inne' ? 'photo_inne' : \`photo_\${id}\`;
+        const fileTypeLabel = id === 'inne' ? 'photo_inne' : `photo_${id}`;
         const c = counts[fileTypeLabel] || 0;
         if (c > 0) {
-            el.innerHTML = \`<span class="text-emerald-600 font-bold text-xs">✓ Dodano: \${c}</span>\`;
+            el.innerHTML = `<span class="text-emerald-600 font-bold text-xs">✓ Dodano: ${c}</span>`;
         } else {
             el.textContent = 'Brak zdjęć';
         }
@@ -453,7 +453,7 @@ const MonterApp = {
         const inneEl = document.getElementById('photo-count-inne');
         if (inneEl) {
            const curr = counts['photo_inne'] || 0;
-           inneEl.innerHTML = \`<span class="text-emerald-600 font-bold text-xs">✓ Dodano: \${curr + oldPhotos}</span>\`;
+           inneEl.innerHTML = `<span class="text-emerald-600 font-bold text-xs">✓ Dodano: ${curr + oldPhotos}</span>`;
         }
       }
       
@@ -465,8 +465,10 @@ const MonterApp = {
   }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => MonterApp.init());
+} else {
   MonterApp.init();
-});
+}
 
 
