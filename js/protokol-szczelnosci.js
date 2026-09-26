@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
   // Elements
   const inpClientName = document.getElementById('inp_client_name');
+  const inpClientAddress = document.getElementById('inp_client_address');
   const inpAddress = document.getElementById('inp_address');
   const inpCity = document.getElementById('inp_city');
   const inpDate = document.getElementById('inp_date');
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const inpManometer = document.getElementById('inp_manometer');
 
   const docClientName = document.getElementById('doc_client_name');
+  const docClientAddress = document.getElementById('doc_client_address');
   const docAddress = document.getElementById('doc_address');
   const docCity = document.getElementById('doc_city');
   const docDate = document.getElementById('doc_date');
@@ -83,28 +85,52 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         const project = projects.find(p => p.id === activeProjectId);
         if (project) {
-          const client = clients.find(c => c.id === project.clientId);
+          const cId = project.clientId || project.client_id;
+          const client = clients.find(c => c.id === cId);
           
-          inpClientName.value = client ? client.name : '';
-          inpAddress.value = project.investmentAddress || (client ? client.address : '');
-          inpCity.value = project.investmentCity || '';
+          let cName = (client && (client.name || client.client_name || client.companyName)) || project.clientName || project.client_name || '';
           
-          if(inpClientNip) inpClientNip.value = client ? client.nip : '';
-          if(inpClientPhone) inpClientPhone.value = client ? client.phone : '';
-          if(inpClientEmail) inpClientEmail.value = client ? client.email : '';
+          let cAddr = '';
+          if (client) {
+            cAddr = client.address || client.address_home || client.address_company || '';
+            if (client.city && cAddr && !cAddr.toLowerCase().includes(client.city.toLowerCase())) {
+              cAddr += ', ' + client.city;
+            } else if (!cAddr && client.city) {
+              cAddr = client.city;
+            }
+          }
+          if (!cAddr) {
+            cAddr = project.clientAddress || project.address_home || '';
+          }
+
+          let invAddr = project.investmentAddress || project.address || '';
+          const invCity = project.investmentCity || project.city || '';
+          if (invAddr && invCity && !invAddr.toLowerCase().includes(invCity.toLowerCase())) {
+            invAddr += ', ' + invCity;
+          } else if (!invAddr && invCity) {
+            invAddr = invCity;
+          }
+          if (!invAddr) {
+            invAddr = cAddr;
+          }
           
-          docClientName.textContent = client ? client.name : '________________________';
+          inpClientName.value = cName;
+          if (inpClientAddress) inpClientAddress.value = cAddr;
+          inpAddress.value = invAddr;
+          inpCity.value = invCity || (client && client.city) || '';
           
-          const parts = [];
-          if(inpAddress.value) parts.push(inpAddress.value);
-          if(inpCity.value) parts.push(inpCity.value);
-          docAddress.textContent = parts.length > 0 ? parts.join(', ') : '________________________';
+          if(inpClientNip) inpClientNip.value = (client && client.nip) || project.clientNip || '';
+          if(inpClientPhone) inpClientPhone.value = (client && client.phone) || project.clientPhone || '';
+          if(inpClientEmail) inpClientEmail.value = (client && client.email) || project.clientEmail || '';
           
+          docClientName.textContent = cName || '________________________';
+          if(docClientAddress) docClientAddress.textContent = cAddr || '________________________';
+          docAddress.textContent = invAddr || '________________________';
           docCity.textContent = inpCity.value;
           
-          if(docClientNip) docClientNip.textContent = (client && client.nip) ? client.nip : '_________________';
-          if(docClientPhone) docClientPhone.textContent = (client && client.phone) ? client.phone : '_________';
-          if(docClientEmail) docClientEmail.textContent = (client && client.email) ? client.email : '_________';
+          if(docClientNip) docClientNip.textContent = (client && client.nip) || project.clientNip || '_________________';
+          if(docClientPhone) docClientPhone.textContent = (client && client.phone) || project.clientPhone || '_________';
+          if(docClientEmail) docClientEmail.textContent = (client && client.email) || project.clientEmail || '_________';
 
           if (project.cadData) {
              if (project.cadData.loopsCount) {
@@ -115,6 +141,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           
           if (project.protocols && project.protocols.szczelnoscData) {
              const data = project.protocols.szczelnoscData;
+             if (data.clientName) { inpClientName.value = data.clientName; docClientName.textContent = data.clientName; }
+             if (data.clientAddress && inpClientAddress) { inpClientAddress.value = data.clientAddress; if (docClientAddress) docClientAddress.textContent = data.clientAddress; }
+             if (data.address) { inpAddress.value = data.address; docAddress.textContent = data.address; }
              if (data.date) inpDate.value = data.date;
              if (data.medium) inpMedium.value = data.medium;
              if (data.loopsCount) inpLoopsCount.value = data.loopsCount;
@@ -187,6 +216,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   bindInput(inpClientName, docClientName);
+  if (inpClientAddress && docClientAddress) bindInput(inpClientAddress, docClientAddress);
   
   const updateDocAddress = () => {
     const addr = inpAddress.value.trim();
@@ -394,6 +424,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (idx !== -1) {
           const formData = {
               clientName: document.getElementById('inp_client_name') ? document.getElementById('inp_client_name').value : '',
+              clientAddress: document.getElementById('inp_client_address') ? document.getElementById('inp_client_address').value : '',
               address: document.getElementById('inp_address') ? document.getElementById('inp_address').value : '',
               city: document.getElementById('inp_city') ? document.getElementById('inp_city').value : '',
               date: document.getElementById('inp_date') ? document.getElementById('inp_date').value : '',

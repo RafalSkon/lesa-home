@@ -195,26 +195,26 @@ const ApiService = {
         const json = await res.json();
         if (json.success) {
           // Cache locally for offline use
-          localStorage.setItem('lesa_clients', JSON.stringify(json.clients));
+          sessionStorage.setItem('lesa_clients', JSON.stringify(json.clients));
           return json.clients;
         }
       } catch (e) {
         console.error('Błąd pobierania klientów z serwera, używam pamięci lokalnej:', e);
       }
     }
-    return JSON.parse(localStorage.getItem('lesa_clients') || '[]');
+    return JSON.parse(sessionStorage.getItem('lesa_clients') || '[]');
   },
 
   async saveClient(clientData) {
     // 1. Always save in localStorage for instant response & offline
-    let clients = JSON.parse(localStorage.getItem('lesa_clients') || '[]');
+    let clients = JSON.parse(sessionStorage.getItem('lesa_clients') || '[]');
     const idx = clients.findIndex(c => c.id === clientData.id);
     if (idx >= 0) {
       clients[idx] = { ...clients[idx], ...clientData };
     } else {
       clients.push(clientData);
     }
-    localStorage.setItem('lesa_clients', JSON.stringify(clients));
+    sessionStorage.setItem('lesa_clients', JSON.stringify(clients));
 
     // 2. Sync to Server
     const isOnline = await this.checkServer();
@@ -237,9 +237,9 @@ const ApiService = {
   },
 
   async deleteClient(id) {
-    let clients = JSON.parse(localStorage.getItem('lesa_clients') || '[]');
+    let clients = JSON.parse(sessionStorage.getItem('lesa_clients') || '[]');
     clients = clients.filter(c => c.id !== id);
-    localStorage.setItem('lesa_clients', JSON.stringify(clients));
+    sessionStorage.setItem('lesa_clients', JSON.stringify(clients));
 
     const isOnline = await this.checkServer();
     if (isOnline) {
@@ -262,25 +262,25 @@ const ApiService = {
         const res = await fetch(this.getBaseUrl() + 'projects.php?_t=' + new Date().getTime());
         const json = await res.json();
         if (json.success) {
-          localStorage.setItem('lesa_projects', JSON.stringify(json.projects));
+          sessionStorage.setItem('lesa_projects', JSON.stringify(json.projects));
           return json.projects;
         }
       } catch (e) {
         console.error('Błąd pobierania projektów z serwera:', e);
       }
     }
-    return JSON.parse(localStorage.getItem('lesa_projects') || '[]');
+    return JSON.parse(sessionStorage.getItem('lesa_projects') || '[]');
   },
 
   async saveProject(projectData) {
-    let projects = JSON.parse(localStorage.getItem('lesa_projects') || '[]');
+    let projects = JSON.parse(sessionStorage.getItem('lesa_projects') || '[]');
     const idx = projects.findIndex(p => p.id === projectData.id);
     if (idx >= 0) {
       projects[idx] = { ...projects[idx], ...projectData };
     } else {
       projects.push(projectData);
     }
-    localStorage.setItem('lesa_projects', JSON.stringify(projects));
+    sessionStorage.setItem('lesa_projects', JSON.stringify(projects));
 
     const isOnline = await this.checkServer();
     if (isOnline) {
@@ -302,9 +302,9 @@ const ApiService = {
   },
 
   async deleteProject(id) {
-    let projects = JSON.parse(localStorage.getItem('lesa_projects') || '[]');
+    let projects = JSON.parse(sessionStorage.getItem('lesa_projects') || '[]');
     projects = projects.filter(p => p.id !== id);
-    localStorage.setItem('lesa_projects', JSON.stringify(projects));
+    sessionStorage.setItem('lesa_projects', JSON.stringify(projects));
 
     const isOnline = await this.checkServer();
     if (isOnline) {
@@ -327,25 +327,25 @@ const ApiService = {
         const res = await fetch(this.getBaseUrl() + 'offers.php');
         const json = await res.json();
         if (json.success) {
-          localStorage.setItem('lesa_saved_offers', JSON.stringify(json.offers));
+          sessionStorage.setItem('lesa_saved_offers', JSON.stringify(json.offers));
           return json.offers;
         }
       } catch (e) {
         console.error('Błąd pobierania ofert z serwera:', e);
       }
     }
-    return JSON.parse(localStorage.getItem('lesa_saved_offers') || '[]');
+    return JSON.parse(sessionStorage.getItem('lesa_saved_offers') || '[]');
   },
 
   async saveOffer(offerData) {
-    let offers = JSON.parse(localStorage.getItem('lesa_saved_offers') || '[]');
+    let offers = JSON.parse(sessionStorage.getItem('lesa_saved_offers') || '[]');
     const idx = offers.findIndex(o => o.id === offerData.id || o.number === offerData.number);
     if (idx >= 0) {
       offers[idx] = offerData;
     } else {
       offers.push(offerData);
     }
-    localStorage.setItem('lesa_saved_offers', JSON.stringify(offers));
+    sessionStorage.setItem('lesa_saved_offers', JSON.stringify(offers));
 
     const isOnline = await this.checkServer();
     if (isOnline) {
@@ -367,9 +367,9 @@ const ApiService = {
   },
 
   async deleteOffer(id) {
-    let offers = JSON.parse(localStorage.getItem('lesa_saved_offers') || '[]');
+    let offers = JSON.parse(sessionStorage.getItem('lesa_saved_offers') || '[]');
     offers = offers.filter(o => o.id !== id);
-    localStorage.setItem('lesa_saved_offers', JSON.stringify(offers));
+    sessionStorage.setItem('lesa_saved_offers', JSON.stringify(offers));
 
     const isOnline = await this.checkServer();
     if (isOnline) {
@@ -392,20 +392,20 @@ const ApiService = {
         const res = await fetch(this.getBaseUrl() + 'contracts.php');
         const json = await res.json();
         if (json.success) {
-          localStorage.setItem('lesa_contracts_history', JSON.stringify(json.contracts));
+          sessionStorage.setItem('lesa_contracts_history', JSON.stringify(json.contracts));
           return json.contracts;
         }
       } catch (e) {
         console.error('Błąd pobierania umów z serwera:', e);
       }
     }
-    return JSON.parse(localStorage.getItem('lesa_contracts_history') || '[]');
+    return JSON.parse(sessionStorage.getItem('lesa_contracts_history') || '[]');
   },
 
   async saveContract(contractData) {
-    let contracts = JSON.parse(localStorage.getItem('lesa_contracts_history') || '[]');
+    let contracts = JSON.parse(sessionStorage.getItem('lesa_contracts_history') || '[]');
     contracts.unshift(contractData);
-    localStorage.setItem('lesa_contracts_history', JSON.stringify(contracts));
+    sessionStorage.setItem('lesa_contracts_history', JSON.stringify(contracts));
 
     const isOnline = await this.checkServer();
     if (isOnline) {
@@ -423,9 +423,9 @@ const ApiService = {
   },
 
   async deleteContract(id) {
-    let contracts = JSON.parse(localStorage.getItem('lesa_contracts_history') || '[]');
+    let contracts = JSON.parse(sessionStorage.getItem('lesa_contracts_history') || '[]');
     contracts = contracts.filter(c => c.id !== id);
-    localStorage.setItem('lesa_contracts_history', JSON.stringify(contracts));
+    sessionStorage.setItem('lesa_contracts_history', JSON.stringify(contracts));
 
     const isOnline = await this.checkServer();
     if (isOnline) {
@@ -447,16 +447,16 @@ const ApiService = {
         const res = await fetch(this.getBaseUrl() + 'contracts.php?type=profile');
         const json = await res.json();
         if (json.success && json.profile) {
-          localStorage.setItem('lesa_contractor_profile', JSON.stringify(json.profile));
+          sessionStorage.setItem('lesa_contractor_profile', JSON.stringify(json.profile));
           return json.profile;
         }
       } catch (e) {}
     }
-    return JSON.parse(localStorage.getItem('lesa_contractor_profile') || 'null');
+    return JSON.parse(sessionStorage.getItem('lesa_contractor_profile') || 'null');
   },
 
   async saveContractorProfile(profile) {
-    localStorage.setItem('lesa_contractor_profile', JSON.stringify(profile));
+    sessionStorage.setItem('lesa_contractor_profile', JSON.stringify(profile));
     const isOnline = await this.checkServer();
     if (isOnline) {
       try {
@@ -502,14 +502,18 @@ const ApiService = {
   /**
    * Upload a photo taken on site by monter (with automatic fast compression)
    */
-  async uploadSitePhoto(projectId, fileBlob, fileType = 'photo') {
+  async uploadSitePhoto(projectId, fileBlob, fileType = 'photo', roomName = '') {
     // Automatically compress to ~250KB JPEG
     const compressed = await this.compressImage(fileBlob, 1600, 0.8);
 
     const formData = new FormData();
-    formData.append('file', compressed);
+    const cleanRoomName = roomName ? roomName.replace(/[^a-zA-Z0-9_\u00C0-\u024F\u1E00-\u1EFF-]/g, '_') : 'photo';
+    formData.append('file', compressed, cleanRoomName + '.jpg');
     formData.append('projectId', projectId);
     formData.append('fileType', fileType);
+    if (roomName) {
+      formData.append('roomName', roomName);
+    }
 
     const res = await fetch(this.getBaseUrl() + 'upload.php', {
       method: 'POST',

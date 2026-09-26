@@ -1,0 +1,32 @@
+# LeSa Home - Inquiries Uploads Security
+# Strictly disallow execution of any scripts in this directory
+
+Options -ExecCGI -Indexes
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .phps .cgi .pl .py .sh
+
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php8.c>
+    php_flag engine off
+</IfModule>
+
+<FilesMatch "\.(php|phtml|php3|php4|php5|php7|phps|pl|py|cgi|asp|aspx|jsp|sh|bash|html|htm|shtml|svg|exe|cmd|bat|vbs|js|json)$">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
+
+# Only allow safe media/document extensions to be read
+<FilesMatch "\.(pdf|dwg|jpg|jpeg|png|webp)$">
+    Order allow,deny
+    Allow from all
+</FilesMatch>
+
+# Force binary download for DWG files
+<FilesMatch "\.(dwg)$">
+    ForceType application/octet-stream
+    Header set Content-Disposition "attachment"
+</FilesMatch>

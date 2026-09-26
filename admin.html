@@ -193,6 +193,22 @@
                 </div>
                 <span id="badge-projects-count" class="bg-emerald-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
               </button>
+
+              <button data-tab="calendar" class="nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all text-left">
+                <div class="flex items-center gap-3">
+                  <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  <span>Kalendarz &amp; Terminarz Montera</span>
+                </div>
+                <span id="badge-calendar-count" class="bg-amber-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+              </button>
+
+              <a href="monter.html" target="_blank" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all text-left">
+                <div class="flex items-center gap-3">
+                  <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                  <span>Panel Montera (Mobilny)</span>
+                </div>
+                <span class="bg-blue-500/20 text-blue-300 text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">Widok Ekipy</span>
+              </a>
               
               <a href="oferta.html" target="_blank" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all text-left">
                 <div class="flex items-center gap-3">
@@ -378,6 +394,22 @@
               </a>
             </div>
 
+          </div>
+
+          <!-- Upcoming Installations (Kalendarz Montera) Preview on Dashboard -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                <h2 class="text-sm font-bold text-slate-900">Harmonogram Montaży &bull; Najbliższe zaplanowane zlecenia</h2>
+              </div>
+              <button onclick="AdminApp.switchTab('calendar')" class="text-xs text-amber-600 hover:text-amber-700 font-bold flex items-center gap-1">
+                <span>Otwórz pełny kalendarz montera &rarr;</span>
+              </button>
+            </div>
+            <div id="dashboard-upcoming-installations" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              <!-- Dynamically populated -->
+            </div>
           </div>
 
         </section>
@@ -685,6 +717,92 @@
           </div>
         </section>
 
+        <!-- ================= TAB: KALENDARZ MONTERA ================= -->
+        <section id="tab-calendar" class="tab-pane hidden space-y-6">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-bold font-heading text-slate-900 flex items-center gap-2.5">
+                <span class="p-2 rounded-xl bg-amber-500/10 text-amber-600">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </span>
+                <span>Kalendarz Prac &amp; Terminarz Montera</span>
+              </h1>
+              <p class="text-xs text-slate-500 mt-1">Harmonogram zleceń montażowych i odbiorów w terenie. Pełna synchronizacja z aplikacją montera i paletą 20 kolorów projektów.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="AdminApp.openProjectModal()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-md shadow-amber-600/20 transition-all flex items-center gap-1.5 active:scale-95">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                <span>Zaplanuj Nowy Montaż</span>
+              </button>
+              <a href="monter.html" target="_blank" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl shadow-sm transition-all flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                <span>Widok Montera</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Main Calendar Grid: Left Month view (5 cols), Right Tasks view (7 cols) -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Lewa kolumna: Kalendarz Miesięczny + Paleta Kolorów -->
+            <div class="lg:col-span-5 space-y-4">
+              <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 id="admin-cal-month-title" class="font-bold text-slate-800 text-base">...</h3>
+                  <div class="flex items-center gap-1">
+                    <button onclick="AdminApp.changeCalendarMonth(-1)" title="Poprzedni miesiąc" class="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-colors">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button onclick="AdminApp.resetCalendarMonth()" class="px-2.5 py-1 text-xs font-bold rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 transition-colors">
+                      Dziś
+                    </button>
+                    <button onclick="AdminApp.changeCalendarMonth(1)" title="Następny miesiąc" class="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-colors">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-wider">
+                  <div>Pn</div><div>Wt</div><div>Śr</div><div>Cz</div><div>Pt</div><div>Sb</div><div>Nd</div>
+                </div>
+                <div id="admin-calendar-grid" class="grid grid-cols-7 gap-1 text-sm">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Prawa kolumna: Zadania i zlecenia dla wybranego dnia lub wszystkie -->
+            <div class="lg:col-span-7 space-y-4">
+              <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 min-h-[480px] flex flex-col">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-4">
+                  <div>
+                    <h3 id="admin-cal-tasks-header" class="text-base font-bold text-slate-900 flex items-center gap-2">
+                      <span>Wszystkie zaplanowane zlecenia</span>
+                    </h3>
+                    <p id="admin-cal-tasks-sub" class="text-xs text-slate-500 mt-0.5">Wybierz dzień w kalendarzu lub przeglądaj pełną listę.</p>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button id="admin-cal-btn-all" onclick="AdminApp.showAllCalendarTasks()" class="hidden text-xs text-amber-700 hover:text-amber-800 font-bold px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 transition-colors">
+                      Pokaż wszystkie
+                    </button>
+                    <select id="admin-cal-status-filter" onchange="AdminApp.onCalendarFilterChange()" class="text-xs font-semibold px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 outline-none">
+                      <option value="all">Wszystkie statusy</option>
+                      <option value="montaz">Do montażu / W trakcie</option>
+                      <option value="zakonczone">Zakończone</option>
+                      <option value="wycena">Wycena / Wstępne</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div id="admin-cal-tasks-list" class="flex-1 space-y-3 overflow-y-auto">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
         <!-- ================= TAB: USERS ================= -->
         <section id="tab-users" class="tab-pane hidden space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -910,6 +1028,18 @@
             </select>
           </div>
         </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+            <span>Kolor Projektu:</span>
+          </label>
+          <input type="hidden" id="modal-project-color" value="#ea580c">
+          <div id="modal-project-color-swatches" class="grid grid-cols-10 gap-1.5 p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+            <!-- 20 clickable color dots populated via JS -->
+          </div>
+          <p class="text-[10px] text-slate-400 mt-1">Wybrany kolor wyróżni ten projekt w kalendarzu, na listach i w widokach.</p>
+        </div>
       </div>
       <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
         <button onclick="AdminApp.closeProjectModal()" class="px-4 py-2 text-sm font-bold text-slate-600 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition-colors">Anuluj</button>
@@ -922,8 +1052,8 @@
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
   <!-- Scripts -->
-  <script src="js/api-service.js?v=1"></script>
-  <script src="js/admin2.js?v=15"></script>
+  <script src="js/api-service.js?v=10"></script>
+  <script src="js/admin2.js?v=18"></script>
 </body>
 </html>
 

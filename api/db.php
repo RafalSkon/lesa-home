@@ -104,6 +104,7 @@ try {
             cad_data TEXT DEFAULT '',
             installation_date TEXT DEFAULT '',
             installation_days INTEGER DEFAULT 1,
+            color TEXT DEFAULT '',
             created_at INTEGER NOT NULL
         );
 
@@ -162,6 +163,21 @@ try {
             entity_id TEXT DEFAULT '',
             details TEXT DEFAULT '',
             ip_address TEXT DEFAULT '',
+            created_at INTEGER NOT NULL
+        );
+
+        CREATE TABLE IF NOT EXISTS inquiries (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            phone TEXT NOT NULL,
+            email TEXT DEFAULT '',
+            area REAL DEFAULT 0,
+            location TEXT DEFAULT '',
+            stage TEXT DEFAULT '',
+            message TEXT DEFAULT '',
+            files_json TEXT DEFAULT '[]',
+            ip_address TEXT DEFAULT '',
+            status TEXT DEFAULT 'Nowe',
             created_at INTEGER NOT NULL
         );
     ");
@@ -227,33 +243,27 @@ try {
         $db->exec("ALTER TABLE projects ADD COLUMN installation_days INTEGER DEFAULT 1");
     }
 
-    // Seed default admin user "Rafal" if not exists
-    $adminUsername = 'Rafal';
-    $checkAdminStmt = $db->prepare("SELECT id FROM users WHERE username = :username");
-    $checkAdminStmt->execute([':username' => $adminUsername]);
-    if (!$checkAdminStmt->fetch()) {
-        $adminId = uniqid('usr_');
-        $adminHash = password_hash('@!Winter@2026', PASSWORD_DEFAULT);
-        $insertAdminStmt = $db->prepare("
-            INSERT INTO users (id, username, password_hash, role, status, created_at)
-            VALUES (:id, :username, :password_hash, 'admin', 'approved', :created_at)
-        ");
-        $insertAdminStmt->execute([
-            ':id' => $adminId,
-            ':username' => $adminUsername,
-            ':password_hash' => $adminHash,
-            ':created_at' => time()
-        ]);
-        
-        // Also seed 'Rafał' just in case he types with a Polish letter
-        $adminIdPl = uniqid('usr_');
-        $insertAdminStmt->execute([
-            ':id' => $adminIdPl,
-            ':username' => 'Rafał',
-            ':password_hash' => $adminHash,
-            ':created_at' => time()
-        ]);
+    // Migration: Add color to projects table if missing
+    $hasColorCol = false;
+    foreach ($columns as $col) {
+        if ($col['name'] === 'color') $hasColorCol = true;
     }
+    if (!$hasColorCol) {
+        $db->exec("ALTER TABLE projects ADD COLUMN color TEXT DEFAULT ''");
+    }
+
+    // Migration: Add room_name to project_files table if missing
+    $fileCols = $db->query("PRAGMA table_info(project_files)")->fetchAll(PDO::FETCH_ASSOC);
+    $hasRoomNameCol = false;
+    foreach ($fileCols as $col) {
+        if ($col['name'] === 'room_name') $hasRoomNameCol = true;
+    }
+    if (!$hasRoomNameCol) {
+        $db->exec("ALTER TABLE project_files ADD COLUMN room_name TEXT DEFAULT ''");
+    }
+
+    // Seedowanie konta admina zostało usunięte w ramach poprawek bezpieczeństwa.
+    // Hasło nie jest już zapisane jawnym tekstem w kodzie źródłowym.
 
 } catch (PDOException $e) {
     error_log('[LeSa DB ERROR] ' . $e->getMessage());

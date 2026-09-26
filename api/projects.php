@@ -23,7 +23,34 @@ switch ($method) {
                 $project['cadData'] = !empty($project['cad_data']) ? json_decode($project['cad_data'], true) : null;
                 $project['protocols'] = !empty($project['protocols']) ? (is_array($project['protocols']) ? $project['protocols'] : json_decode($project['protocols'], true)) : null;
                 $project['installationDate'] = $project['installation_date'] ?? '';
+                $project['installation_date'] = $project['installation_date'] ?? '';
                 $project['installationDays'] = intval($project['installation_days'] ?? 1);
+                $project['installation_days'] = intval($project['installation_days'] ?? 1);
+                $project['color'] = $project['color'] ?? '';
+                $project['clientId'] = $project['client_id'];
+                $project['projectTitle'] = $project['title'];
+                $project['investmentAddress'] = $project['address'];
+                $project['investmentCity'] = $project['city'];
+
+                if (!empty($project['client_id'])) {
+                    $cStmt = $db->prepare("SELECT * FROM clients WHERE id = ?");
+                    $cStmt->execute([$project['client_id']]);
+                    $c = $cStmt->fetch();
+                    if ($c) {
+                        $project['clientName'] = $c['name'];
+                        $cAddr = $c['address'] ?: ($c['address_home'] ?: ($c['address_company'] ?: ''));
+                        if (!empty($c['city']) && $cAddr && stripos($cAddr, $c['city']) === false) {
+                            $cAddr .= ', ' . $c['city'];
+                        } elseif (empty($cAddr) && !empty($c['city'])) {
+                            $cAddr = $c['city'];
+                        }
+                        $project['clientAddress'] = $cAddr;
+                        $project['clientCity'] = $c['city'] ?? '';
+                        $project['clientNip'] = $c['nip'] ?? '';
+                        $project['clientPhone'] = $c['phone'] ?? '';
+                        $project['clientEmail'] = $c['email'] ?? '';
+                    }
+                }
 
                 jsonResponse(['success' => true, 'project' => $project]);
             } else {
@@ -48,7 +75,7 @@ switch ($method) {
         }
 
         // Get all clients to map their names and addresses
-        $clientsStmt = $db->query("SELECT id, name, address, phone, email FROM clients");
+        $clientsStmt = $db->query("SELECT * FROM clients");
         $allClients = $clientsStmt->fetchAll();
         $clientsById = [];
         foreach ($allClients as $client) {
@@ -69,17 +96,25 @@ switch ($method) {
             $p['installation_date'] = $p['installation_date'] ?? '';
             $p['installationDays'] = intval($p['installation_days'] ?? 1);
             $p['installation_days'] = intval($p['installation_days'] ?? 1);
+            $p['color'] = $p['color'] ?? '';
             
             // Map client data
             if (isset($clientsById[$p['client_id']])) {
                 $c = $clientsById[$p['client_id']];
                 $p['clientName'] = $c['name'];
-                $p['clientAddress'] = $c['address'];
+                $cAddr = $c['address'] ?: ($c['address_home'] ?: ($c['address_company'] ?: ''));
+                if (!empty($c['city']) && $cAddr && stripos($cAddr, $c['city']) === false) {
+                    $cAddr .= ', ' . $c['city'];
+                } elseif (empty($cAddr) && !empty($c['city'])) {
+                    $cAddr = $c['city'];
+                }
+                $p['clientAddress'] = $cAddr;
+                $p['clientCity'] = $c['city'] ?? '';
                 $p['clientNip'] = $c['nip'] ?? '';
                 $p['clientPesel'] = $c['pesel'] ?? '';
                 $p['clientIdCard'] = $c['id_card'] ?? '';
-                $p['clientPhone'] = $c['phone'];
-                $p['clientEmail'] = $c['email'];
+                $p['clientPhone'] = $c['phone'] ?? '';
+                $p['clientEmail'] = $c['email'] ?? '';
             }
         }
 
@@ -101,6 +136,7 @@ switch ($method) {
         $installationDate = isset($body['installationDate']) ? trim($body['installationDate']) : (isset($body['installation_date']) ? trim($body['installation_date']) : '');
         $installationDays = isset($body['installationDays']) ? intval($body['installationDays']) : (isset($body['installation_days']) ? intval($body['installation_days']) : 1);
         if ($installationDays < 1) $installationDays = 1;
+        $color = !empty($body['color']) ? trim($body['color']) : ($exists ? ($exists['color'] ?? '') : '');
 
         $checkStmt = $db->prepare("SELECT * FROM projects WHERE id = ?");
         $checkStmt->execute([$id]);
@@ -125,16 +161,16 @@ switch ($method) {
             }
             $stmt = $db->prepare("
                 UPDATE projects SET 
-                    client_id = ?, title = ?, address = ?, city = ?, status = ?, cad_file = ?, cad_data = ?, protocols = ?, installation_date = ?, installation_days = ?
+                    client_id = ?, title = ?, address = ?, city = ?, status = ?, cad_file = ?, cad_data = ?, protocols = ?, installation_date = ?, installation_days = ?, color = ?
                 WHERE id = ?
             ");
-            $stmt->execute([$clientId, $title, $address, $city, $status, $cadFile, $cadData, $protocols, $installationDate, $installationDays, $id]);
+            $stmt->execute([$clientId, $title, $address, $city, $status, $cadFile, $cadData, $protocols, $installationDate, $installationDays, $color, $id]);
         } else {
             $stmt = $db->prepare("
-                INSERT INTO projects (id, client_id, title, address, city, status, cad_file, cad_data, protocols, installation_date, installation_days, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO projects (id, client_id, title, address, city, status, cad_file, cad_data, protocols, installation_date, installation_days, color, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
-            $stmt->execute([$id, $clientId, $title, $address, $city, $status, $cadFile, $cadData, $protocols, $installationDate, $installationDays, $createdAt]);
+            $stmt->execute([$id, $clientId, $title, $address, $city, $status, $cadFile, $cadData, $protocols, $installationDate, $installationDays, $color, $createdAt]);
         }
 
         jsonResponse([
@@ -154,6 +190,7 @@ switch ($method) {
                 'installation_date' => $installationDate,
                 'installationDays' => $installationDays,
                 'installation_days' => $installationDays,
+                'color' => $color,
                 'cad_file' => $cadFile,
                 'cadData' => !empty($cadData) ? json_decode($cadData, true) : null,
                 'protocols' => !empty($protocols) ? (is_array($protocols) ? $protocols : json_decode($protocols, true)) : null,

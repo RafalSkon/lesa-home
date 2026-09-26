@@ -19,3 +19,12 @@ tmp/
 .lesa-sync.cache.json
 tools/lesa-sync/*.exe
 tools/lesa-sync/*.pdb
+
+# Database & uploads data
+api/data/*
+!api/data/.htaccess
+uploads/inquiries/*
+!uploads/inquiries/.htaccess
+!uploads/inquiries/index.html
+!uploads/index.html
+

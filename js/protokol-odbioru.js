@@ -1,12 +1,18 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  // Elements
+  // Elements - Form inputs
   const inpClientName = document.getElementById('inp_client_name');
+  const inpClientAddress = document.getElementById('inp_client_address');
   const inpAddress = document.getElementById('inp_address');
   const inpCity = document.getElementById('inp_city');
   const inpDate = document.getElementById('inp_date');
   const inpDocNo = document.getElementById('inp_doc_no');
+  const inpClientNip = document.getElementById('inp_client_nip');
+  const inpClientPhone = document.getElementById('inp_client_phone');
+  const inpClientEmail = document.getElementById('inp_client_email');
 
+  // Elements - Document preview
   const docClientName = document.getElementById('doc_client_name');
+  const docClientAddress = document.getElementById('doc_client_address');
   const docAddress = document.getElementById('doc_address');
   const docCity = document.getElementById('doc_city');
   const docDate = document.getElementById('doc_date');
@@ -15,15 +21,87 @@ document.addEventListener('DOMContentLoaded', async () => {
   const docClientPhone = document.getElementById('doc_client_phone');
   const docClientEmail = document.getElementById('doc_client_email');
   
-  const inpClientNip = document.getElementById('inp_client_nip');
-  const inpClientPhone = document.getElementById('inp_client_phone');
-  const inpClientEmail = document.getElementById('inp_client_email');
-  
   const docContractor = document.getElementById('doc_contractor');
   const docContractorDetails = document.getElementById('doc_contractor_details');
   const docContractorContact = document.getElementById('doc_contractor_contact');
 
   let rowsData = [];
+
+  const escapeQuote = (val) => String(val || '').replace(/"/g, '&quot;');
+
+  // Live synchronisation from form inputs to document preview
+  const syncInputsToDocument = () => {
+    if (inpClientName && docClientName) {
+      inpClientName.addEventListener('input', (e) => {
+        docClientName.textContent = e.target.value.trim() || '________________________';
+      });
+    }
+    if (inpClientAddress && docClientAddress) {
+      inpClientAddress.addEventListener('input', (e) => {
+        docClientAddress.textContent = e.target.value.trim() || '________________________';
+      });
+    }
+    if (inpAddress && docAddress) {
+      inpAddress.addEventListener('input', (e) => {
+        docAddress.textContent = e.target.value.trim() || '________________________';
+      });
+    }
+    if (inpClientNip && docClientNip) {
+      inpClientNip.addEventListener('input', (e) => {
+        docClientNip.textContent = e.target.value.trim() || '_________________';
+      });
+    }
+    if (inpClientPhone && docClientPhone) {
+      inpClientPhone.addEventListener('input', (e) => {
+        docClientPhone.textContent = e.target.value.trim() || '_________';
+      });
+    }
+    if (inpClientEmail && docClientEmail) {
+      inpClientEmail.addEventListener('input', (e) => {
+        docClientEmail.textContent = e.target.value.trim() || '_________';
+      });
+    }
+    if (inpCity && docCity) {
+      inpCity.addEventListener('input', (e) => {
+        docCity.textContent = e.target.value.trim() || '___________';
+      });
+    }
+    if (inpDate && docDate) {
+      inpDate.addEventListener('input', (e) => {
+        docDate.textContent = e.target.value || '______';
+      });
+    }
+    if (inpDocNo && docNo) {
+      inpDocNo.addEventListener('input', (e) => {
+        docNo.innerHTML = "Nr: <strong>" + (e.target.value.trim() || '______') + "</strong>";
+      });
+    }
+  };
+
+  // Load Contractor Profile (same as in Contract Generator / Admin Settings)
+  const loadContractorSettings = async () => {
+    let profile = null;
+    if (window.ApiService && typeof ApiService.getContractorProfile === 'function') {
+      try { profile = await ApiService.getContractorProfile(); } catch (e) {}
+    }
+    if (!profile) {
+      try {
+        profile = JSON.parse(localStorage.getItem('lesa_contractor_profile') || localStorage.getItem('lesa_admin_settings') || 'null');
+      } catch (e) {}
+    }
+    if (profile) {
+      if (docContractor) docContractor.textContent = profile.name || profile.companyName || 'LeSa - Home | Rafał Skowroński';
+      if (docContractorDetails) {
+        const parts = [];
+        if (profile.address || profile.companyAddress) parts.push(profile.address || profile.companyAddress);
+        if (profile.nip || profile.companyNip) parts.push(`NIP: ${profile.nip || profile.companyNip}`);
+        if (parts.length > 0) docContractorDetails.textContent = parts.join(', ');
+      }
+      if (docContractorContact) {
+        docContractorContact.textContent = `Tel: ${profile.phone || profile.companyPhone || '_________'} • E-mail: ${profile.email || profile.companyEmail || '_________'}`;
+      }
+    }
+  };
 
   const renderDocumentTable = () => {
     const container = document.getElementById('doc_manifolds_container');
@@ -196,12 +274,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const fetchCadLoops = async (project) => {
     if (!project) return [];
     
-    // 1. Try reading directly from s1c file if available to get the most accurate, live manifold and room names
+    // 1. Try reading directly from s1c file if available
     let cadContent = null;
     let fileUrl = project.cad_file;
     if (!fileUrl && project.files && project.files.length > 0) {
-      const cadF = project.files.find(f => f.file_type === 'cad' || (f.file_name && f.file_name.endsWith('.s1c')));
-      if (cadF) fileUrl = cadF.file_url;
+      const cadF = project.files.find(f => (f.file_type === 'cad' || f.fileType === 'cad') || (f.file_name && f.file_name.endsWith('.s1c')));
+      if (cadF) fileUrl = cadF.file_url || cadF.fileUrl;
     }
     
     if (fileUrl) {
@@ -323,7 +401,6 @@ document.addEventListener('DOMContentLoaded', async () => {
      });
   }
 
-  const escapeQuote = (val) => String(val || '').replace(/"/g, '&quot;');
   const renderEditorTables = () => {
     const container = document.getElementById('editor-manifolds-container');
     if (!container) return;
@@ -428,65 +505,163 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
-  btnAddRow.addEventListener('click', () => addRow('Nowy Rozdzielacz'));
+  if (btnAddRow) {
+    btnAddRow.addEventListener('click', () => addRow('Nowy Rozdzielacz'));
+  }
 
-    const loadRowsData = async () => {
+  // Load project & client data from database
+  const loadActiveProjectData = async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const pid = urlParams.get('projectId') || localStorage.getItem('lesa_active_project_id');
-    if (pid) {
+    if (!pid) return;
+
+    try {
       let projects = [];
+      let clients = [];
       if (window.ApiService) {
-          projects = await ApiService.getProjects();
+        projects = await ApiService.getProjects() || [];
+        try { clients = await ApiService.getClients() || []; } catch (e) {}
       } else {
-          projects = JSON.parse(localStorage.getItem('lesa_projects')) || [];
+        projects = JSON.parse(localStorage.getItem('lesa_projects')) || [];
+        clients = JSON.parse(localStorage.getItem('lesa_clients')) || [];
       }
+
       const project = projects.find(p => p.id === pid);
-      
-      if (project && project.protocols && project.protocols.odbiorData) {
-         const data = project.protocols.odbiorData;
-         if (data.date) { document.getElementById('inp_date').value = data.date; document.getElementById('doc_date').textContent = data.date; }
-         if (data.docNo) { document.getElementById('inp_doc_no').value = data.docNo; document.getElementById('doc_no').textContent = "Nr: " + data.docNo; }
-         
-         if (data.sigClient && data.sigClient.startsWith('data:')) {
-            const img = document.getElementById('doc_sig_client');
-            img.src = data.sigClient;
-            img.classList.remove('hidden');
-         }
-         if (data.sigContractor && data.sigContractor.startsWith('data:')) {
-            const img = document.getElementById('doc_sig_contractor');
-            img.src = data.sigContractor;
-            img.classList.remove('hidden');
-         }
-         
-         if (data.rowsData && data.rowsData.length > 0) {
-             rowsData = data.rowsData;
-             renderEditorTables(); renderDocumentTable();
-             return;
-         }
+      if (!project) return;
+
+      const cId = project.clientId || project.client_id;
+      const client = clients.find(c => c.id === cId);
+
+      // 1. Nazwa inwestora
+      let cName = (client && (client.name || client.client_name || client.companyName)) || project.clientName || project.client_name || '';
+
+      // 2. Pełny adres Inwestora (zamieszkania / siedziby)
+      let cAddr = '';
+      if (client) {
+        cAddr = client.address || client.address_home || client.address_company || '';
+        if (client.city && cAddr && !cAddr.toLowerCase().includes(client.city.toLowerCase())) {
+          cAddr += ', ' + client.city;
+        } else if (!cAddr && client.city) {
+          cAddr = client.city;
+        }
       }
-      
-      const saved = localStorage.getItem('lesa_protokol_loops_' + pid);
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          if (parsed && parsed.length > 0) {
-            rowsData = parsed;
-            renderEditorTables(); renderDocumentTable();
-            return;
-          }
-        } catch (e) {}
+      if (!cAddr) {
+        cAddr = project.clientAddress || project.address_home || '';
       }
-      const cadLoops = await fetchCadLoops(project);
-      if (cadLoops && cadLoops.length > 0) {
-        rowsData = cadLoops;
-        renderEditorTables(); renderDocumentTable();
-        saveRowsData();
-        return;
+
+      // 3. Miejsce Inwestycji (po prawej stronie)
+      let invAddr = project.investmentAddress || project.address || '';
+      const invCity = project.investmentCity || project.city || '';
+      if (invAddr && invCity && !invAddr.toLowerCase().includes(invCity.toLowerCase())) {
+        invAddr += ', ' + invCity;
+      } else if (!invAddr && invCity) {
+        invAddr = invCity;
       }
+      if (!invAddr) {
+        invAddr = cAddr; // Fallback
+      }
+
+      // 4. NIP, telefon, email
+      let cNip = (client && client.nip) || project.clientNip || project.client_nip || '';
+      let cPhone = (client && client.phone) || project.clientPhone || project.client_phone || '';
+      let cEmail = (client && client.email) || project.clientEmail || project.client_email || '';
+
+      // 5. Miejscowość i data
+      let docCityVal = invCity || (client && client.city) || 'Warszawa';
+      let docDateVal = new Date().toISOString().split('T')[0];
+      let docNoVal = `GWR/${new Date().getFullYear()}/${String(new Date().getMonth()+1).padStart(2,'0')}/${(project.id || '01').replace(/[^a-zA-Z0-9]/g, '').substr(-4).toUpperCase()}`;
+
+      // Jeśli protokół był już wcześniej zapisany - wczytaj zachowane dane
+      if (project.protocols && project.protocols.odbiorData) {
+        const d = project.protocols.odbiorData;
+        if (d.clientName) cName = d.clientName;
+        if (d.clientAddress) cAddr = d.clientAddress;
+        if (d.investmentAddress || d.address) invAddr = d.investmentAddress || d.address;
+        if (d.clientNip) cNip = d.clientNip;
+        if (d.clientPhone) cPhone = d.clientPhone;
+        if (d.clientEmail) cEmail = d.clientEmail;
+        if (d.city) docCityVal = d.city;
+        if (d.date) docDateVal = d.date;
+        if (d.docNo) docNoVal = d.docNo;
+
+        if (d.sigClient && d.sigClient.startsWith('data:')) {
+          const img = document.getElementById('doc_sig_client');
+          if (img) { img.src = d.sigClient; img.classList.remove('hidden'); }
+        }
+        if (d.sigContractor && d.sigContractor.startsWith('data:')) {
+          const img = document.getElementById('doc_sig_contractor');
+          if (img) { img.src = d.sigContractor; img.classList.remove('hidden'); }
+        }
+
+        if (d.rowsData && d.rowsData.length > 0) {
+          rowsData = d.rowsData;
+          renderEditorTables();
+          renderDocumentTable();
+        }
+      }
+
+      // Wypełnij formularz (lewa kolumna)
+      if (inpClientName) inpClientName.value = cName;
+      if (inpClientAddress) inpClientAddress.value = cAddr;
+      if (inpAddress) inpAddress.value = invAddr;
+      if (inpClientNip) inpClientNip.value = cNip;
+      if (inpClientPhone) inpClientPhone.value = cPhone;
+      if (inpClientEmail) inpClientEmail.value = cEmail;
+      if (inpCity) inpCity.value = docCityVal;
+      if (inpDate) inpDate.value = docDateVal;
+      if (inpDocNo) inpDocNo.value = docNoVal;
+
+      // Wypełnij podgląd dokumentu (prawa kolumna)
+      if (docClientName) docClientName.textContent = cName || '________________________';
+      if (docClientAddress) docClientAddress.textContent = cAddr || '________________________';
+      if (docAddress) docAddress.textContent = invAddr || '________________________';
+      if (docClientNip) docClientNip.textContent = cNip || '_________________';
+      if (docClientPhone) docClientPhone.textContent = cPhone || '_________';
+      if (docClientEmail) docClientEmail.textContent = cEmail || '_________';
+      if (docCity) docCity.textContent = docCityVal || '___________';
+      if (docDate) docDate.textContent = docDateVal || '______';
+      if (docNo) docNo.innerHTML = "Nr: <strong>" + (docNoVal || '______') + "</strong>";
+
+      // Jeśli pętle nie były jeszcze wczytane z odbiorData:
+      if (!rowsData || rowsData.length === 0) {
+        const saved = localStorage.getItem('lesa_protokol_loops_' + pid);
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            if (parsed && parsed.length > 0) {
+              rowsData = parsed;
+              renderEditorTables();
+              renderDocumentTable();
+              return;
+            }
+          } catch (e) {}
+        }
+        const cadLoops = await fetchCadLoops(project);
+        if (cadLoops && cadLoops.length > 0) {
+          rowsData = cadLoops;
+          renderEditorTables();
+          renderDocumentTable();
+          saveRowsData();
+          return;
+        }
+      }
+
+    } catch (e) {
+      console.error("Błąd ładowania danych projektu:", e);
     }
-    if(rowsData.length === 0) addRow('R1'); else { renderEditorTables(); renderDocumentTable(); } 
+
+    if (rowsData.length === 0) addRow('R1');
+    else { renderEditorTables(); renderDocumentTable(); }
   };
-    await loadRowsData();
+
+  // Bind live sync
+  syncInputsToDocument();
+
+  // Load contractor and project data
+  await loadContractorSettings();
+  await loadActiveProjectData();
+
+  // Signature Pad Logic
   const sigModal = document.getElementById('signature-modal');
   const btnCloseSig = document.getElementById('btn_close_signature');
   const btnClearSig = document.getElementById('btn_clear_signature');
@@ -505,7 +680,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       penColor: '#1e293b'
     });
     
-    // Resize canvas properly
     const resizeCanvas = () => {
       const ratio =  Math.max(window.devicePixelRatio || 1, 1);
       sigCanvas.width = sigCanvas.offsetWidth * ratio;
@@ -532,31 +706,38 @@ document.addEventListener('DOMContentLoaded', async () => {
     currentTargetImg = null;
   };
 
-  document.getElementById('btn_sign_client').addEventListener('click', () => {
-    openSignatureModal('Złóż podpis (Inwestor)', 'doc_sig_client');
-  });
+  const btnSignClient = document.getElementById('btn_sign_client');
+  if (btnSignClient) {
+    btnSignClient.addEventListener('click', () => {
+      openSignatureModal('Złóż podpis (Inwestor)', 'doc_sig_client');
+    });
+  }
 
-  document.getElementById('btn_sign_contractor').addEventListener('click', () => {
-    openSignatureModal('Złóż podpis (Wykonawca)', 'doc_sig_contractor');
-  });
+  const btnSignContractor = document.getElementById('btn_sign_contractor');
+  if (btnSignContractor) {
+    btnSignContractor.addEventListener('click', () => {
+      openSignatureModal('Złóż podpis (Wykonawca)', 'doc_sig_contractor');
+    });
+  }
 
-  btnCloseSig.addEventListener('click', closeSignatureModal);
-  
-  btnClearSig.addEventListener('click', () => {
-    if (signaturePad) signaturePad.clear();
-  });
+  if (btnCloseSig) btnCloseSig.addEventListener('click', closeSignatureModal);
+  if (btnClearSig) btnClearSig.addEventListener('click', () => { if (signaturePad) signaturePad.clear(); });
 
-  btnSaveSig.addEventListener('click', () => {
-    if (signaturePad && currentTargetImg) {
-      if (signaturePad.isEmpty()) {
-        alert("Proszę złożyć podpis przed zapisaniem.");
-        return;
+  if (btnSaveSig) {
+    btnSaveSig.addEventListener('click', () => {
+      if (signaturePad && currentTargetImg) {
+        if (signaturePad.isEmpty()) {
+          alert("Proszę złożyć podpis przed zapisaniem.");
+          return;
+        }
+        currentTargetImg.src = signaturePad.toDataURL('image/png');
+        currentTargetImg.classList.remove('hidden');
+        closeSignatureModal();
       }
-      currentTargetImg.src = signaturePad.toDataURL('image/png');
-      currentTargetImg.classList.remove('hidden');
-      closeSignatureModal();
-    }
-  });
+    });
+  }
+
+  // Save Protocol to System
   const btnSaveProtocol = document.getElementById('btn-save-protocol');
   if (btnSaveProtocol) {
     btnSaveProtocol.addEventListener('click', async () => {
@@ -571,12 +752,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         const idx = projects.findIndex(p => p.id === activeProjectId);
         if (idx !== -1) {
+          const clientNameVal = document.getElementById('inp_client_name') ? document.getElementById('inp_client_name').value : '';
+          const clientAddressVal = document.getElementById('inp_client_address') ? document.getElementById('inp_client_address').value : '';
+          const investmentAddressVal = document.getElementById('inp_address') ? document.getElementById('inp_address').value : '';
+          const clientNipVal = document.getElementById('inp_client_nip') ? document.getElementById('inp_client_nip').value : '';
+          const clientPhoneVal = document.getElementById('inp_client_phone') ? document.getElementById('inp_client_phone').value : '';
+          const clientEmailVal = document.getElementById('inp_client_email') ? document.getElementById('inp_client_email').value : '';
+          const cityVal = document.getElementById('inp_city') ? document.getElementById('inp_city').value : '';
+          const dateVal = document.getElementById('inp_date') ? document.getElementById('inp_date').value : '';
+          const docNoVal = document.getElementById('inp_doc_no') ? document.getElementById('inp_doc_no').value : '';
+
           const formData = {
-              clientName: document.getElementById('inp_client_name') ? document.getElementById('inp_client_name').value : '',
-              address: document.getElementById('inp_address') ? document.getElementById('inp_address').value : '',
-              city: document.getElementById('inp_city') ? document.getElementById('inp_city').value : '',
-              date: document.getElementById('inp_date') ? document.getElementById('inp_date').value : '',
-              docNo: document.getElementById('inp_doc_no') ? document.getElementById('inp_doc_no').value : '',
+              clientName: clientNameVal,
+              clientAddress: clientAddressVal,
+              investmentAddress: investmentAddressVal,
+              address: investmentAddressVal,
+              clientNip: clientNipVal,
+              clientPhone: clientPhoneVal,
+              clientEmail: clientEmailVal,
+              city: cityVal,
+              date: dateVal,
+              docNo: docNoVal,
               sigClient: document.getElementById('doc_sig_client') ? document.getElementById('doc_sig_client').src : '',
               sigContractor: document.getElementById('doc_sig_contractor') ? document.getElementById('doc_sig_contractor').src : '',
               rowsData: rowsData || []
@@ -594,10 +790,10 @@ document.addEventListener('DOMContentLoaded', async () => {
              } else {
                  localStorage.setItem('lesa_projects', JSON.stringify(projects));
              }
-             alert('Protok� odbioru zosta� zapisany w systemie.');
+             alert('Karta Gwarancyjna i Protokół Odbioru zostały pomyślnie zapisane w systemie!');
           } catch (e) {
-             console.error("B��d zapisu:", e);
-             alert('B��d podczas zapisywania protoko�u. Szczeg�y: ' + e.message);
+             console.error("Błąd zapisu:", e);
+             alert('Błąd podczas zapisywania protokołu: ' + e.message);
           }
         } else {
           alert('Nie znaleziono aktywnego projektu.');
@@ -608,20 +804,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

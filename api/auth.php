@@ -187,17 +187,25 @@ if ($action === 'reset_request') {
     $username = trim($data['username'] ?? '');
     if (!$username) jsonResponse(['success' => false, 'error' => 'Brak nazwy uzytkownika'], 400);
 
-    $stmt = $db->prepare("UPDATE users SET status = 'reset_requested' WHERE username = :username");
-    $stmt->execute([':username' => $username]);
-    
-    // Send email to admin
-    $to = 'rafal@lesa-home.pl';
-    $subject = 'Prosba o reset hasla w systemie LeSa';
-    $message = "Witaj,\n\nUzytkownik '$username' prosi o zresetowanie hasla.\nZaloguj sie do panelu, przejdz do Uzytkownikow i nadaj mu nowe haslo.\n\nPozdrawiamy,\nSystem LeSa";
-    $headers = "From: system@lesa-home.pl\r\n";
-    @mail($to, $subject, $message, $headers);
+    // Zawsze zwracamy ten sam komunikat bez względu na to, czy user istnieje.
+    $responseMsg = 'Jeśli konto istnieje w systemie, prośba o reset hasła została wysłana do Administratora.';
 
-    jsonResponse(['success' => true, 'message' => 'Prośba o reset hasła została wysłana do Administratora.']);
+    $checkStmt = $db->prepare("SELECT id FROM users WHERE username = :username");
+    $checkStmt->execute([':username' => $username]);
+    
+    if ($checkStmt->fetch()) {
+        $stmt = $db->prepare("UPDATE users SET status = 'reset_requested' WHERE username = :username");
+        $stmt->execute([':username' => $username]);
+        
+        // Send email to admin
+        $to = 'rafal@lesa-home.pl';
+        $subject = 'Prosba o reset hasla w systemie LeSa';
+        $message = "Witaj,\n\nUzytkownik '$username' prosi o zresetowanie hasla.\nZaloguj sie do panelu, przejdz do Uzytkownikow i nadaj mu nowe haslo.\n\nPozdrawiamy,\nSystem LeSa";
+        $headers = "From: system@lesa-home.pl\r\n";
+        @mail($to, $subject, $message, $headers);
+    }
+
+    jsonResponse(['success' => true, 'message' => $responseMsg]);
 }
 
 if ($action === 'admin_reset_password') {

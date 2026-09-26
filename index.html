@@ -1050,6 +1050,12 @@
 
           <form id="contact-form" class="space-y-4">
             
+            <!-- Anti-spam Honeypot (niewidoczne dla użytkowników) -->
+            <div class="hidden" style="display:none !important;" aria-hidden="true">
+              <label for="contact-website">Pozostaw to pole puste</label>
+              <input type="text" id="contact-website" name="company_website" tabindex="-1" autocomplete="off">
+            </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label for="contact-name" class="block text-xs font-bold text-slate-700 uppercase mb-1">Twoje Imię i Nazwisko *</label>
@@ -1078,7 +1084,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label for="contact-location" class="block text-xs font-bold text-slate-700 uppercase mb-1">Miejscowość inwestycji</label>
-                <input type="text" id="contact-location" placeholder="np. Kraków / okolice" class="w-full px-4 py-3 bg-white rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-sm text-slate-900">
+                <input type="text" id="contact-location" placeholder="np. Toruń / okolice" class="w-full px-4 py-3 bg-white rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-sm text-slate-900">
               </div>
               <div>
                 <label for="contact-stage" class="block text-xs font-bold text-slate-700 uppercase mb-1">Planowany termin prac</label>
@@ -1096,11 +1102,62 @@
               <textarea id="contact-message" rows="4" placeholder="Napisz, jakie masz źródło ciepła (np. pompa ciepła), czy interesuje Cię także wylewka anhydrytowa lub automatyka..." class="w-full px-4 py-3 bg-white rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-sm text-slate-900"></textarea>
             </div>
 
-            <div class="text-xs text-slate-500 flex items-start gap-2 pt-1">
-              <input type="checkbox" id="contact-consent" required checked class="mt-0.5 rounded text-orange-600 focus:ring-orange-500">
-              <label for="contact-consent">
-                Wyrażam zgodę na kontakt telefoniczny lub e-mailowy w celu przedstawienia oferty LeSa - Home.
-              </label>
+            <!-- Załączniki: Pliki, Rzuty PDF, Zdjęcia, DWG -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <label class="block text-xs font-bold text-slate-700 uppercase">
+                  Załączniki / Rzuty / Zdjęcia (opcjonalnie)
+                </label>
+                <span class="text-[11px] text-slate-500 font-medium">PDF, DWG, JPG, PNG (max 15 MB/plik)</span>
+              </div>
+              
+              <!-- Drag & Drop Zone -->
+              <div id="contact-dropzone" class="relative border-2 border-dashed border-slate-300 hover:border-orange-500 bg-white hover:bg-orange-50/20 rounded-2xl p-4 sm:p-5 text-center transition-all cursor-pointer group">
+                <input type="file" id="contact-files" multiple accept=".pdf,.dwg,.jpg,.jpeg,.png,.webp" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                <div class="flex flex-col items-center justify-center pointer-events-none">
+                  <div class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                  </div>
+                  <p class="text-xs font-bold text-slate-700 mb-0.5">
+                    <span class="text-orange-600 underline">Kliknij, aby wybrać pliki</span> lub przeciągnij je tutaj
+                  </p>
+                  <p class="text-[11px] text-slate-500">
+                    Rzuty kondygnacji (PDF), pliki CAD (DWG) lub zdjęcia z budowy (do 5 plików)
+                  </p>
+                </div>
+              </div>
+
+              <!-- Selected files preview list -->
+              <div id="contact-file-list" class="space-y-1.5 hidden pt-1">
+                <!-- Dynamically rendered list of selected files -->
+              </div>
+              
+              <!-- Client-side error warning -->
+              <div id="contact-file-error" class="hidden p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+                <svg class="w-4 h-4 shrink-0 text-rose-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                <span id="contact-file-error-msg"></span>
+              </div>
+            </div>
+
+            <!-- RODO: Klauzula informacyjna i zgoda marketingowa -->
+            <div class="p-4 bg-slate-100 rounded-xl border border-slate-200 space-y-3">
+              <p class="text-[11px] text-slate-500 leading-relaxed">
+                <strong class="text-slate-700">Informacja o przetwarzaniu danych osobowych (RODO):</strong>
+                Administratorem Twoich danych osobowych jest LeSa HOME (dane w
+                <a href="polityka-prywatnosci.html" target="_blank" class="text-orange-600 underline hover:text-orange-700">Polityce Prywatności</a>).
+                Twoje dane (imię, telefon, e-mail) będą przetwarzane w celu odpowiedzi na zapytanie ofertowe
+                na podstawie art. 6 ust. 1 lit. b RODO (działania przedumowne). Dane przechowujemy przez 12 miesięcy.
+                Przysługuje Ci prawo dostępu, sprostowania, usunięcia oraz wniesienia sprzeciwu wobec przetwarzania.
+              </p>
+              <div class="flex items-start gap-2.5">
+                <input type="checkbox" id="contact-consent" required class="mt-0.5 w-4 h-4 rounded border-slate-400 text-orange-600 focus:ring-orange-500 cursor-pointer shrink-0">
+                <label for="contact-consent" class="text-xs text-slate-600 cursor-pointer leading-relaxed">
+                  <span class="text-red-500 font-bold">*</span>
+                  Wyrażam zgodę na kontakt telefoniczny lub e-mailowy przez LeSa HOME w celu przedstawienia oferty
+                  i odpowiedzi na moje zapytanie. Wiem, że zgodę mogę wycofać w dowolnym momencie.
+                  <span class="text-slate-400 font-normal">(zgoda wymagana)</span>
+                </label>
+              </div>
             </div>
 
             <button type="submit" class="w-full py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-600/30 transition-all text-base flex items-center justify-center gap-2">
@@ -1185,9 +1242,7 @@
           © <span id="current-year">2026</span> LeSa - Home. Wszelkie prawa zastrzeżone.
         </div>
         <div class="flex items-center gap-6">
-          <a href="#" class="hover:text-slate-300">Polityka Prywatności</a>
-          <a href="#" class="hover:text-slate-300">Regulamin audytu</a>
-          <a href="#" class="hover:text-slate-300">Standardy jakości PN-EN 1264</a>
+          <a href="polityka-prywatnosci.html" class="hover:text-slate-300">Polityka Prywatności</a>
         </div>
       </div>
 

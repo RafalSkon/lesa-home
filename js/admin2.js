@@ -3,8 +3,51 @@
  * Authentication, Dashboard KPIs, Contracts Registry, CAD Loop Engine, CRM Leads
  */
 
+const PROJECT_COLORS = [
+  { name: 'Ceglasty Pomarańcz', hex: '#ea580c', bg: '#fff7ed', border: '#fdba74' },
+  { name: 'Ognista Czerwień',   hex: '#dc2626', bg: '#fef2f2', border: '#fca5a5' },
+  { name: 'Malinowa Róża',      hex: '#e11d48', bg: '#fff1f2', border: '#fda4af' },
+  { name: 'Ciepły Bursztyn',    hex: '#d97706', bg: '#fffbeb', border: '#fcd34d' },
+  { name: 'Złoty Słoneczny',    hex: '#ca8a04', bg: '#fefce8', border: '#fde047' },
+  { name: 'Świeża Limonka',     hex: '#65a30d', bg: '#f7fee7', border: '#bef264' },
+  { name: 'Soczysta Zieleń',    hex: '#16a34a', bg: '#f0fdf4', border: '#86efac' },
+  { name: 'Głęboki Szmaragd',   hex: '#059669', bg: '#ecfdf5', border: '#6ee7b7' },
+  { name: 'Morski Turkus',      hex: '#0d9488', bg: '#f0fdfa', border: '#5eead4' },
+  { name: 'Cyjanowy Ocean',     hex: '#0891b2', bg: '#ecfeff', border: '#67e8f9' },
+  { name: 'Lazurowy Błękit',    hex: '#0284c7', bg: '#f0f9ff', border: '#7dd3fc' },
+  { name: 'Szafirowy Kobalt',   hex: '#2563eb', bg: '#eff6ff', border: '#93c5fd' },
+  { name: 'Nocne Indygo',       hex: '#4f46e5', bg: '#eef2ff', border: '#a5b4fc' },
+  { name: 'Królewski Fiolet',   hex: '#7c3aed', bg: '#f5f3ff', border: '#c4b5fd' },
+  { name: 'Intensywna Purpura', hex: '#9333ea', bg: '#faf5ff', border: '#d8b4fe' },
+  { name: 'Energetyczna Fuksja',hex: '#c026d3', bg: '#fdf4ff', border: '#f0abfc' },
+  { name: 'Neonowy Róż',        hex: '#db2777', bg: '#fdf2f8', border: '#f472b6' },
+  { name: 'Koralowy Karmin',    hex: '#f43f5e', bg: '#fff1f2', border: '#fb7185' },
+  { name: 'Grafitowy Stalowy',  hex: '#475569', bg: '#f8fafc', border: '#cbd5e1' },
+  { name: 'Ciepły Piaskowiec',  hex: '#78716c', bg: '#fafaf9', border: '#d6d3d1' }
+];
+
 const AdminApp = {
   activeTab: 'dashboard',
+  projectColors: PROJECT_COLORS,
+  calendarMonthOffset: 0,
+  calendarSelectedDate: null,
+  calendarStatusFilter: 'all',
+  calendarColorFilter: null,
+
+  getProjectColor(projectOrId) {
+    if (!projectOrId) return PROJECT_COLORS[0];
+    let colorHex = (typeof projectOrId === 'object') ? projectOrId.color : null;
+    if (colorHex) {
+      const found = PROJECT_COLORS.find(c => c.hex.toLowerCase() === colorHex.toLowerCase());
+      if (found) return found;
+      return { name: 'Własny', hex: colorHex, bg: colorHex + '18', border: colorHex + '40' };
+    }
+    const idStr = (typeof projectOrId === 'object') ? (projectOrId.id || projectOrId.title || '') : String(projectOrId);
+    let hash = 0;
+    for (let i = 0; i < idStr.length; i++) hash = (hash * 31 + idStr.charCodeAt(i)) % PROJECT_COLORS.length;
+    return PROJECT_COLORS[Math.abs(hash)];
+  },
+
   // Security: HTML escape function to prevent XSS
   escapeHtml(str) {
     if (!str) return '';
@@ -226,6 +269,9 @@ const AdminApp = {
     if (tabId === 'history') {
       this.fetchAuditLogs();
     }
+    if (tabId === 'calendar') {
+      this.renderAdminCalendar();
+    }
   },
 
   handleUrlParams() {
@@ -439,15 +485,21 @@ const AdminApp = {
       if (clientProjects.length === 0) {
         projListEl.innerHTML = '<div class="text-xs text-slate-400 py-4 bg-slate-50 rounded-xl text-center border border-slate-200">Ten kontrahent nie ma jeszcze żadnych projektów.</div>';
       } else {
-        projListEl.innerHTML = clientProjects.map(p => `
-          <div onclick="AdminApp.switchTab('projects'); AdminApp.viewProject('${p.id}');" class="p-3 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 cursor-pointer flex items-center justify-between transition-colors">
+        projListEl.innerHTML = clientProjects.map(p => {
+          const col = this.getProjectColor(p);
+          return `
+          <div onclick="AdminApp.switchTab('projects'); AdminApp.viewProject('${p.id}');" class="p-3 bg-white hover:bg-slate-50 rounded-xl border border-slate-200 cursor-pointer flex items-center justify-between transition-colors shadow-xs" style="border-left: 4px solid ${col.hex};">
             <div>
-              <div class="font-bold text-slate-800 text-xs">${p.title || p.projectTitle || 'Projekt'}</div>
-              <div class="text-[10px] text-slate-500">${p.address || p.investmentAddress || 'Brak adresu'} ${p.city ? ', ' + p.city : ''}</div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${col.hex}"></span>
+                <span class="font-bold text-slate-800 text-xs">${this.escapeHtml(p.title) || this.escapeHtml(p.projectTitle) || 'Projekt'}</span>
+              </div>
+              <div class="text-[10px] text-slate-500 pl-4 mt-0.5">${this.escapeHtml(p.address || p.investmentAddress || 'Brak adresu')} ${p.city ? ', ' + this.escapeHtml(p.city) : ''}</div>
             </div>
             <span class="text-[10px] px-2 py-0.5 rounded font-bold ${p.status === 'Zakończony' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'}">${p.status || 'Nowy'}</span>
           </div>
-        `).join('');
+        `;
+        }).join('');
       }
     }
 
@@ -483,6 +535,9 @@ const AdminApp = {
       this.projects = await ApiService.getProjects() || [];
       this.renderProjectsList();
       this.updateDashboardKPIs();
+      if (this.activeTab === 'calendar') {
+        this.renderAdminCalendar();
+      }
     }
   },
 
@@ -501,17 +556,23 @@ const AdminApp = {
     }
     
     if (filtered.length === 0) {
-      container.innerHTML = '<p class="text-xs text-slate-500 text-center p-4">Brak projektĂłw.</p>';
+      container.innerHTML = '<p class="text-xs text-slate-500 text-center p-4">Brak projektów.</p>';
       return;
     }
     
     filtered.forEach(p => {
       const c = this.clients.find(x => x.id === p.client_id);
       const cName = c ? (c.name || c.client_name) : 'Brak klienta';
+      const col = this.getProjectColor(p);
       container.innerHTML += `
-        <div onclick="AdminApp.viewProject('${p.id}')" class="p-3 border-b border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors">
-          <p class="text-sm font-bold text-slate-800 truncate">${p.title || 'Brak nazwy'}</p>
-          <p class="text-[10px] text-slate-500 truncate">${cName}</p>
+        <div onclick="AdminApp.viewProject('${p.id}')" class="p-3 border-b border-slate-200 cursor-pointer hover:bg-slate-100/80 transition-colors flex items-center justify-between gap-2" style="border-left: 4px solid ${col.hex};">
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-1.5 mb-0.5">
+              <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm" style="background-color: ${col.hex}"></span>
+              <p class="text-sm font-bold text-slate-800 truncate">${this.escapeHtml(p.title) || 'Brak nazwy'}</p>
+            </div>
+            <p class="text-[10px] text-slate-500 truncate pl-4">${this.escapeHtml(cName)}</p>
+          </div>
         </div>
       `;
     });
@@ -526,8 +587,14 @@ const AdminApp = {
     if (emptyDetails) emptyDetails.classList.add('hidden');
     if (activeDetails) activeDetails.classList.remove('hidden');
 
+    const col = this.getProjectColor(proj);
     const titleEl = document.getElementById('pd-project-title');
-    if (titleEl) titleEl.textContent = proj.title || 'Brak nazwy';
+    if (titleEl) {
+      titleEl.innerHTML = `
+        <span class="inline-block w-4 h-4 rounded-full shadow-sm mr-2 align-middle" style="background-color: ${col.hex}"></span>
+        <span class="align-middle">${this.escapeHtml(proj.title) || 'Brak nazwy'}</span>
+      `;
+    }
     
     const c = this.clients.find(x => x.id === proj.client_id);
     const linkEl = document.getElementById('pd-client-link');
@@ -904,40 +971,64 @@ const AdminApp = {
     const grid = document.getElementById('pd-photos-grid');
     if (!grid) return;
     
-    grid.innerHTML = '<div class="col-span-full text-center text-xs text-slate-400 py-4">Wczytywanie zdjÄ™Ä‡...</div>';
+    grid.innerHTML = '<div class="col-span-full text-center text-xs text-slate-400 py-6"><svg class="animate-spin w-5 h-5 mx-auto mb-2 text-slate-400" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Wczytywanie zdjęć z serwera...</div>';
     
     if (window.ApiService) {
       try {
         const files = await ApiService.getProjectFiles(projectId);
-        const photos = files.filter(f => f.fileType && f.fileType.startsWith('photo'));
+        const photos = (files || []).filter(f => {
+          const type = f.fileType || f.file_type || '';
+          const url = f.fileUrl || f.file_url || '';
+          return type.startsWith('photo') || url.match(/\.(jpg|jpeg|png|webp)$/i);
+        });
         
         if (photos.length === 0) {
-          grid.innerHTML = '<div class="col-span-full text-center text-xs text-slate-400 py-4">Brak zdjÄ™Ä‡ z montaĹĽu dla tego projektu. Monter moĹĽe je dodaÄ‡ telefonem z budowy.</div>';
+          grid.innerHTML = '<div class="col-span-full text-center text-xs text-slate-400 py-6">Brak zdjęć z montażu dla tego projektu. Monter może je dodać telefonem z budowy lub możesz wgrać je przyciskiem powyżej.</div>';
           return;
         }
         
         let html = '';
         photos.forEach(p => {
-          let badgeText = 'ZdjÄ™cie';
-          if (p.fileType === 'photo_inne') badgeText = 'Inne';
-          else if (p.fileType.startsWith('photo_room-')) {
-             const roomIdx = p.fileType.replace('photo_room-', '');
-             // try to get room name from proj if available, else just ID
-             const proj = this.projects.find(x => x.id === projectId);
-             let roomName = `Pomieszczenie ${parseInt(roomIdx) + 1}`;
-             if (proj && proj.cadData && proj.cadData.rooms && proj.cadData.rooms[roomIdx]) {
-                roomName = proj.cadData.rooms[roomIdx].name;
-             }
-             badgeText = roomName;
+          const fUrl = p.fileUrl || p.file_url;
+          const fName = p.fileName || p.file_name;
+          const fType = p.fileType || p.file_type || '';
+          const rName = p.roomName || p.room_name;
+          
+          let badgeText = rName;
+          if (!badgeText) {
+            if (fType === 'photo_inne') badgeText = 'Inne / Ogólne';
+            else if (fType.startsWith('photo_room-')) {
+               const roomIdx = fType.replace('photo_room-', '');
+               const proj = this.projects.find(x => x.id === projectId);
+               let roomNameFallback = `Pomieszczenie ${parseInt(roomIdx) + 1}`;
+               if (proj && proj.cadData && proj.cadData.rooms && proj.cadData.rooms[roomIdx]) {
+                  roomNameFallback = proj.cadData.rooms[roomIdx].name;
+               }
+               badgeText = roomNameFallback;
+            } else {
+               badgeText = 'Zdjęcie';
+            }
           }
           
           html += `
-            <div class="relative group aspect-square rounded-lg overflow-hidden border border-slate-200 bg-white">
-              <a href="${p.fileUrl}" target="_blank" class="block w-full h-full">
-                <img src="${p.fileUrl}" class="w-full h-full object-cover transition-transform group-hover:scale-105" alt="${p.fileName}">
+            <div class="relative group rounded-xl overflow-hidden border border-slate-200 bg-white shadow-sm hover:shadow-md transition-all flex flex-col">
+              <a href="${fUrl}" target="_blank" class="block aspect-square w-full bg-slate-100 overflow-hidden relative">
+                <img src="${fUrl}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" alt="${fName}" loading="lazy">
+                <div class="absolute top-1.5 left-1.5">
+                   <span class="inline-block px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-900/80 text-white backdrop-blur-sm shadow">${badgeText}</span>
+                </div>
               </a>
-              <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-2 pt-4">
-                 <p class="text-[9px] text-white font-bold truncate drop-shadow-md">${badgeText}</p>
+              <div class="p-2 bg-white flex flex-col justify-between flex-1">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="text-[10px] font-mono text-slate-600 truncate font-semibold" title="${fName}">${fName}</span>
+                  <button onclick="AdminApp.deleteProjectPhoto('${p.id}', '${projectId}')" title="Usuń zdjęcie" class="text-slate-400 hover:text-red-600 transition-colors p-0.5 rounded">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                  </button>
+                </div>
+                <div class="flex items-center justify-between text-[9px] text-slate-400 mt-1">
+                  <span>${p.fileSize || p.file_size ? Math.round((p.fileSize || p.file_size) / 1024) + ' KB' : ''}</span>
+                  <a href="${fUrl}" target="_blank" class="text-blue-600 hover:text-blue-800 font-bold hover:underline">Powiększ &rarr;</a>
+                </div>
               </div>
             </div>
           `;
@@ -947,8 +1038,22 @@ const AdminApp = {
         
       } catch (e) {
         console.error(e);
-        grid.innerHTML = '<div class="col-span-full text-center text-xs text-red-400 py-4">BĹ‚Ä…d podczas Ĺ‚adowania zdjÄ™Ä‡.</div>';
+        grid.innerHTML = '<div class="col-span-full text-center text-xs text-red-400 py-4">Błąd podczas ładowania zdjęć.</div>';
       }
+    }
+  },
+
+  async deleteProjectPhoto(fileId, projectId) {
+    if (!confirm('Czy na pewno chcesz usunąć to zdjęcie z serwera?')) return;
+    try {
+      if (window.ApiService) {
+        await ApiService.deleteProjectFile(fileId);
+        this.showToast('Zdjęcie zostało usunięte z serwera');
+        this.loadProjectPhotos(projectId);
+      }
+    } catch (e) {
+      console.error(e);
+      this.showToast('Błąd podczas usuwania zdjęcia');
     }
   },
 
@@ -959,13 +1064,13 @@ const AdminApp = {
     
     if (window.ApiService) {
       try {
-        this.showToast('WysyĹ‚anie zdjÄ™cia...');
-        await ApiService.uploadSitePhoto(this.currentViewedProjectId, file, 'photo_inne');
-        this.showToast('ZdjÄ™cie dodane pomyĹ›lnie!');
+        this.showToast('Wysyłanie zdjęcia na serwer...');
+        await ApiService.uploadSitePhoto(this.currentViewedProjectId, file, 'photo_inne', 'Panel_Admina');
+        this.showToast('Zdjęcie zapisane w katalogu /foto/!');
         this.loadProjectPhotos(this.currentViewedProjectId);
       } catch (e) {
         console.error(e);
-        this.showToast('WystÄ…piĹ‚ bĹ‚Ä…d podczas wgrywania.');
+        this.showToast('Wystąpił błąd podczas wgrywania.');
       }
     }
     // reset input
@@ -1013,7 +1118,20 @@ const AdminApp = {
     let url = '';
     if (tool === 'cad') url = 'lesa-cad-v2/index.html?projectId=' + proj.id;
     if (tool === 'oferta') url = 'oferta.html?projectId=' + proj.id;
-    if (tool === 'umowa' || tool === 'generator') url = 'generator-umow.html?projectId=' + proj.id;
+    if (tool === 'umowa' || tool === 'generator') {
+      url = 'generator-umow.html?projectId=' + proj.id;
+      try {
+        const offers = JSON.parse(sessionStorage.getItem('lesa_saved_offers') || localStorage.getItem('lesa_saved_offers') || '[]');
+        const o = offers.find(x => x.projectId === proj.id);
+        if (o) {
+          let net = o.totalNet || o.total_net || 0;
+          if (!net && o.scopeItems && Array.isArray(o.scopeItems)) {
+            net = o.scopeItems.reduce((acc, it) => acc + (parseFloat(it.qty) || 0) * (parseFloat(it.price) || 0), 0);
+          }
+          if (net > 0) url += '&price=' + net;
+        }
+      } catch (e) {}
+    }
     if (tool === 'szczelnosc' || tool === 'protokol1') url = 'protokol-szczelnosci.html?projectId=' + proj.id;
     if (tool === 'odbior' || tool === 'protokol2') url = 'protokol-odbioru.html?projectId=' + proj.id;
     
@@ -1045,8 +1163,8 @@ const AdminApp = {
     filtered.forEach(c => {
       tbody.innerHTML += `
         <tr>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">${c.contract_number}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">${c.client_name}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">${this.escapeHtml(c.contract_number)}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">${this.escapeHtml(c.client_name)}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">${c.created_at}</td>
         </tr>
       `;
@@ -1065,6 +1183,12 @@ const AdminApp = {
     
     const bProjects = document.getElementById('badge-projects-count');
     if (bProjects) bProjects.textContent = this.projects.length;
+
+    const scheduled = (this.projects || []).filter(p => !!(p.installationDate || p.installation_date));
+    const bCalendar = document.getElementById('badge-calendar-count');
+    if (bCalendar) bCalendar.textContent = scheduled.length;
+
+    this.renderDashboardUpcomingInstallations();
   },
 
     /* ================= MODALS & FORMS ================= */
@@ -1173,6 +1297,26 @@ const AdminApp = {
     }
   },
 
+  renderProjectColorSwatches(selectedHex) {
+    const container = document.getElementById('modal-project-color-swatches');
+    const input = document.getElementById('modal-project-color');
+    if (!container) return;
+    if (input) input.value = selectedHex;
+
+    container.innerHTML = this.projectColors.map(c => {
+      const isSel = c.hex.toLowerCase() === (selectedHex || '').toLowerCase();
+      return `
+        <button type="button" onclick="AdminApp.selectProjectColor('${c.hex}')" class="w-7 h-7 rounded-lg transition-transform flex items-center justify-center shadow-sm relative ${isSel ? 'ring-2 ring-offset-2 ring-slate-800 scale-110' : 'hover:scale-105'}" style="background-color: ${c.hex}">
+          ${isSel ? '<svg class="w-4 h-4 text-white drop-shadow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>' : ''}
+        </button>
+      `;
+    }).join('');
+  },
+
+  selectProjectColor(hex) {
+    this.renderProjectColorSwatches(hex);
+  },
+
   openProjectModal(id = null, preselectedClientId = null) {
     document.getElementById('project-modal').classList.remove('hidden');
     this.populateClientDropdown();
@@ -1197,6 +1341,9 @@ const AdminApp = {
           document.getElementById('modal-project-status').value = proj.status || 'Nowy';
         }
         this.updateClientDropdownText(proj.client_id || proj.clientId);
+
+        const curColor = proj.color || this.getProjectColor(proj).hex;
+        this.renderProjectColorSwatches(curColor);
       }
     } else {
       document.getElementById('project-modal-title').textContent = 'Nowy Projekt';
@@ -1217,6 +1364,9 @@ const AdminApp = {
         document.getElementById('modal-project-status').value = 'Nowy';
       }
       this.updateClientDropdownText(cId);
+
+      const randColor = this.projectColors[Math.floor(Math.random() * this.projectColors.length)].hex;
+      this.renderProjectColorSwatches(randColor);
     }
   },
   
@@ -1266,12 +1416,15 @@ const AdminApp = {
   async saveProjectModal() {
     const instDate = document.getElementById('modal-project-installation-date')?.value || '';
     const instDays = parseInt(document.getElementById('modal-project-installation-days')?.value || '1', 10) || 1;
+    const pColor = document.getElementById('modal-project-color')?.value || '';
+
     const data = {
       id: document.getElementById('modal-project-id').value || 'p_' + Date.now(),
       client_id: document.getElementById('modal-project-client-id').value,
       title: document.getElementById('modal-project-title').value,
       address: document.getElementById('modal-project-address').value,
       city: document.getElementById('modal-project-city').value,
+      color: pColor,
       installation_date: instDate,
       installationDate: instDate,
       installation_days: instDays,
@@ -1291,7 +1444,313 @@ const AdminApp = {
       if (this.currentViewedProjectId === data.id) {
         this.viewProject(data.id);
       }
+      if (this.activeTab === 'calendar') {
+        this.renderAdminCalendar();
+      }
     }
+  },
+
+  /* ================= ADMIN MONTER CALENDAR & COLOR CODING ================= */
+  changeCalendarMonth(delta) {
+    this.calendarMonthOffset += delta;
+    this.renderAdminCalendar();
+  },
+
+  resetCalendarMonth() {
+    this.calendarMonthOffset = 0;
+    this.calendarSelectedDate = null;
+    this.renderAdminCalendar();
+  },
+
+  selectCalendarDate(dateStr) {
+    if (this.calendarSelectedDate === dateStr) {
+      this.calendarSelectedDate = null;
+    } else {
+      this.calendarSelectedDate = dateStr;
+    }
+    this.renderAdminCalendar();
+  },
+
+  showAllCalendarTasks() {
+    this.calendarSelectedDate = null;
+    const filterEl = document.getElementById('admin-cal-status-filter');
+    if (filterEl) filterEl.value = 'all';
+    this.calendarStatusFilter = 'all';
+    this.renderAdminCalendar();
+  },
+
+  onCalendarFilterChange() {
+    const sel = document.getElementById('admin-cal-status-filter');
+    if (sel) this.calendarStatusFilter = sel.value;
+    this.renderAdminCalendar();
+  },
+
+  renderAdminCalendar() {
+    const grid = document.getElementById('admin-calendar-grid');
+    const title = document.getElementById('admin-cal-month-title');
+    if (!grid) return;
+
+    // Normalizacja projektów z datami montażu
+    const allProjects = (this.projects || []).map(p => {
+      const col = this.getProjectColor(p);
+      return {
+        ...p,
+        installationDate: p.installationDate || p.installation_date || '',
+        installationDays: parseInt(p.installationDays || p.installation_days || 1, 10) || 1,
+        colorInfo: col
+      };
+    });
+
+    // Filtrowanie zadań wg statusu
+    let tasks = allProjects.filter(p => {
+      if (!p.installationDate) return false;
+      
+      const st = (p.status || '').toLowerCase().trim();
+      if (this.calendarStatusFilter === 'montaz') {
+        if (!st.includes('monta') && !st.includes('realizac') && st !== 'do montażu') return false;
+      } else if (this.calendarStatusFilter === 'zakonczone') {
+        if (!st.includes('zakończ') && !st.includes('odebr')) return false;
+      } else if (this.calendarStatusFilter === 'wycena') {
+        if (!st.includes('wycen') && !st.includes('nowy') && !st.includes('ofert')) return false;
+      }
+
+      return true;
+    });
+
+    // Budowanie mapy dni -> lista projektów
+    const tasksMap = {};
+    allProjects.forEach(task => {
+      if (!task.installationDate) return;
+      const parts = task.installationDate.split('-').map(Number);
+      if (parts.length !== 3 || isNaN(parts[0])) return;
+
+      const start = new Date(parts[0], parts[1] - 1, parts[2], 12, 0, 0);
+      const days = task.installationDays || 1;
+      for (let i = 0; i < days; i++) {
+        const cur = new Date(start);
+        cur.setDate(start.getDate() + i);
+        const y = cur.getFullYear();
+        const m = String(cur.getMonth() + 1).padStart(2, '0');
+        const d = String(cur.getDate()).padStart(2, '0');
+        const dateStr = `${y}-${m}-${d}`;
+        if (!tasksMap[dateStr]) tasksMap[dateStr] = [];
+        tasksMap[dateStr].push(task);
+      }
+    });
+
+    const dzisiaj = new Date();
+    const todayStr = `${dzisiaj.getFullYear()}-${String(dzisiaj.getMonth() + 1).padStart(2, '0')}-${String(dzisiaj.getDate()).padStart(2, '0')}`;
+    const nazwyMiesiecy = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
+
+    const monthDate = new Date(dzisiaj.getFullYear(), dzisiaj.getMonth() + this.calendarMonthOffset, 1);
+    const month = monthDate.getMonth();
+    const year = monthDate.getFullYear();
+
+    if (title) {
+      title.textContent = `${nazwyMiesiecy[month]} ${year}`;
+    }
+
+    let startDay = monthDate.getDay() - 1;
+    if (startDay === -1) startDay = 6;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    let gridHtml = '';
+    for (let i = 0; i < startDay; i++) {
+      gridHtml += '<div class="p-2 opacity-0 pointer-events-none"></div>';
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = `${year}-${String(month+1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const dayTasks = tasksMap[dateStr] || [];
+      const hasTasks = dayTasks.length > 0;
+      const isToday = (dateStr === todayStr);
+      const isSelected = (this.calendarSelectedDate === dateStr);
+
+      let btnClass = "w-full min-h-[46px] p-1 flex flex-col items-center justify-between rounded-xl font-bold transition-all relative text-xs border ";
+      if (isSelected) {
+        btnClass += "bg-amber-500 text-white border-amber-600 shadow-md ring-2 ring-offset-2 ring-amber-400 scale-105 z-10";
+      } else if (isToday) {
+        btnClass += "bg-amber-50/70 text-amber-900 border-amber-300 font-extrabold hover:bg-amber-100/70";
+      } else if (hasTasks) {
+        btnClass += "bg-white text-slate-800 border-slate-200 hover:border-amber-400 hover:shadow-sm";
+      } else {
+        btnClass += "bg-slate-50/50 text-slate-600 border-transparent hover:bg-slate-100/80";
+      }
+
+      let dotsHtml = '';
+      if (hasTasks) {
+        dotsHtml = '<div class="flex items-center justify-center gap-0.5 mt-0.5 flex-wrap max-w-full px-0.5">';
+        const visibleDots = dayTasks.slice(0, 4);
+        visibleDots.forEach(t => {
+          dotsHtml += `<span class="w-1.5 h-1.5 rounded-full shrink-0 shadow-sm" style="background-color: ${isSelected ? '#ffffff' : t.colorInfo.hex}" title="${this.escapeHtml(t.title || 'Projekt')}"></span>`;
+        });
+        if (dayTasks.length > 4) {
+          dotsHtml += `<span class="text-[8px] leading-none ${isSelected ? 'text-white' : 'text-slate-500'} font-bold">+${dayTasks.length - 4}</span>`;
+        }
+        dotsHtml += '</div>';
+      }
+
+      gridHtml += `
+        <div>
+          <button type="button" onclick="AdminApp.selectCalendarDate('${dateStr}')" class="${btnClass}" title="${hasTasks ? dayTasks.length + ' zlecenia' : dateStr}">
+            <span>${d}</span>
+            ${dotsHtml}
+          </button>
+        </div>
+      `;
+    }
+    grid.innerHTML = gridHtml;
+
+    let displayedTasks = tasks;
+    let headerText = 'Wszystkie zaplanowane zlecenia';
+    let subText = `Łącznie w bazie: ${tasks.length} zaplanowanych prac montażowych.`;
+    const isFiltered = !!(this.calendarSelectedDate || this.calendarStatusFilter !== 'all');
+
+    if (this.calendarSelectedDate) {
+      displayedTasks = tasksMap[this.calendarSelectedDate] || [];
+      headerText = `Zlecenia w dniu: ${this.calendarSelectedDate}`;
+      subText = `Zaplanowano ${displayedTasks.length} ${displayedTasks.length === 1 ? 'pracę' : 'prac'} na ten dzień.`;
+    }
+
+    const headerEl = document.getElementById('admin-cal-tasks-header');
+    const subEl = document.getElementById('admin-cal-tasks-sub');
+    const btnAll = document.getElementById('admin-cal-btn-all');
+    if (headerEl) headerEl.innerHTML = `<span class="truncate">${this.escapeHtml(headerText)}</span>`;
+    if (subEl) subEl.textContent = subText;
+    if (btnAll) {
+      if (isFiltered) btnAll.classList.remove('hidden');
+      else btnAll.classList.add('hidden');
+    }
+
+    this.renderAdminCalendarTasksList(displayedTasks, isFiltered);
+  },
+
+  renderAdminCalendarTasksList(tasks, isFiltered) {
+    const listContainer = document.getElementById('admin-cal-tasks-list');
+    if (!listContainer) return;
+
+    if (!tasks || tasks.length === 0) {
+      listContainer.innerHTML = `
+        <div class="p-8 text-center text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+          <svg class="w-10 h-10 mx-auto text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <p class="text-sm font-bold text-slate-600">Brak zaplanowanych zleceń</p>
+          <p class="text-xs text-slate-400 mt-1">${isFiltered ? 'Dla wybranych kryteriów filtrowania nie znaleziono żadnych prac.' : 'Żaden projekt nie ma jeszcze wyznaczonej daty montażu.'}</p>
+          ${isFiltered ? '<button onclick="AdminApp.showAllCalendarTasks()" class="mt-3 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow-sm">Pokaż wszystkie</button>' : ''}
+        </div>
+      `;
+      return;
+    }
+
+    const uniqueTasks = [];
+    const seenIds = new Set();
+    tasks.forEach(t => {
+      if (!seenIds.has(t.id)) {
+        seenIds.add(t.id);
+        uniqueTasks.push(t);
+      }
+    });
+
+    listContainer.innerHTML = uniqueTasks.map(t => {
+      const client = (this.clients || []).find(c => c.id === (t.client_id || t.clientId));
+      const clientName = client ? (client.name || client.client_name) : (t.clientName || 'Brak danych inwestora');
+      const col = t.colorInfo || this.getProjectColor(t);
+      const days = t.installationDays || 1;
+      const daysLabel = days > 1 ? `${days} dni` : '1 dzień';
+      const address = (t.address || t.investmentAddress || '') + (t.city || t.investmentCity ? ', ' + (t.city || t.investmentCity) : '');
+      const loops = t.cadData?.loopsCount || 0;
+
+      let statusBadge = '';
+      if (t.status === 'Do Montażu' || t.status === 'W trakcie') {
+        statusBadge = '<span class="px-2 py-0.5 text-[10px] font-bold rounded-md bg-blue-100 text-blue-700">Do Montażu</span>';
+      } else if (t.status === 'Zakończone') {
+        statusBadge = '<span class="px-2 py-0.5 text-[10px] font-bold rounded-md bg-emerald-100 text-emerald-700">Zakończone</span>';
+      } else {
+        statusBadge = `<span class="px-2 py-0.5 text-[10px] font-bold rounded-md bg-slate-100 text-slate-700">${this.escapeHtml(t.status || 'Nowy')}</span>`;
+      }
+
+      return `
+        <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group" style="border-left: 5px solid ${col.hex};">
+          <div class="min-w-0 flex-1">
+            <div class="flex flex-wrap items-center gap-2 mb-1">
+              <span class="px-2 py-0.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold font-mono">
+                📅 ${t.installationDate || 'Termin nieustalony'} (${daysLabel})
+              </span>
+              ${statusBadge}
+              ${loops > 0 ? `<span class="text-[10px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">Pętle: ${loops}</span>` : ''}
+            </div>
+            
+            <h4 class="text-sm font-bold text-slate-900 group-hover:text-amber-600 transition-colors flex items-center gap-2 cursor-pointer" onclick="AdminApp.switchTab('projects'); AdminApp.viewProject('${t.id}')">
+              <span class="w-3 h-3 rounded-full shrink-0 shadow-sm" style="background-color: ${col.hex}"></span>
+              <span>${this.escapeHtml(t.title || 'Bez nazwy')}</span>
+              <svg class="w-3.5 h-3.5 text-slate-400 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            </h4>
+            <p class="text-xs text-slate-500 mt-0.5 pl-5">Inwestor: <strong class="text-slate-700">${this.escapeHtml(clientName)}</strong></p>
+            ${address ? `<p class="text-[11px] text-slate-400 mt-1 flex items-center gap-1 pl-5"><svg class="w-3 h-3 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span class="truncate">${this.escapeHtml(address)}</span></p>` : ''}
+          </div>
+
+          <div class="flex sm:flex-col items-center sm:items-end justify-between gap-1.5 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+            <button onclick="AdminApp.openProjectModal('${t.id}')" class="px-2.5 py-1 text-xs font-bold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
+              Zmień termin / Kolor
+            </button>
+            <div class="flex items-center gap-1">
+              <button onclick="AdminApp.switchTab('projects'); AdminApp.viewProject('${t.id}')" class="px-2.5 py-1 text-xs font-bold text-amber-700 hover:text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition-colors">
+                Karta projektu &rarr;
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  },
+
+  renderDashboardUpcomingInstallations() {
+    const container = document.getElementById('dashboard-upcoming-installations');
+    if (!container) return;
+
+    const scheduled = (this.projects || [])
+      .filter(p => !!(p.installationDate || p.installation_date))
+      .map(p => ({
+        ...p,
+        installationDate: p.installationDate || p.installation_date,
+        installationDays: parseInt(p.installationDays || p.installation_days || 1, 10) || 1,
+        colorInfo: this.getProjectColor(p)
+      }))
+      .sort((a, b) => (a.installationDate || '').localeCompare(b.installationDate || ''));
+
+    if (scheduled.length === 0) {
+      container.innerHTML = `
+        <div class="col-span-full p-6 text-center text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+          <p class="text-xs font-medium">Brak zaplanowanych montaży na najbliższy czas.</p>
+          <button onclick="AdminApp.switchTab('calendar')" class="mt-2 text-xs text-amber-600 hover:underline font-bold">Zaplanuj termin w Kalendarzu &rarr;</button>
+        </div>
+      `;
+      return;
+    }
+
+    const upcoming = scheduled.slice(0, 6);
+    container.innerHTML = upcoming.map(t => {
+      const client = (this.clients || []).find(c => c.id === (t.client_id || t.clientId));
+      const clientName = client ? (client.name || client.client_name) : 'Inwestor';
+      const col = t.colorInfo;
+      const days = t.installationDays > 1 ? `${t.installationDays} dni` : '1 dzień';
+
+      return `
+        <div onclick="AdminApp.switchTab('calendar'); AdminApp.selectCalendarDate('${t.installationDate}')" class="p-3 bg-slate-50/70 hover:bg-slate-100/80 rounded-xl border border-slate-200 transition-all cursor-pointer flex flex-col justify-between" style="border-left: 4px solid ${col.hex};">
+          <div>
+            <div class="flex items-center justify-between gap-1 mb-1">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md font-mono bg-white border border-slate-200 text-slate-700">📅 ${t.installationDate}</span>
+              <span class="w-2.5 h-2.5 rounded-full shadow-sm" style="background-color: ${col.hex}"></span>
+            </div>
+            <p class="text-xs font-bold text-slate-900 truncate">${this.escapeHtml(t.title || 'Zlecenie')}</p>
+            <p class="text-[11px] text-slate-500 truncate">${this.escapeHtml(clientName)} &bull; ${days}</p>
+          </div>
+          <div class="mt-2 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px] text-slate-400">
+            <span>Status: <strong class="text-slate-600">${this.escapeHtml(t.status || 'Nowy')}</strong></span>
+            <span class="text-amber-600 font-bold hover:underline">Szczegóły &rarr;</span>
+          </div>
+        </div>
+      `;
+    }).join('');
   },
 
   initCadEngine() {

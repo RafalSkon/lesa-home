@@ -1,8 +1,46 @@
+const PROJECT_COLORS = [
+  { name: 'Ceglasty Pomarańcz', hex: '#ea580c', bg: '#fff7ed', border: '#fdba74' },
+  { name: 'Ognista Czerwień',   hex: '#dc2626', bg: '#fef2f2', border: '#fca5a5' },
+  { name: 'Malinowa Róża',      hex: '#e11d48', bg: '#fff1f2', border: '#fda4af' },
+  { name: 'Ciepły Bursztyn',    hex: '#d97706', bg: '#fffbeb', border: '#fcd34d' },
+  { name: 'Złoty Słoneczny',    hex: '#ca8a04', bg: '#fefce8', border: '#fde047' },
+  { name: 'Świeża Limonka',     hex: '#65a30d', bg: '#f7fee7', border: '#bef264' },
+  { name: 'Soczysta Zieleń',    hex: '#16a34a', bg: '#f0fdf4', border: '#86efac' },
+  { name: 'Głęboki Szmaragd',   hex: '#059669', bg: '#ecfdf5', border: '#6ee7b7' },
+  { name: 'Morski Turkus',      hex: '#0d9488', bg: '#f0fdfa', border: '#5eead4' },
+  { name: 'Cyjanowy Ocean',     hex: '#0891b2', bg: '#ecfeff', border: '#67e8f9' },
+  { name: 'Lazurowy Błękit',    hex: '#0284c7', bg: '#f0f9ff', border: '#7dd3fc' },
+  { name: 'Szafirowy Kobalt',   hex: '#2563eb', bg: '#eff6ff', border: '#93c5fd' },
+  { name: 'Nocne Indygo',       hex: '#4f46e5', bg: '#eef2ff', border: '#a5b4fc' },
+  { name: 'Królewski Fiolet',   hex: '#7c3aed', bg: '#f5f3ff', border: '#c4b5fd' },
+  { name: 'Intensywna Purpura', hex: '#9333ea', bg: '#faf5ff', border: '#d8b4fe' },
+  { name: 'Energetyczna Fuksja',hex: '#c026d3', bg: '#fdf4ff', border: '#f0abfc' },
+  { name: 'Neonowy Róż',        hex: '#db2777', bg: '#fdf2f8', border: '#f472b6' },
+  { name: 'Koralowy Karmin',    hex: '#f43f5e', bg: '#fff1f2', border: '#fb7185' },
+  { name: 'Grafitowy Stalowy',  hex: '#475569', bg: '#f8fafc', border: '#cbd5e1' },
+  { name: 'Ciepły Piaskowiec',  hex: '#78716c', bg: '#fafaf9', border: '#d6d3d1' }
+];
+
 const MonterApp = {
   projects: [],
   clients: [],
   selectedProjectId: null,
   currentMonthOffset: 0,
+  projectColors: PROJECT_COLORS,
+
+  getProjectColor(projectOrId) {
+    if (!projectOrId) return PROJECT_COLORS[0];
+    let colorHex = (typeof projectOrId === 'object') ? projectOrId.color : null;
+    if (colorHex) {
+      const found = PROJECT_COLORS.find(c => c.hex.toLowerCase() === colorHex.toLowerCase());
+      if (found) return found;
+      return { name: 'Własny', hex: colorHex, bg: colorHex + '18', border: colorHex + '40' };
+    }
+    const idStr = (typeof projectOrId === 'object') ? (projectOrId.id || projectOrId.title || '') : String(projectOrId);
+    let hash = 0;
+    for (let i = 0; i < idStr.length; i++) hash = (hash * 31 + idStr.charCodeAt(i)) % PROJECT_COLORS.length;
+    return PROJECT_COLORS[Math.abs(hash)];
+  },
 
   async init() {
     this.checkAuth();
@@ -108,6 +146,7 @@ const MonterApp = {
       task.investmentAddress = task.investmentAddress || task.address;
       task.investmentCity = task.investmentCity || task.city;
       task.projectTitle = task.projectTitle || task.title;
+      task.colorInfo = this.getProjectColor(task);
     });
 
     // Budowanie mapy dni -> lista zadań (odporne na strefy czasowe)
@@ -172,21 +211,33 @@ const MonterApp = {
       const isToday = (dateStr === todayStr);
       const isSelected = (this.selectedDateStr === dateStr);
 
-      let btnClass = "w-full py-2.5 sm:py-3 flex flex-col items-center justify-center rounded-xl font-bold transition-all relative ";
+      let btnClass = "w-full py-2 sm:py-2.5 flex flex-col items-center justify-between rounded-xl font-bold transition-all relative text-xs min-h-[46px] border ";
       if (isSelected) {
-        btnClass += "bg-blue-700 text-white ring-4 ring-blue-300 shadow-md scale-105 z-10";
-      } else if (hasTasks) {
-        btnClass += "bg-blue-600 text-white shadow-md shadow-blue-200 cursor-pointer hover:bg-blue-700 hover:scale-105";
+        btnClass += "bg-slate-900 text-white border-slate-950 ring-4 ring-slate-400 shadow-md scale-105 z-10";
       } else if (isToday) {
-        btnClass += "bg-blue-50 text-blue-700 border-2 border-blue-400 font-extrabold hover:bg-blue-100";
+        btnClass += "bg-blue-50/80 text-blue-700 border-blue-400 font-extrabold hover:bg-blue-100";
+      } else if (hasTasks) {
+        btnClass += "bg-white text-slate-800 border-slate-200 shadow-xs cursor-pointer hover:border-blue-400 hover:scale-105";
       } else {
-        btnClass += "text-slate-700 hover:bg-slate-100";
+        btnClass += "text-slate-700 border-transparent hover:bg-slate-100";
       }
 
-      const taskBadge = hasTasks ? `<span class="w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-amber-300' : 'bg-white'} mt-0.5"></span>` : ``;
+      let dotsHtml = '';
+      if (hasTasks) {
+        dotsHtml = '<div class="flex items-center justify-center gap-0.5 mt-0.5 flex-wrap max-w-full px-0.5">';
+        const visibleDots = dayTasks.slice(0, 3);
+        visibleDots.forEach(t => {
+          dotsHtml += `<span class="w-1.5 h-1.5 rounded-full shrink-0 shadow-sm" style="background-color: ${isSelected ? '#ffffff' : t.colorInfo.hex}"></span>`;
+        });
+        if (dayTasks.length > 3) {
+          dotsHtml += `<span class="text-[7px] leading-none ${isSelected ? 'text-white' : 'text-slate-500'} font-bold">+${dayTasks.length - 3}</span>`;
+        }
+        dotsHtml += '</div>';
+      }
+
       const onclickAttr = `onclick="MonterApp.showDailyTasks('${dateStr}')"`;
 
-      html += `<div><button class="${btnClass}" ${onclickAttr} title="${hasTasks ? 'Zaplanowane zlecenia (' + dayTasks.length + ')' : ''}">${d}${taskBadge}</button></div>`;
+      html += `<div><button class="${btnClass}" ${onclickAttr} title="${hasTasks ? 'Zaplanowane zlecenia (' + dayTasks.length + ')' : ''}"><span>${d}</span>${dotsHtml}</button></div>`;
     }
 
     html += `</div></div>`;
@@ -265,6 +316,7 @@ const MonterApp = {
       const duration = task.installationDays || 1;
       const durationText = duration > 1 ? `${duration} dni` : `1 dzień`;
       const dateDisplay = task.installationDate ? `📅 ${task.installationDate} (${durationText})` : `Termin do ustalenia`;
+      const col = task.colorInfo || this.getProjectColor(task);
 
       let badges = '';
       if (task.protocols && task.protocols.szczelnosc) {
@@ -275,18 +327,23 @@ const MonterApp = {
       }
 
       return `
-        <div onclick="MonterApp.openProjectModal('${task.id}')" class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-400 transition-all cursor-pointer border-l-4 border-l-blue-600 group">
+        <div onclick="MonterApp.openProjectModal('${task.id}')" class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300 transition-all cursor-pointer group" style="border-left: 5px solid ${col.hex};">
           <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
-            <span class="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-xs font-extrabold rounded-lg">${dateDisplay}</span>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="inline-block px-2.5 py-0.5 bg-slate-100 text-slate-700 text-xs font-bold rounded-lg">${dateDisplay}</span>
+            </div>
             <div class="flex items-center gap-1.5">
               ${badges}
               <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">Pętli: ${loops}</span>
             </div>
           </div>
-          <h3 class="font-bold text-slate-900 text-lg leading-snug group-hover:text-blue-600 transition-colors">${task.projectTitle || task.title || clientName}</h3>
-          <p class="text-xs text-slate-500 mt-0.5 font-medium">Inwestor: <strong class="text-slate-700">${clientName}</strong></p>
+          <h3 class="font-bold text-slate-900 text-lg leading-snug group-hover:text-blue-600 transition-colors flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full shrink-0 shadow-sm" style="background-color: ${col.hex}"></span>
+            <span>${task.projectTitle || task.title || clientName}</span>
+          </h3>
+          <p class="text-xs text-slate-500 mt-0.5 font-medium pl-5">Inwestor: <strong class="text-slate-700">${clientName}</strong></p>
           <p class="text-xs text-slate-600 font-medium flex items-center gap-1.5 mt-2.5 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-            <svg class="w-4 h-4 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
             <span class="truncate font-semibold">${task.investmentAddress || task.address ? (task.investmentAddress || task.address) + (task.investmentCity || task.city ? ', ' + (task.investmentCity || task.city) : '') : 'Brak podanego adresu'}</span>
           </p>
         </div>
@@ -303,9 +360,21 @@ const MonterApp = {
     const duration = task.installationDays || task.installation_days || 1;
     const durationText = duration > 1 ? `${duration} dni` : `1 dzień`;
     const dateStr = (task.installationDate || task.installation_date) ? `📅 ${task.installationDate || task.installation_date} (Czas: ${durationText})` : 'Termin do ustalenia';
+    const col = this.getProjectColor(task);
     
-    document.getElementById('modal-date-badge').textContent = dateStr;
-    document.getElementById('modal-project-title').textContent = (task.projectTitle || task.title) ? `${task.projectTitle || task.title} - ${clientName}` : clientName;
+    const dateBadge = document.getElementById('modal-date-badge');
+    if (dateBadge) {
+      dateBadge.textContent = dateStr;
+    }
+
+    const titleEl = document.getElementById('modal-project-title');
+    if (titleEl) {
+      titleEl.innerHTML = `
+        <span class="inline-block w-4 h-4 rounded-full shadow-sm mr-1.5 align-middle" style="background-color: ${col.hex}"></span>
+        <span>${(task.projectTitle || task.title) ? `${task.projectTitle || task.title} - ${clientName}` : clientName}</span>
+      `;
+    }
+
     document.getElementById('modal-project-address').textContent = (task.investmentAddress || task.address) ? (task.investmentAddress || task.address) + (task.investmentCity || task.city ? ', ' + (task.investmentCity || task.city) : '') : 'Brak wpisanego adresu inwestycji';
     
     document.getElementById('modal-loops').textContent = task.cadData?.loopsCount || 0;
@@ -369,23 +438,50 @@ const MonterApp = {
     let rooms = [];
     if (task.cadData && task.cadData.rooms && task.cadData.rooms.length > 0) {
       rooms = task.cadData.rooms;
+    } else {
+      rooms = [
+        { name: 'Salon' },
+        { name: 'Kuchnia' },
+        { name: 'Łazienka' },
+        { name: 'Kotłownia' },
+        { name: 'Korytarz' }
+      ];
     }
 
     let html = '';
     
     const generateRoomItem = (roomName, id, fileTypeLabel) => `
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3 last:border-0 last:pb-0">
-        <div class="flex flex-col">
-          <span class="font-bold text-slate-700 text-sm">${roomName}</span>
-          <span class="text-[10px] text-slate-400" id="photo-count-${id}">Wczytywanie...</span>
+      <div class="bg-white rounded-xl border border-slate-200 p-3.5 shadow-sm hover:border-slate-300 transition-all flex flex-col gap-2.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <div class="flex flex-col">
+            <span class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0"></span>
+              <span class="truncate">${roomName}</span>
+            </span>
+            <div id="photo-status-${id}" class="mt-0.5">
+              <span class="text-[11px] text-slate-400">Sprawdzanie zdjęć...</span>
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-2 shrink-0">
+            <!-- 1. Zrób zdjęcie telefonem (Aparat bezpośredni) -->
+            <input type="file" accept="image/*" capture="environment" class="hidden" id="camera-upload-${id}" onchange="MonterApp.handlePhotoUpload(event, '${task.id}', '${id}', '${fileTypeLabel}', '${encodeURIComponent(roomName)}')">
+            <button onclick="document.getElementById('camera-upload-${id}').click()" id="btn-camera-${id}" title="Zrób zdjęcie aparatem telefonu" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm active:scale-95">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <span>Aparat</span>
+            </button>
+
+            <!-- 2. Dodaj z pamięci / galerii telefonu -->
+            <input type="file" multiple accept="image/*" class="hidden" id="file-upload-${id}" onchange="MonterApp.handlePhotoUpload(event, '${task.id}', '${id}', '${fileTypeLabel}', '${encodeURIComponent(roomName)}')">
+            <button onclick="document.getElementById('file-upload-${id}').click()" id="btn-gallery-${id}" title="Wybierz z pamięci lub galerii urządzenia" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm active:scale-95">
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <span>Z pamięci</span>
+            </button>
+          </div>
         </div>
-        <div>
-          <input type="file" multiple accept="image/*" class="hidden" id="file-upload-${id}" onchange="MonterApp.handlePhotoUpload(event, '${task.id}', '${id}', '${fileTypeLabel}')">
-          <button onclick="document.getElementById('file-upload-${id}').click()" class="bg-blue-100 text-blue-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-200 transition-colors flex items-center gap-1 shadow-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-            Dodaj
-          </button>
-        </div>
+        
+        <!-- Kontener na miniatury zdjęć -->
+        <div id="photo-thumbs-${id}" class="flex items-center gap-2 overflow-x-auto pt-1 empty:hidden border-t border-slate-100"></div>
       </div>
     `;
 
@@ -400,22 +496,34 @@ const MonterApp = {
     this.updatePhotoCounts(task.id);
   },
 
-  async handlePhotoUpload(event, projectId, uiId, fileTypeLabel) {
+  async handlePhotoUpload(event, projectId, uiId, fileTypeLabel, encodedRoomName) {
     const files = event.target.files;
     if (!files || files.length === 0) return;
     
-    const countEl = document.getElementById(`photo-count-${uiId}`);
-    if (countEl) countEl.innerHTML = `<span class="text-blue-500 font-bold">Wysyłanie ${files.length} zdjęć...</span>`;
+    const roomName = decodeURIComponent(encodedRoomName || '');
+    const statusEl = document.getElementById(`photo-status-${uiId}`);
+    const btnCam = document.getElementById(`btn-camera-${uiId}`);
+    const btnGal = document.getElementById(`btn-gallery-${uiId}`);
+    
+    if (statusEl) {
+      statusEl.innerHTML = `<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 animate-pulse"><svg class="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Wgrywanie ${files.length} zdjęć na serwer...</span>`;
+    }
+    if (btnCam) btnCam.disabled = true;
+    if (btnGal) btnGal.disabled = true;
     
     try {
       for (let i = 0; i < files.length; i++) {
-        await ApiService.uploadSitePhoto(projectId, files[i], fileTypeLabel);
+        await ApiService.uploadSitePhoto(projectId, files[i], fileTypeLabel, roomName);
       }
-      this.updatePhotoCounts(projectId);
+      await this.updatePhotoCounts(projectId);
     } catch (err) {
       console.error("Błąd podczas wgrywania zdjęć:", err);
       alert('Nie udało się wgrać niektórych zdjęć. Sprawdź połączenie.');
-      this.updatePhotoCounts(projectId);
+      await this.updatePhotoCounts(projectId);
+    } finally {
+      if (btnCam) btnCam.disabled = false;
+      if (btnGal) btnGal.disabled = false;
+      event.target.value = '';
     }
   },
 
@@ -424,43 +532,82 @@ const MonterApp = {
     
     try {
       const files = await ApiService.getProjectFiles(projectId);
-      // files have fileType like 'photo_room-0', 'photo_inne', or just 'photo'
       
-      const counts = {};
-      files.forEach(f => {
-        if (!counts[f.fileType]) counts[f.fileType] = 0;
-        counts[f.fileType]++;
+      const photos = (files || []).filter(f => {
+        const type = f.fileType || f.file_type || '';
+        const url = f.fileUrl || f.file_url || '';
+        return type.startsWith('photo') || url.match(/\.(jpg|jpeg|png|webp)$/i);
       });
-      
-      // Update UI for all room IDs
-      // To keep it simple, we just find all elements matching our expected pattern
-      // Since we don't have the room list here, we rely on the DOM elements
-      const countEls = document.querySelectorAll('[id^="photo-count-"]');
-      countEls.forEach(el => {
-        const id = el.id.replace('photo-count-', '');
-        const fileTypeLabel = id === 'inne' ? 'photo_inne' : `photo_${id}`;
-        const c = counts[fileTypeLabel] || 0;
-        if (c > 0) {
-            el.innerHTML = `<span class="text-emerald-600 font-bold text-xs">✓ Dodano: ${c}</span>`;
+
+      const statusEls = document.querySelectorAll('[id^="photo-status-"]');
+      statusEls.forEach(el => {
+        const uiId = el.id.replace('photo-status-', '');
+        const targetFileType = uiId === 'inne' ? 'photo_inne' : `photo_${uiId}`;
+        const thumbsEl = document.getElementById(`photo-thumbs-${uiId}`);
+
+        const roomPhotos = photos.filter(p => {
+          const type = p.fileType || p.file_type || '';
+          return type === targetFileType;
+        });
+
+        if (uiId === 'inne') {
+          photos.forEach(p => {
+            const type = p.fileType || p.file_type || '';
+            if (type === 'photo' && !roomPhotos.some(rp => rp.id === p.id)) {
+              roomPhotos.push(p);
+            }
+          });
+        }
+
+        const count = roomPhotos.length;
+        if (count > 0) {
+          el.innerHTML = `
+            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+              <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+              Zapisano na serwerze (${count} ${count === 1 ? 'zdjęcie' : (count < 5 ? 'zdjęcia' : 'zdjęć')})
+            </span>
+          `;
+          
+          if (thumbsEl) {
+            thumbsEl.innerHTML = roomPhotos.map(p => {
+              const url = p.fileUrl || p.file_url;
+              const name = p.fileName || p.file_name;
+              return `
+                <div class="relative group/thumb shrink-0 w-14 h-14 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shadow-sm">
+                  <a href="${url}" target="_blank" class="block w-full h-full">
+                    <img src="${url}" class="w-full h-full object-cover transition-transform group-hover/thumb:scale-105" alt="${name}">
+                  </a>
+                  <button onclick="MonterApp.deletePhoto('${p.id}', '${projectId}')" title="Usuń zdjęcie" class="absolute top-0.5 right-0.5 bg-red-600/90 hover:bg-red-700 text-white rounded-full p-0.5 shadow transition-all opacity-80 hover:opacity-100">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                  </button>
+                  <div class="absolute bottom-0 inset-x-0 bg-black/60 text-[8px] text-white px-1 truncate font-mono">${name}</div>
+                </div>
+              `;
+            }).join('');
+          }
         } else {
-            el.textContent = 'Brak zdjęć';
+          el.innerHTML = `<span class="text-[11px] text-slate-400">Brak wgranych zdjęć</span>`;
+          if (thumbsEl) thumbsEl.innerHTML = '';
         }
       });
-      
-      // Also maybe fallback 'photo' type mapping to 'inne'
-      const oldPhotos = counts['photo'] || 0;
-      if (oldPhotos > 0) {
-        const inneEl = document.getElementById('photo-count-inne');
-        if (inneEl) {
-           const curr = counts['photo_inne'] || 0;
-           inneEl.innerHTML = `<span class="text-emerald-600 font-bold text-xs">✓ Dodano: ${curr + oldPhotos}</span>`;
-        }
-      }
       
     } catch (e) {
+      console.error("Błąd podczas pobierania zdjęć:", e);
+      const statusEls = document.querySelectorAll('[id^="photo-status-"]');
+      statusEls.forEach(el => el.innerHTML = `<span class="text-[11px] text-slate-400">Brak wgranych zdjęć</span>`);
+    }
+  },
+
+  async deletePhoto(photoId, projectId) {
+    if (!confirm('Czy na pewno chcesz usunąć to zdjęcie z serwera?')) return;
+    try {
+      if (window.ApiService) {
+        await ApiService.deleteProjectFile(photoId);
+        await this.updatePhotoCounts(projectId);
+      }
+    } catch (e) {
       console.error(e);
-      const countEls = document.querySelectorAll('[id^="photo-count-"]');
-      countEls.forEach(el => el.textContent = 'Brak zdjęć');
+      alert('Nie udało się usunąć zdjęcia: ' + e.message);
     }
   }
 };

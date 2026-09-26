@@ -16,6 +16,12 @@ switch ($method) {
             $offer = $stmt->fetch();
             if ($offer) {
                 $data = json_decode($offer['data_json'], true);
+                if ($data) {
+                    $data['totalNet'] = floatval($offer['total_net']);
+                    $data['totalGross'] = floatval($offer['total_gross']);
+                    $data['total_net'] = floatval($offer['total_net']);
+                    $data['total_gross'] = floatval($offer['total_gross']);
+                }
                 jsonResponse(['success' => true, 'offer' => $data]);
             } else {
                 jsonResponse(['success' => false, 'error' => 'Oferta nie znaleziona'], 404);
@@ -28,6 +34,10 @@ switch ($method) {
         foreach ($rows as $row) {
             $parsed = json_decode($row['data_json'], true);
             if ($parsed) {
+                $parsed['totalNet'] = floatval($row['total_net']);
+                $parsed['totalGross'] = floatval($row['total_gross']);
+                $parsed['total_net'] = floatval($row['total_net']);
+                $parsed['total_gross'] = floatval($row['total_gross']);
                 $offers[] = $parsed;
             }
         }
