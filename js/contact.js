@@ -314,9 +314,14 @@ const Contact = {
         body: formData
       });
 
-      const result = await response.json();
+      let result = null;
+      try {
+        result = await response.json();
+      } catch (parseErr) {
+        console.error('Błąd odczytu odpowiedzi JSON:', parseErr);
+      }
 
-      if (response.ok && result.success) {
+      if (response.ok && result && result.success) {
         // Success
         this.form.reset();
         this.selectedFiles = [];
@@ -326,13 +331,15 @@ const Contact = {
         const successMsg = `Dziękujemy, ${name}! Twoje zapytanie dotyczące podłogówki${area ? ' (' + area + ' m²)' : ''} oraz ${result.filesCount || 0} załączników zostało pomyślnie wysłane do naszego zespołu (oferty@lesa-home.pl). Skontaktujemy się z Tobą najszybciej jak to możliwe!`;
         this.showToast(successMsg, true);
       } else {
-        const errorMsg = result.error || 'Wystąpił nieoczekiwany błąd podczas wysyłania zapytania. Spróbuj ponownie lub napisz na oferty@lesa-home.pl.';
+        const errorMsg = (result && result.error) 
+          ? result.error 
+          : `Wystąpił błąd serwera (kod ${response.status}). Prosimy o bezpośredni kontakt: oferty@lesa-home.pl`;
         alert(errorMsg);
         this.showToast(errorMsg, false);
       }
     } catch (err) {
       console.error('Błąd wysyłania formularza:', err);
-      const fallbackMsg = 'Wystąpił problem z połączeniem sieciowym. Jeśli błąd się powtarza, prosimy o bezpośredni kontakt: oferty@lesa-home.pl';
+      const fallbackMsg = err.message || 'Wystąpił problem z połączeniem sieciowym. Jeśli błąd się powtarza, prosimy o bezpośredni kontakt: oferty@lesa-home.pl';
       alert(fallbackMsg);
       this.showToast(fallbackMsg, false);
     } finally {

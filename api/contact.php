@@ -192,14 +192,14 @@ foreach ($normalizedFiles as $f) {
         jsonResponse(['success' => false, 'error' => "Format .$ext jest niedozwolony. Akceptujemy wyłącznie: PDF, DWG, JPG, PNG, WEBP."], 400);
     }
 
-    // Security check 4: Deep Content Inspection (reject embedded PHP tags or web shell signatures)
+    // Security check 4: Deep Content Inspection (reject embedded PHP tags, HTML scripts, or server-side execution tags)
     $sampleLen = min(1048576, (int)$f['size']); // check first 1 MB
     $sampleBytes = @file_get_contents($f['tmp_name'], false, null, 0, $sampleLen);
     if ($sampleBytes === false) {
         jsonResponse(['success' => false, 'error' => 'Nie można zweryfikować zawartości pliku ' . htmlspecialchars($origName)], 400);
     }
 
-    if (preg_match('/<\?php|<\?=|<\?[\s\r\n]|<script\b|<%|\b(eval|system|passthru|shell_exec|exec|base64_decode)\s*\(/i', $sampleBytes)) {
+    if (preg_match('/<\?php|<\?=|<!--#exec|<script\b/i', $sampleBytes)) {
         jsonResponse(['success' => false, 'error' => 'Plik ' . htmlspecialchars($origName) . ' zawiera zabroniony kod skryptowy i został odrzucony.'], 400);
     }
 
